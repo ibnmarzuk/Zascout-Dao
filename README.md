@@ -1,20 +1,70 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# ZA Scout - AI-Powered DAO Intelligence Platform
 
-# Run and deploy your AI Studio app
+ZA Scout is a modern, responsive web application designed to help contributors navigate the vast DAO landscape. It aggregates signals from across the ecosystem to surface grants, bounties, and governance opportunities, enhanced by AI-driven filtering and analysis.
 
-This contains everything you need to run your app locally.
+## 🚀 Features
 
-View your app in AI Studio: https://ai.studio/apps/03c05c0b-98a2-4b90-944c-55e0709da4ca
+-   **Intelligent Exploration:** Search through a curated database of DAO opportunities using AI-powered natural language queries.
+-   **Contributor Intelligence:** Analyze reputation, participation history, and ecosystem signals for DAO contributors.
+-   **Ecosystem Analytics:** Live visualization of funding volumes, sector distribution, and participant growth.
+-   **Saved Opportunities:** Bookmark and track your favorite grants and bounties.
+-   **Responsive Design:** Fully optimized for mobile, tablet, and desktop experiences.
+-   **Dark/Light Mode:** Seamlessly switch between themes to suit your preference.
 
-## Run Locally
+## 🛠️ Tech Stack
 
-**Prerequisites:**  Node.js
+-   **Frontend:** React 18+, TypeScript, Vite
+-   **Styling:** Tailwind CSS, Lucide React (Icons), Motion (Animations)
+-   **AI Integration:** Gemini API (via server-side proxy)
+-   **Charts:** Recharts
+-   **State Management:** React Hooks & Context API
 
+## 🏁 Getting Started
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Prerequisites
+
+-   [Node.js](https://nodejs.org/) (v18 or higher recommended)
+-   [npm](https://www.npmjs.com/)
+
+### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository-url>
+    cd zascout
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Environment Variables:**
+    Create a `.env` file in the root directory and add your Gemini API key:
+    ```env
+    GEMINI_API_KEY=your_gemini_api_key_here
+    ```
+    *Note: See `.env.example` for the required structure.*
+
+4.  **Start the development server:**
+    ```bash
+    npm run dev
+    ```
+    The application will be available at `http://localhost:3000`.
+
+## 🏗️ Building for Production
+
+To create a production build, run:
+```bash
+npm run build
+```
+This will generate a `dist/` directory containing the bundled application and a compiled server in `dist/server.cjs`.
+
+To start the production server:
+```bash
+npm run start
+```
+
+## 📄 License
+
+This project is licensed under the MIT License.

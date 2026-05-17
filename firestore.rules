@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidUser(data) {
+      return data.uid == request.auth.uid && 
+             data.email is string && 
+             data.keys().hasAll(['uid', 'email', 'createdAt']) && 
+             data.keys().size() <= 8;
+    }
+
+    function isValidSavedOp(data) {
+      return data.userId == request.auth.uid && 
+             data.opportunityId is string && 
+             data.type in ['grant', 'bounty', 'proposal'];
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // User profiles
+    match /users/{userId} {
+      allow get: if isSignedIn();
+      allow create, update: if isOwner(userId) && isValidUser(request.resource.data);
+      allow delete: if false;
+
+      // Saved Opportunities
+      match /savedOpportunities/{opportunityId} {
+        allow list, get: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidSavedOp(request.resource.data);
+        allow update: if isOwner(userId) && isValidSavedOp(request.resource.data) && 
+                         request.resource.data.userId == resource.data.userId;
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}

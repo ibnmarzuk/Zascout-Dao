@@ -1,0 +1,41 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account and preferences",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "walletAddress": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "SavedOpportunity": {
+      "title": "Saved Opportunity",
+      "description": "An opportunity bookmarked by a user",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "opportunityId": { "type": "string" },
+        "type": { "type": "string", "enum": ["grant", "bounty", "proposal"] },
+        "data": { "type": "object" },
+        "savedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "opportunityId"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "users/{userId}/savedOpportunities/{opportunityId}": {
+      "schema": "SavedOpportunity",
+      "description": "User's bookmarked items"
+    }
+  }
+}
