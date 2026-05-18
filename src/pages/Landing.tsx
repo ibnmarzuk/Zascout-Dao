@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Sparkles, Shield, BarChart3, Users, Zap, ArrowRight, Github, Twitter, Search, Compass } from "lucide-react";
 import { motion } from "motion/react";
 
-import logo from "../assets/images/zascout_logo_1779052819094.png";
+import { LogoIcon } from "../components/Header";
 import banner from "../assets/images/zascout_banner_1779052799939.png";
 
 export default function Landing() {
@@ -13,7 +13,7 @@ export default function Landing() {
       <nav className="h-20 border-b border-neutral-800 flex items-center justify-between px-6 md:px-12 relative z-50">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded overflow-hidden">
-            <img src={logo} alt="Logo" className="w-full h-full object-contain" />
+            <LogoIcon className="w-full h-full object-contain" />
           </div>
           <span className="font-display font-bold text-lg md:text-xl tracking-tight text-white uppercase italic">ZA Scout</span>
         </div>
@@ -161,9 +161,29 @@ export default function Landing() {
             We pull data from the most trusted sources in the ecosystem to ensure you have a complete picture of the landscape.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {["ZeroAuth", "Snapshot", "Gitcoin", "Tally", "Safe", "ENS", "Arbitrum", "Optimism"].map((name) => (
-              <div key={name} className="h-24 md:h-32 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center group hover:border-white/20 transition-all cursor-default">
-                <span className="text-xl font-bold opacity-30 group-hover:opacity-80 transition-opacity font-display italic">{name}</span>
+            {[
+              { name: "ZeroAuth", status: "Active" },
+              { name: "Snapshot", status: "Active" },
+              { name: "Gitcoin", status: "Active" },
+              { name: "Tally", status: "Active" },
+              { name: "Safe", status: "Active" },
+              { name: "Arbitrum", status: "Active" },
+              { name: "Optimism", status: "Active" },
+              { name: "ENS", status: "Active" }
+            ].map((partner) => (
+              <div key={partner.name} className="relative h-24 md:h-32 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center group hover:border-white/20 transition-all cursor-default overflow-hidden">
+                <span className={`text-xl font-bold transition-opacity font-display italic ${partner.status === "Active" ? "opacity-80 text-white" : "opacity-30 text-white"}`}>{partner.name}</span>
+                {partner.status === "Active" && (
+                  <div className="absolute top-2 right-2 flex items-center gap-1 bg-brand-blue/20 text-brand-blue px-2 py-0.5 rounded text-[10px] font-bold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" />
+                    Live
+                  </div>
+                )}
+                {partner.status === "Coming Soon" && (
+                  <div className="absolute top-2 right-2 flex items-center gap-1 bg-neutral-800 text-neutral-400 px-2 py-0.5 rounded text-[10px] font-bold">
+                    Soon
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -207,7 +227,7 @@ export default function Landing() {
   );
 }
 
-function FeatureCard({ icon: Icon, title, description }: any) {
+function FeatureCard({ icon: Icon, title, description }: { icon: React.ElementType, title: string, description: string }) {
   return (
     <div className="p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-blue/30 transition-all group">
       <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mb-6 group-hover:bg-brand-blue/20 transition-all">

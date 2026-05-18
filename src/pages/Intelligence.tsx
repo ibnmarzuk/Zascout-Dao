@@ -89,7 +89,7 @@ export default function Intelligence() {
   );
 }
 
-function ScoreItem({ label, value }: any) {
+function ScoreItem({ label, value }: { label: string, value: string | number }) {
   return (
     <div>
       <div className="text-[10px] font-bold uppercase text-neutral-500 tracking-widest mb-1">{label}</div>
@@ -98,7 +98,7 @@ function ScoreItem({ label, value }: any) {
   );
 }
 
-function Badge({ label }: any) {
+function Badge({ label }: { label: string }) {
   return (
     <span className="px-3 py-1 bg-card-bg border border-border-main rounded-full text-[10px] font-bold uppercase tracking-wider text-neutral-400">
       {label}
@@ -106,7 +106,7 @@ function Badge({ label }: any) {
   );
 }
 
-function ContributionItem({ title, dao, reward, date }: any) {
+function ContributionItem({ title, dao, reward, date }: { title: string, dao: string, reward: string, date: string }) {
   return (
     <div className="flex items-center justify-between p-4 bg-card-bg border border-border-main rounded-xl hover:border-brand-blue/30 transition-all group">
       <div className="flex items-center gap-4">

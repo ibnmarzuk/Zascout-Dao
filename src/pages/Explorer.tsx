@@ -8,8 +8,21 @@ interface ExplorerProps {
   type?: "grant" | "bounty" | "proposal" | "all";
 }
 
+interface Opportunity {
+  id: string;
+  type: string;
+  title: string;
+  dao: string;
+  tags: string[];
+  reward: number;
+  deadline: string;
+  activityScore: number;
+  sourcePlatform?: string;
+  status: string;
+}
+
 export default function Explorer({ type = "all" }: ExplorerProps) {
-  const [opportunities, setOpportunities] = useState<any[]>([]);
+  const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [view, setView] = useState<"grid" | "list">("list");
@@ -31,7 +44,7 @@ export default function Explorer({ type = "all" }: ExplorerProps) {
     const saved = localStorage.getItem("zascout_saved");
     if (saved) {
       const parsed = JSON.parse(saved);
-      setSavedIds(parsed.map((item: any) => item.id));
+      setSavedIds(parsed.map((item: Record<string, string>) => item.id));
     }
   }, []);
 
@@ -52,7 +65,7 @@ export default function Explorer({ type = "all" }: ExplorerProps) {
     }
   };
 
-  const toggleSave = (e: React.MouseEvent, op: any) => {
+  const toggleSave = (e: React.MouseEvent, op: Opportunity) => {
     e.stopPropagation();
     const isSaved = savedIds.includes(op.id);
     let updatedSaved;
@@ -61,7 +74,7 @@ export default function Explorer({ type = "all" }: ExplorerProps) {
     const currentSaved = currentSavedStr ? JSON.parse(currentSavedStr) : [];
 
     if (isSaved) {
-      updatedSaved = currentSaved.filter((item: any) => item.id !== op.id);
+      updatedSaved = currentSaved.filter((item: Opportunity) => item.id !== op.id);
       setSavedIds(savedIds.filter(id => id !== op.id));
     } else {
       updatedSaved = [...currentSaved, op];
@@ -71,7 +84,7 @@ export default function Explorer({ type = "all" }: ExplorerProps) {
     localStorage.setItem("zascout_saved", JSON.stringify(updatedSaved));
   };
 
-  const filtered = opportunities.filter(op => {
+  const filtered = opportunities.filter((op: Opportunity) => {
     const matchesSearch = op.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           op.tags.some((t: string) => t.toLowerCase().includes(searchQuery.toLowerCase())) ||
                           op.dao.toLowerCase().includes(searchQuery.toLowerCase());
@@ -109,7 +122,7 @@ export default function Explorer({ type = "all" }: ExplorerProps) {
     }
   };
 
-  const resetFilters = () => {
+  const clearActiveFilters = () => {
     setStatusFilter("all");
     setDaoFilter("all");
     setRewardRange([0, 20000]);
@@ -256,7 +269,7 @@ export default function Explorer({ type = "all" }: ExplorerProps) {
                     max="20000" 
                     step="500"
                     value={rewardRange[1]}
-                    onChange={(e) => setRewardRange([0, parseInt(e.target.value)])}
+                    onChange={(e) => setRewardRange([0, parseInt(e.target.value, 10)])}
                     className="flex-1 accent-brand-blue h-1 bg-border-main rounded-full appearance-none cursor-pointer"
                   />
                   <span className="text-xs font-mono font-bold text-brand-blue min-w-[70px] text-right">
@@ -267,7 +280,7 @@ export default function Explorer({ type = "all" }: ExplorerProps) {
 
               <div className="flex items-end">
                 <button 
-                  onClick={resetFilters}
+                  onClick={clearActiveFilters}
                   className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 hover:text-red-500 transition-all underline underline-offset-4"
                 >
                   Clear All Filters
@@ -283,7 +296,7 @@ export default function Explorer({ type = "all" }: ExplorerProps) {
         {["all", "grant", "bounty", "proposal"].map((t) => (
           <button
             key={t}
-            onClick={() => setSelectedType(t as any)}
+            onClick={() => setSelectedType(t as "grant" | "bounty" | "proposal" | "all")}
             className={cn(
               "pb-4 text-sm font-bold uppercase tracking-widest transition-all relative",
               selectedType === t ? "text-brand-blue" : "text-neutral-500 hover:text-text-main"
@@ -311,14 +324,14 @@ export default function Explorer({ type = "all" }: ExplorerProps) {
                 key={op.id} 
                 op={op} 
                 isSaved={savedIds.includes(op.id)}
-                onToggleSave={(e: any) => toggleSave(e, op)}
+                onToggleSave={(e: React.MouseEvent) => toggleSave(e, op)}
               />
             ) : (
               <OpListCard 
-                key={op.id} 
+                key={op.id as string} 
                 op={op} 
-                isSaved={savedIds.includes(op.id)}
-                onToggleSave={(e: any) => toggleSave(e, op)}
+                isSaved={savedIds.includes(op.id as string)}
+                onToggleSave={(e: React.MouseEvent) => toggleSave(e, op)}
               />
             )
           ))
@@ -339,13 +352,18 @@ function formatReward(reward: number) {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(reward);
 }
 
-function OpListCard({ op, isSaved, onToggleSave }: any) {
+const OpListCard: React.FC<{ op: Opportunity, isSaved: boolean, onToggleSave: (e: React.MouseEvent) => void }> = ({ op, isSaved, onToggleSave }) => {
   // Reuse existing card from Dashboard but styled for Explorer list view
   return (
     <div className="bloomberg-card group cursor-pointer flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 relative">
       <div className="flex-1 w-full">
         <div className="flex items-center gap-2 mb-2">
           <span className="px-2 py-0.5 rounded bg-brand-blue/10 text-brand-blue text-[10px] font-bold uppercase tracking-wider">{op.type}</span>
+          {op.sourcePlatform && (
+            <span className="px-1.5 py-0.5 rounded text-[8px] font-bold bg-neutral-800 text-neutral-300 border border-neutral-700">
+              via {op.sourcePlatform}
+            </span>
+          )}
           <span className="text-[10px] uppercase font-mono text-neutral-500">{op.dao}</span>
           <span className={cn(
             "px-1.5 py-0.5 rounded text-[8px] font-bold uppercase",
@@ -395,7 +413,7 @@ function OpListCard({ op, isSaved, onToggleSave }: any) {
   );
 }
 
-function OpGridCard({ op, isSaved, onToggleSave }: any) {
+const OpGridCard: React.FC<{ op: Opportunity, isSaved: boolean, onToggleSave: (e: React.MouseEvent) => void }> = ({ op, isSaved, onToggleSave }) => {
   return (
     <div className="bloomberg-card group cursor-pointer flex flex-col justify-between h-full relative">
       <div>
@@ -427,6 +445,11 @@ function OpGridCard({ op, isSaved, onToggleSave }: any) {
             {op.status}
           </span>
           <span className="text-[10px] uppercase font-mono text-neutral-500">{op.dao}</span>
+          {op.sourcePlatform && (
+            <span className="px-1.5 py-0.5 rounded text-[8px] font-bold bg-neutral-800 text-neutral-300 border border-neutral-700">
+              via {op.sourcePlatform}
+            </span>
+          )}
         </div>
         <h3 className="text-xl font-bold text-text-main group-hover:text-brand-blue transition-colors mb-3 leading-tight font-display">{op.title}</h3>
         <p className="text-sm text-neutral-500 line-clamp-2 mb-4 leading-relaxed tracking-tight">Active opportunity from {op.dao} focused on {op.tags.join(', ')}.</p>

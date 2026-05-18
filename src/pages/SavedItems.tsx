@@ -88,7 +88,7 @@ export default function SavedItems() {
   );
 }
 
-function SavedItemCard({ item, onRemove }: any) {
+function SavedItemCard({ item, onRemove }: { item: Record<string, any>, onRemove: () => void }) {
   const formatReward = (reward: number) => {
     if (reward === 0) return "N/A";
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(reward);

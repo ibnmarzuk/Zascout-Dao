@@ -13,7 +13,9 @@ export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
   const [wallets, setWallets] = useState(["0x71C...4f9a"]);
 
   const addWallet = () => {
-    const newWallet = `0x${Math.random().toString(16).slice(2, 10)}...${Math.random().toString(16).slice(2, 6)}`;
+    const array = new Uint32Array(2);
+    window.crypto.getRandomValues(array);
+    const newWallet = `0x${array[0].toString(16).padStart(8, '0')}...${array[1].toString(16).padStart(8, '0').slice(0, 4)}`;
     setWallets([...wallets, newWallet]);
   };
 
@@ -61,7 +63,7 @@ export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                 ].map((tab) => (
                   <button
                     key={tab.id}
-                    onClick={() => setActiveTab(tab.id as any)}
+                    onClick={() => setActiveTab(tab.id as "general" | "wallets" | "notifications")}
                     className={cn(
                       "flex-1 md:flex-none flex items-center justify-center md:justify-start gap-2 md:gap-3 px-3 py-2 rounded-xl text-[10px] md:text-sm font-bold transition-all whitespace-nowrap",
                       activeTab === tab.id ? "bg-brand-blue text-white shadow-lg shadow-brand-blue/20" : "text-neutral-500 hover:bg-card-hover hover:text-text-main"

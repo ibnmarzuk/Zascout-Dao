@@ -5,7 +5,7 @@ import axios from "axios";
 import { cn } from "@/src/lib/utils";
 
 export default function Dashboard() {
-  const [opportunities, setOpportunities] = useState<any[]>([]);
+  const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [loading, setLoading] = useState(true);
   const [aiQuery, setAiQuery] = useState("");
   const [aiInsight, setAiInsight] = useState<string | null>(null);
@@ -34,7 +34,7 @@ export default function Dashboard() {
         setTrendingSkills(res.data.keywords.slice(0, 3));
       }
     } catch (error) {
-      console.error("AI Insight failed", error);
+      // Handle silently in production
     } finally {
       setAiLoading(false);
     }
@@ -66,9 +66,26 @@ export default function Dashboard() {
 
       {/* Main Content Split */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left: Trending/Fresh Ops */}
+        {/* Left: Alerts & Workflows + Trending Ops */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="flex items-center justify-between">
+          
+          {/* SaaS Specific: Saved Workflows / Alerts */}
+          <div className="rounded-2xl border border-border-main bg-card-bg p-5 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-full bg-brand-blue/10 flex items-center justify-center">
+                <Bookmark className="w-4 h-4 text-brand-blue" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-text-main">Your Automation is Active</h3>
+                <p className="text-xs text-neutral-500">Auto-applying to "React" specific bounties under DevDAO.</p>
+              </div>
+            </div>
+            <button className="text-[10px] uppercase tracking-wider font-bold text-brand-blue bg-brand-blue/10 px-3 py-1.5 rounded-lg hover:bg-brand-blue hover:text-white transition-colors">
+              Manage Workflows
+            </button>
+          </div>
+
+          <div className="flex items-center justify-between mt-8 mb-2">
             <h2 className="text-xl font-bold flex items-center gap-2 text-text-main">
               <Sparkles className="w-5 h-5 text-brand-blue" />
               Trending Opportunities
@@ -170,7 +187,7 @@ export default function Dashboard() {
   );
 }
 
-function StatCard({ label, value, subValue, icon: Icon }: any) {
+function StatCard({ label, value, subValue, icon: Icon }: { label: string, value: string, subValue: string, icon: React.ElementType }) {
   return (
     <div className="stats-card">
       <div className="flex items-center justify-between mb-2">
@@ -183,7 +200,18 @@ function StatCard({ label, value, subValue, icon: Icon }: any) {
   );
 }
 
-function OpCard({ op }: any) {
+interface Opportunity {
+  id: string;
+  type: string;
+  title: string;
+  dao: string;
+  tags: string[];
+  reward: number | string;
+  deadline: string;
+  sourcePlatform?: string;
+}
+
+const OpCard: React.FC<{ op: Opportunity }> = ({ op }) => {
   const isBounty = op.type === 'bounty';
   const isGrant = op.type === 'grant';
   const isProposal = op.type === 'proposal';
@@ -205,14 +233,21 @@ function OpCard({ op }: any) {
       )}
     >
       <div className="flex justify-between items-start mb-3">
-        <span className={cn(
-          "rounded-full px-2 py-0.5 text-[10px] font-bold",
-          isGrant && "bg-brand-blue/10 text-brand-blue",
-          isBounty && "bg-brand-purple/10 text-brand-purple",
-          isProposal && "bg-emerald-500/10 text-emerald-500"
-        )}>
-          {op.type.toUpperCase()}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className={cn(
+            "rounded-full px-2 py-0.5 text-[10px] font-bold",
+            isGrant && "bg-brand-blue/10 text-brand-blue",
+            isBounty && "bg-brand-purple/10 text-brand-purple",
+            isProposal && "bg-emerald-500/10 text-emerald-500"
+          )}>
+            {op.type.toUpperCase()}
+          </span>
+          {op.sourcePlatform && (
+            <span className="rounded-full px-2 py-0.5 text-[10px] font-bold bg-neutral-800 text-neutral-300 border border-neutral-700">
+              via {op.sourcePlatform}
+            </span>
+          )}
+        </div>
         <span className="text-[10px] font-mono text-neutral-600">ID: ZA-{op.id}</span>
       </div>
       <h3 className="text-md font-semibold text-text-main group-hover:text-brand-blue transition-colors">{op.title}</h3>
@@ -239,8 +274,8 @@ function OpCard({ op }: any) {
   );
 }
 
-function ActivityItem({ title, desc, time, color }: any) {
-  const colors: any = {
+function ActivityItem({ title, desc, time, color }: { title: string, desc: string, time: string, color: 'blue' | 'purple' | 'green' }) {
+  const colors: Record<'blue' | 'purple' | 'green', string> = {
     blue: "bg-brand-blue",
     purple: "bg-brand-purple",
     green: "bg-green-500",

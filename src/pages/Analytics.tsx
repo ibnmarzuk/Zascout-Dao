@@ -119,7 +119,7 @@ export default function Analytics() {
   );
 }
 
-function MetricCard({ label, value, change, icon: Icon }: any) {
+function MetricCard({ label, value, change, icon: Icon }: { label: string, value: string, change: string, icon: React.ElementType }) {
   const isPositive = change.startsWith('+');
   return (
     <div className="stats-card">

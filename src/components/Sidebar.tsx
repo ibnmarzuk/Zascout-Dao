@@ -2,8 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, Compass, Trophy, User, Bookmark, BarChart3, Settings, LogOut, Search, X, HelpCircle } from "lucide-react";
 import { cn } from "@/src/lib/utils";
-
-import logo from "../assets/images/zascout_logo_1779052819094.png";
+import { LogoIcon } from "./Header";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
@@ -39,7 +38,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         <div className="flex items-center justify-between px-6 py-8">
           <Link to="/" className="flex items-center gap-3 group" onClick={onClose}>
             <div className="flex h-10 w-10 items-center justify-center rounded overflow-hidden group-hover:scale-110 transition-transform">
-              <img src={logo} alt="ZA Scout Logo" className="w-full h-full object-contain" />
+              <LogoIcon className="w-full h-full object-contain" />
             </div>
             <span className="text-lg font-semibold tracking-tight text-text-main font-display uppercase italic">ZA Scout</span>
           </Link>
@@ -79,15 +78,19 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         </nav>
 
         <div className="border-t border-border-main p-4">
-          <div className="mb-4 rounded-lg bg-brand-blue/5 p-4 ring-1 ring-brand-blue/20">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-brand-blue">AI Credit Status</p>
-            <div className="mt-2 h-1 w-full rounded-full bg-border-main">
-              <div className="h-full w-3/4 rounded-full bg-brand-blue"></div>
+          <div className="mb-4 rounded-xl bg-gradient-to-br from-brand-blue/10 to-brand-purple/10 p-4 ring-1 ring-border-main border shadow-sm">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-text-main flex items-center gap-1">
+                ZAScout <span className="bg-brand-blue text-white px-1.5 py-0.5 rounded text-[8px]">PRO</span>
+              </span>
             </div>
-            <p className="mt-2 text-[10px] text-neutral-500 font-mono">740 / 1000 searches remaining</p>
+            <p className="text-[10px] text-neutral-500 mb-3 leading-relaxed">Unlock advanced AI scouting, API alerts, and Team Workspaces.</p>
+            <button className="w-full rounded bg-card-bg border border-brand-blue/30 py-1.5 text-[10px] font-bold text-brand-blue hover:bg-brand-blue hover:text-white transition-all">
+              Upgrade Plan
+            </button>
           </div>
           
-          <button className="flex w-full items-center justify-center gap-2 rounded-md bg-brand-blue py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90">
+          <button className="flex w-full items-center justify-center gap-2 rounded-md bg-white text-brand-charcoal py-2.5 text-sm font-bold shadow-sm hover:opacity-90 transition-opacity">
             Connect Wallet
           </button>
         </div>
