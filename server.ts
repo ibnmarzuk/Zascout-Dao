@@ -8,6 +8,8 @@ import crypto from "crypto";
 import helmet from "helmet";
 import csrf from "csurf";
 import cookieParser from "cookie-parser";
+import rateLimit from "express-rate-limit";
+import compression from "compression";
 
 dotenv.config();
 
@@ -37,6 +39,16 @@ async function startServer() {
   }));
   app.use(express.json());
   app.use(cookieParser());
+  app.use(compression());
+  
+  const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, 
+    max: 100, 
+    message: { error: 'Too many requests, please try again later' },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+  app.use("/api/", apiLimiter);
   
   // Custom CSRF error handler since this is an API
   const csrfProtection = csrf({ cookie: { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict' } });
