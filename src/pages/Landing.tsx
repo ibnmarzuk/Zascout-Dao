@@ -75,9 +75,12 @@ export default function Landing() {
           >
             Start Exploring <ArrowRight className="w-4 h-4" />
           </Link>
-          <button className="h-14 px-8 bg-neutral-900 border border-neutral-800 rounded-md flex items-center justify-center font-bold text-white hover:bg-neutral-800 transition-all">
+          <Link 
+            to="/explorer" 
+            className="h-14 px-8 bg-neutral-900 border border-neutral-800 rounded-md flex items-center justify-center font-bold text-white hover:bg-neutral-800 transition-all"
+          >
             View Live Ops
-          </button>
+          </Link>
         </motion.div>
 
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full -z-10 pointer-events-none opacity-20">
@@ -87,23 +90,94 @@ export default function Landing() {
       </section>
 
       {/* Features Grid */}
-      <section id="features" className="px-12 py-24 border-t border-neutral-800">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-          <FeatureCard 
-            icon={Search} 
-            title="Semantic Discovery" 
-            description="Find opportunities using natural language. Ask Scout to'Find DeFi grants'."
-          />
-          <FeatureCard 
-            icon={Shield} 
-            title="Reputation Scores" 
-            description="Understand contributor signals and DAO trustworthiness at a glance."
-          />
-          <FeatureCard 
-            icon={Zap} 
-            title="Real-time Feed" 
-            description="Live aggregation of grants, bounties, and governance proposals across DAOs."
-          />
+      <section id="features" className="px-6 md:px-12 py-24 border-t border-neutral-800">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-4">Powerful Discovery</h2>
+            <p className="text-neutral-500 max-w-xl mx-auto">Scout leverages advanced indexers and AI to surface the highest quality signals.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <FeatureCard 
+              icon={Search} 
+              title="Semantic Discovery" 
+              description="Find opportunities using natural language. Ask Scout to 'Find DeFi grants'."
+            />
+            <FeatureCard 
+              icon={Shield} 
+              title="Reputation Scores" 
+              description="Understand contributor signals and DAO trustworthiness at a glance."
+            />
+            <FeatureCard 
+              icon={Zap} 
+              title="Real-time Feed" 
+              description="Live aggregation of grants, bounties, and governance proposals across DAOs."
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section id="about" className="px-6 md:px-12 py-24 bg-white/5 border-t border-neutral-800">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+          <div className="flex-1 space-y-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20 text-brand-purple text-[10px] font-bold uppercase tracking-widest">
+              Our Philosophy
+            </div>
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-white leading-tight">
+              A New Generation of <br /> Contributor Intelligence.
+            </h2>
+            <p className="text-neutral-400 text-lg leading-relaxed">
+              ZA Scout was born from the need to organize the chaotic landscape of DAO contributions. We believe that contributor reputation shouldn't be siloed, and finding opportunities shouldn't require monitoring 50 Discord servers.
+            </p>
+            <div className="grid grid-cols-2 gap-8 pt-4">
+              <div>
+                <div className="text-brand-blue font-bold text-2xl mb-1">99%</div>
+                <div className="text-neutral-500 text-xs uppercase font-bold tracking-widest text-nowrap">Filter Accuracy</div>
+              </div>
+              <div>
+                <div className="text-brand-purple font-bold text-2xl mb-1">2k+</div>
+                <div className="text-neutral-500 text-xs uppercase font-bold tracking-widest text-nowrap">DAOs Indexed</div>
+              </div>
+            </div>
+          </div>
+          <div className="flex-1 relative">
+            <div className="absolute inset-0 bg-brand-blue/20 blur-[100px] -z-10" />
+            <div className="aspect-square bg-neutral-900 border border-neutral-800 rounded-3xl p-8 flex items-center justify-center overflow-hidden">
+               <div className="grid grid-cols-2 gap-4 w-full">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="h-32 bg-white/5 rounded-2xl border border-white/5 animate-pulse" />
+                  ))}
+               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Ecosystem Section */}
+      <section id="ecosystem" className="px-6 md:px-12 py-24 border-t border-neutral-800">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-6">Connected Ecosystem</h2>
+          <p className="text-neutral-500 max-w-2xl mx-auto mb-16 text-lg">
+            We pull data from the most trusted sources in the ecosystem to ensure you have a complete picture of the landscape.
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {["ZeroAuth", "Snapshot", "Gitcoin", "Tally", "Safe", "ENS", "Arbitrum", "Optimism"].map((name) => (
+              <div key={name} className="h-24 md:h-32 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center group hover:border-white/20 transition-all cursor-default">
+                <span className="text-xl font-bold opacity-30 group-hover:opacity-80 transition-opacity font-display italic">{name}</span>
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-20 p-8 md:p-12 rounded-[2rem] bg-gradient-to-r from-brand-blue/20 to-brand-purple/20 border border-white/10 relative overflow-hidden group">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/10 blur-[80px] -z-10 group-hover:bg-white/20 transition-all duration-700" />
+            <h3 className="text-2xl md:text-4xl font-display font-bold text-white mb-6">Ready to find your next mission?</h3>
+            <Link 
+              to="/dashboard" 
+              className="inline-flex h-14 px-10 bg-white text-black rounded-full items-center font-bold hover:scale-105 transition-all shadow-xl shadow-white/10"
+            >
+              Get Started for Free
+            </Link>
+          </div>
         </div>
       </section>
 

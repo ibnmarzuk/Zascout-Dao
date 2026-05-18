@@ -41,6 +41,9 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-brand-bg text-text-main font-sans antialiased transition-colors duration-300;
   }
@@ -48,7 +51,7 @@
 
 @layer components {
   .bloomberg-card {
-    @apply bg-card-bg border border-border-main rounded-2xl p-5 transition-all hover:border-brand-blue/50 hover:bg-card-hover;
+    @apply bg-card-bg border border-border-main rounded-2xl p-5 transition-all hover:border-brand-blue/50 hover:bg-card-hover hover:shadow-[0_20px_50px_rgba(37,99,235,0.08)] hover:-translate-y-1;
   }
   
   .glass-panel {

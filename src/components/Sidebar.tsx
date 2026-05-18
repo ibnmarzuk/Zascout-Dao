@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Compass, Trophy, User, Bookmark, BarChart3, Settings, LogOut, Search, X } from "lucide-react";
+import { LayoutDashboard, Compass, Trophy, User, Bookmark, BarChart3, Settings, LogOut, Search, X, HelpCircle } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 
 import logo from "../assets/images/zascout_logo_1779052819094.png";
@@ -66,6 +66,16 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               <span>{item.label}</span>
             </Link>
           ))}
+          <button
+            onClick={() => {
+              window.dispatchEvent(new CustomEvent("trigger-onboarding"));
+              onClose?.();
+            }}
+            className="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-bold text-neutral-500 hover:bg-card-hover hover:text-text-main transition-all mt-4 border-t border-border-main/50 pt-4"
+          >
+            <HelpCircle className="w-4 h-4" />
+            <span>Restart Tour</span>
+          </button>
         </nav>
 
         <div className="border-t border-border-main p-4">

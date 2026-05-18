@@ -8,11 +8,13 @@ import Explorer from "./pages/Explorer";
 import Analytics from "./pages/Analytics";
 import Intelligence from "./pages/Intelligence";
 import SavedItems from "./pages/SavedItems";
+import Onboarding from "./components/Onboarding";
 
 export default function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
+        <Onboarding />
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route element={<Layout />}>

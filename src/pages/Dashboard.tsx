@@ -188,11 +188,17 @@ function OpCard({ op }: any) {
   const isGrant = op.type === 'grant';
   const isProposal = op.type === 'proposal';
 
+  const formatReward = (reward: number | string) => {
+    if (typeof reward === 'string') return reward;
+    if (reward === 0) return "N/A";
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(reward);
+  };
+
   return (
     <motion.div 
-      whileHover={{ y: -2 }}
+      whileHover={{ y: -4, shadow: "0 20px 50px rgba(37,99,235,0.08)" }}
       className={cn(
-        "group relative rounded-2xl border border-border-main bg-card-bg p-5 transition-all hover:bg-card-hover hover:border-brand-blue/30",
+        "group relative rounded-2xl border border-border-main bg-card-bg p-5 transition-all hover:bg-card-hover hover:shadow-xl",
         isGrant && "hover:border-brand-blue/50",
         isBounty && "hover:border-brand-purple/50",
         isProposal && "hover:border-emerald-500/50"
@@ -217,7 +223,7 @@ function OpCard({ op }: any) {
       <div className="mt-6 flex items-center justify-between">
         <div className="flex flex-col">
           <span className="text-[10px] text-neutral-600 uppercase tracking-tighter">Reward</span>
-          <span className="text-sm font-bold text-text-main tracking-tight">{op.reward}</span>
+          <span className="text-sm font-bold text-text-main tracking-tight">{formatReward(op.reward)}</span>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex flex-col items-end">
