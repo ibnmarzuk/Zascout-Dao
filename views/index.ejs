@@ -258,10 +258,6 @@
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20 text-brand-purple text-xs font-semibold uppercase tracking-widest">
                         <i data-lucide="zap" class="w-3 h-3"></i> BOUNTY HUB
                     </div>
-                    <div class="flex items-center gap-2 text-emerald-400 text-sm font-medium">
-                        <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-                        128 live right now
-                    </div>
                 </div>
                 
                 <h1 class="text-4xl md:text-5xl font-display font-bold text-white mb-2 tracking-tight">Complete tasks.</h1>
@@ -293,31 +289,40 @@
                 <div class="flex flex-col sm:flex-row gap-3">
                     <div class="relative flex-grow sm:w-80 group">
                         <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted group-focus-within:text-brand-blue transition-colors"></i>
-                        <input type="text" id="searchInput" placeholder="Search by title, tag, DAO..." class="w-full bg-brand-light border border-white/10 rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder:text-brand-muted focus:outline-none focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/10 transition-all shadow-inner">
+                        <input type="text" id="searchInput" placeholder="Search by title, tag, DAO..." class="w-full bg-brand-light border border-brand-subtle rounded-xl pl-11 pr-4 py-3 text-sm text-brand-text placeholder:text-brand-muted focus:outline-none focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/10 transition-all shadow-inner">
                     </div>
                     <button id="aiSearchBtn" class="bg-brand-purple hover:bg-purple-600 text-white rounded-xl px-4 py-3 text-sm font-medium transition-all shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] flex items-center justify-center gap-2 whitespace-nowrap">
                         <i data-lucide="sparkles" class="w-4 h-4"></i> AI Search
                     </button>
-                    <button id="toggleFiltersBtn" class="bg-brand-light border border-white/10 hover:bg-white/5 text-white rounded-xl px-4 py-3 text-sm font-medium transition-all flex items-center justify-center gap-2 lg:hidden">
+                    <button id="toggleFiltersBtn" class="bg-brand-light border border-brand-subtle hover:bg-brand-subtle/50 text-brand-text rounded-xl px-4 py-3 text-sm font-medium transition-all flex items-center justify-center gap-2 lg:hidden">
                         <i data-lucide="filter" class="w-4 h-4"></i> Filters
                     </button>
                 </div>
                 
                 <!-- Filter Controls (Responsive) -->
-                <div id="filterPanel" class="hidden lg:flex flex-col sm:flex-row gap-3 p-4 lg:p-0 rounded-xl bg-brand-light border border-white/5 lg:bg-transparent lg:border-none w-full animate-slide-up origin-top">
-                    <select id="rewardFilter" class="bg-brand-dark/50 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/50 w-full sm:w-auto cursor-pointer">
-                        <option value="">Any Reward</option>
-                        <option value="0-1000">Under 1,000</option>
-                        <option value="1000-5000">1,000 - 5,000</option>
-                        <option value="5000+">5,000+</option>
-                    </select>
-                    
-                    <select id="typeFilter" class="bg-brand-dark/50 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/50 w-full sm:w-auto cursor-pointer">
-                        <option value="">All Types</option>
-                        <option value="bounty">Bounties</option>
-                        <option value="grant">Grants</option>
-                        <option value="quest">Quests</option>
-                    </select>
+                <div id="filterPanel" class="hidden lg:flex flex-col gap-5 p-5 lg:p-0 rounded-2xl bg-brand-light/95 backdrop-blur-xl border border-brand-subtle lg:bg-transparent lg:backdrop-blur-none lg:border-none w-full animate-slide-up shadow-2xl lg:shadow-none z-20 relative lg:mt-3">
+                    <div class="flex flex-col sm:flex-row gap-6 items-end lg:items-center w-full">
+                        <div class="flex flex-col gap-3 w-full sm:w-1/2 lg:w-1/3">
+                            <label for="rewardRange" class="text-[11px] font-bold text-brand-muted uppercase tracking-wider flex justify-between items-center">
+                                <span>Min Reward</span>
+                                <span id="rewardRangeVal" class="text-brand-purple font-display font-bold text-sm">$0+</span>
+                            </label>
+                            <input type="range" id="rewardRange" min="0" max="15000" step="500" value="0" class="w-full accent-brand-purple h-1.5 bg-brand-subtle rounded-full appearance-none cursor-pointer">
+                        </div>
+                        
+                        <div class="flex flex-col gap-3 w-full sm:w-1/2 lg:w-1/4 lg:ml-auto">
+                            <label for="typeFilter" class="text-[11px] font-bold text-brand-muted uppercase tracking-wider">Opportunity Type</label>
+                            <div class="relative group">
+                                <select id="typeFilter" class="bg-transparent border border-brand-subtle rounded-xl px-4 py-2.5 text-sm text-brand-text focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 w-full cursor-pointer appearance-none transition-all hover:bg-brand-subtle/30 shadow-inner">
+                                    <option value="" class="bg-brand-light text-brand-text">All Types</option>
+                                    <option value="bounty" class="bg-brand-light text-brand-text">Bounties</option>
+                                    <option value="grant" class="bg-brand-light text-brand-text">Grants</option>
+                                    <option value="quest" class="bg-brand-light text-brand-text">Quests</option>
+                                </select>
+                                <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted pointer-events-none group-hover:text-brand-text transition-colors"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -457,12 +462,17 @@
                                 </div>
                             </div>
                             
-                            <div class="text-right">
-                                <% if (op.reward > 0) { %>
-                                    <div class="font-display font-bold text-lg text-white">$<%= op.reward.toLocaleString() %></div>
-                                <% } else { %>
-                                    <div class="font-display font-medium text-sm text-brand-muted mt-1 px-2 py-0.5 bg-white/5 rounded">Open Allocation</div>
-                                <% } %>
+                            <div class="flex items-center gap-3">
+                                <button class="save-bookmark-btn text-brand-muted hover:text-brand-purple transition-all relative z-10" data-id="<%= op.id %>" title="Save Task" onclick="event.stopPropagation();">
+                                    <i data-lucide="bookmark" class="w-5 h-5 bookmark-icon"></i>
+                                </button>
+                                <div class="text-right">
+                                    <% if (op.reward > 0) { %>
+                                        <div class="font-display font-bold text-lg text-white">$<%= op.reward.toLocaleString() %></div>
+                                    <% } else { %>
+                                        <div class="font-display font-medium text-sm text-brand-muted mt-1 px-2 py-0.5 bg-white/5 rounded">Open Allocation</div>
+                                    <% } %>
+                                </div>
                             </div>
                         </div>
 
@@ -604,15 +614,20 @@
                 </div>
             </div>
             
-            <div class="flex flex-col md:items-end gap-3">
-                <div class="flex items-center gap-4 text-sm font-medium text-brand-muted">
-                    <a href="https://x.com/zeroauthscout" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5"><i data-lucide="twitter" class="w-4 h-4"></i> @zeroauthscout</a>
-                    <a href="https://github.com/ibnmarzuk/Zascout-Dao" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5"><i data-lucide="github" class="w-4 h-4"></i> GitHub</a>
-                </div>
-                <div class="flex items-center gap-6 text-sm font-medium text-brand-muted">
+            <div class="flex flex-col lg:items-end gap-5 w-full lg:w-auto">
+                <div class="flex flex-wrap items-center gap-4 sm:gap-6 text-sm font-medium text-brand-muted">
                     <span class="text-brand-purple/70 font-semibold tracking-wide">#ZAScout #DAOBounties #Earn</span>
-                    <a href="/mcp" class="hover:text-white transition-colors border-l border-white/10 pl-6">Model Context Protocol</a>
+                    <div class="w-px h-4 bg-white/10 hidden sm:block"></div>
+                    <a href="/mcp" class="hover:text-white transition-colors">Model Context Protocol</a>
                     <a href="#" class="hover:text-white transition-colors">Terms</a>
+                </div>
+                <div class="flex items-center gap-4 text-brand-muted">
+                    <a href="https://x.com/zeroauthscout" target="_blank" aria-label="X (formerly Twitter)" class="w-10 h-10 rounded-full bg-brand-subtle/50 border border-white/10 flex items-center justify-center hover:bg-white/10 hover:text-white hover:border-white/20 transition-all group">
+                        <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current group-hover:scale-110 transition-transform" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.004 3.829H5.059z"></path></svg>
+                    </a>
+                    <a href="https://github.com/ibnmarzuk/Zascout-Dao" target="_blank" aria-label="GitHub" class="w-10 h-10 rounded-full bg-brand-subtle/50 border border-white/10 flex items-center justify-center hover:bg-white/10 hover:text-white hover:border-white/20 transition-all group">
+                        <i data-lucide="github" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -686,17 +701,100 @@
                 }, 3000);
             };
 
-            // Save Task functionality
+            // Save Task functionality via Local Storage
+            const getSavedItems = () => {
+                try {
+                    const saved = localStorage.getItem('savedItems');
+                    return saved ? JSON.parse(saved) : [];
+                } catch(e) {
+                    console.error('Failed to parse saved items', e);
+                    return [];
+                }
+            };
+
+            const setSavedItems = (items) => {
+                try {
+                    localStorage.setItem('savedItems', JSON.stringify(items));
+                    return true;
+                } catch(e) {
+                    console.error('Failed to save to localStorage', e);
+                    return false;
+                }
+            };
+
+            let savedItems = getSavedItems();
+
+            const updateBookmarkUI = (id, isSaved) => {
+                // Update cards icons
+                const cardBtns = document.querySelectorAll(`.save-bookmark-btn[data-id="${id}"]`);
+                cardBtns.forEach(btn => {
+                    const icon = btn.querySelector('.bookmark-icon');
+                    if(icon) {
+                        if(isSaved) {
+                            btn.classList.add('text-brand-purple');
+                            btn.classList.remove('text-brand-muted');
+                            icon.setAttribute('fill', 'currentColor');
+                        } else {
+                            btn.classList.remove('text-brand-purple');
+                            btn.classList.add('text-brand-muted');
+                            icon.setAttribute('fill', 'none');
+                        }
+                    }
+                });
+
+                // Update modal button if currently viewing
+                const modalBtn = document.getElementById('saveTaskBtn');
+                if(modalBtn && modalBtn.dataset.id === id) {
+                    if(isSaved) {
+                        modalBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 inline mr-1"></i> Saved';
+                        modalBtn.classList.add('saved', 'border-emerald-500/50', 'text-emerald-400', 'bg-emerald-500/10');
+                    } else {
+                        modalBtn.innerHTML = 'Save Task';
+                        modalBtn.classList.remove('saved', 'border-emerald-500/50', 'text-emerald-400', 'bg-emerald-500/10');
+                    }
+                    lucide.createIcons();
+                }
+            };
+
+            const toggleSaveTask = (id) => {
+                if(!id) return;
+                savedItems = getSavedItems();
+                const isCurrentlySaved = savedItems.includes(id);
+                
+                let newSaved = isCurrentlySaved 
+                    ? savedItems.filter(itemId => itemId !== id)
+                    : [...savedItems, id];
+                
+                if(setSavedItems(newSaved)) {
+                    savedItems = newSaved;
+                    updateBookmarkUI(id, !isCurrentlySaved);
+                    if(!isCurrentlySaved) {
+                        window.showToast('Task added to your saved catalogue');
+                    } else {
+                        window.showToast('Task removed from saved catalogue', 'info');
+                    }
+                } else {
+                    window.showToast('Failed to save task. Storage error.', 'error');
+                }
+            };
+
+            // Initialize existing saved UI
+            savedItems.forEach(id => updateBookmarkUI(id, true));
+
+            // Attach to card bookmark icons
+            document.querySelectorAll('.save-bookmark-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleSaveTask(btn.dataset.id);
+                });
+            });
+
+            // Attach to modal Save button
             const saveTaskBtn = document.getElementById('saveTaskBtn');
             if(saveTaskBtn) {
                 saveTaskBtn.addEventListener('click', function() {
-                    if(this.classList.contains('saved')) return; // already saved
-                    
-                    this.innerHTML = '<i data-lucide="check" class="w-4 h-4 inline mr-1"></i> Saved';
-                    this.classList.add('saved', 'border-emerald-500/50', 'text-emerald-400', 'bg-emerald-500/10');
-                    lucide.createIcons();
-                    
-                    window.showToast('Task added to your saved catalogue');
+                    const id = this.dataset.id;
+                    toggleSaveTask(id);
                 });
             }
 
@@ -713,14 +811,27 @@
             // Client-side filtering and search
             const searchInput = document.getElementById('searchInput');
             const typeFilter = document.getElementById('typeFilter');
-            const rewardFilter = document.getElementById('rewardFilter');
+            const rewardRange = document.getElementById('rewardRange');
+            const rewardRangeVal = document.getElementById('rewardRangeVal');
             const cards = document.querySelectorAll('.opportunity-card');
             const hiddenEmptyState = document.getElementById('hiddenEmptyState');
+
+            if (rewardRange) {
+                rewardRange.addEventListener('input', (e) => {
+                    const val = Number(e.target.value);
+                    if (val === 0) {
+                        rewardRangeVal.textContent = '$0+';
+                    } else {
+                        rewardRangeVal.textContent = '$' + val.toLocaleString() + '+';
+                    }
+                    filterCards();
+                });
+            }
 
             function filterCards() {
                 const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
                 const typeVal = typeFilter ? typeFilter.value.toLowerCase() : '';
-                const rewardVal = rewardFilter ? rewardFilter.value : '';
+                const formatVal = rewardRange ? Number(rewardRange.value) : 0;
                 
                 let visibleCount = 0;
                 
@@ -737,9 +848,9 @@
                     const matchesType = typeVal === '' || type === typeVal;
                     
                     let matchesReward = true;
-                    if(rewardVal === '0-1000') matchesReward = rewardAmt < 1000;
-                    else if(rewardVal === '1000-5000') matchesReward = rewardAmt >= 1000 && rewardAmt <= 5000;
-                    else if(rewardVal === '5000+') matchesReward = rewardAmt > 5000;
+                    if (formatVal > 0) {
+                        matchesReward = rewardAmt >= formatVal;
+                    }
                     
                     if (matchesSearch && matchesType && matchesReward) {
                         card.classList.remove('hidden');
@@ -765,7 +876,6 @@
 
             if(searchInput) searchInput.addEventListener('input', filterCards);
             if(typeFilter) typeFilter.addEventListener('change', filterCards);
-            if(rewardFilter) rewardFilter.addEventListener('change', filterCards);
 
             // AI Search feature
             const aiSearchBtn = document.getElementById('aiSearchBtn');
@@ -856,6 +966,7 @@
             const closeDetailModal = document.getElementById('closeDetailModal');
             
             const openOpDetail = (card) => {
+                const id = card.dataset.id;
                 const title = card.dataset.title;
                 const dao = card.dataset.dao;
                 const type = card.dataset.type;
@@ -866,6 +977,19 @@
                 document.getElementById('modalOpDao').textContent = dao;
                 document.getElementById('modalOpType').textContent = type;
                 document.getElementById('modalOpReward').textContent = `$${reward}`;
+                
+                const saveTaskBtn = document.getElementById('saveTaskBtn');
+                if (saveTaskBtn) {
+                    saveTaskBtn.dataset.id = id;
+                    const isSaved = savedItems.includes(id);
+                    if(isSaved) {
+                        saveTaskBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 inline mr-1"></i> Saved';
+                        saveTaskBtn.classList.add('saved', 'border-emerald-500/50', 'text-emerald-400', 'bg-emerald-500/10');
+                    } else {
+                        saveTaskBtn.innerHTML = 'Save Task';
+                        saveTaskBtn.classList.remove('saved', 'border-emerald-500/50', 'text-emerald-400', 'bg-emerald-500/10');
+                    }
+                }
                 
                 // Detailed descriptions based on type
                 const descriptions = {
