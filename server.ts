@@ -27,8 +27,8 @@ const PORT = process.env.PORT || 3000;
 // Set EJS as view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(process.cwd(), "views"));
-  
-  app.use(express.static(path.join(process.cwd(), "public")));
+
+app.use(express.static(path.join(process.cwd(), "public")));
 
   app.use(helmet({
     contentSecurityPolicy: {
@@ -107,10 +107,10 @@ app.set("views", path.join(process.cwd(), "views"));
     }
   });
 
-  if (!process.env.VERCEL) {
+  if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
     app.listen(PORT, () => {
-      console.log(`Server running on http://0.0.0.0:${PORT}`);
+      console.log(`Server running on http://localhost:${PORT}`);
     });
   }
-
-export default app;
+  
+  export default app;

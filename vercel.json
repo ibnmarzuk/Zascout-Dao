@@ -1,14 +1,18 @@
 {
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.ts",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["views/**"]
+      }
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/api"
+      "destination": "/server.ts"
     }
-  ],
-  "functions": {
-    "api/index.ts": {
-      "includeFiles": "views/**"
-    }
-  }
+  ]
 }
-
