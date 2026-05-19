@@ -6,8 +6,23 @@ import ProfileModal from "./ProfileModal";
 
 export const LogoIcon = ({ className }: { className?: string }) => (
   <div className={`relative flex items-center justify-center ${className}`}>
-    <Search className="absolute w-full h-full text-brand-blue/80" />
-    <TrendingUp className="absolute w-2/3 h-2/3 text-brand-blue -translate-y-1 translate-x-1" strokeWidth={3} />
+    <div className="absolute inset-0 bg-brand-blue/20 rounded-full blur-md"></div>
+    <svg viewBox="0 0 100 100" className="w-full h-full relative z-10" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="42" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 2" className="text-brand-blue/50" />
+      <circle cx="50" cy="50" r="38" stroke="currentColor" strokeWidth="1" className="text-brand-blue/30" />
+      <path d="M50 15V22M50 78V85M15 50H22M78 50H85" stroke="currentColor" strokeWidth="1.5" className="text-brand-blue" />
+      <text x="47" y="12" fill="currentColor" className="text-[10px] font-bold text-brand-blue">N</text>
+      <g transform="rotate(45, 50, 50)">
+        <path d="M50 25L56 50L50 75L44 50L50 25Z" fill="url(#header-logo-gradient)" className="drop-shadow-[0_0_8px_rgba(0,112,243,0.8)]" />
+        <circle cx="50" cy="50" r="3" fill="white" />
+      </g>
+      <defs>
+        <linearGradient id="header-logo-gradient" x1="50" y1="25" x2="50" y2="75" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#0070F3" />
+          <stop offset="1" stopColor="#8b5cf6" />
+        </linearGradient>
+      </defs>
+    </svg>
   </div>
 );
 
