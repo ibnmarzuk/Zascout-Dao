@@ -1,6 +1,6 @@
 # ZA Scout - AI-Powered DAO Intelligence Platform
 
-ZA Scout is a premium, responsive dashboard designed for the Zero Authority DAO ecosystem. It serves as a centralized intelligence hub to help contributors discover and track high-impact bounties, grants, and quests, empowered by Gemini 3.1 AI insights and the Model Context Protocol (MCP).
+ZA Scout is a premium, responsive dashboard designed for the Zero Authority DAO ecosystem. It serves as a centralized intelligence hub to help contributors discover and track high-impact bounties, grants, and quests, empowered using  Model Context Protocol (MCP).
 
 ## Key Features
 
