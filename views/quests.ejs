@@ -554,6 +554,29 @@
                 });
             }
 
+            // Initialize all quest UIs
+            document.querySelectorAll('.quest-card').forEach(updateQuestUI);
+            
+            // Add click listeners to save buttons
+            document.querySelectorAll('.save-bookmark-btn').forEach(btn => {
+                const questId = btn.dataset.id;
+                if(savedItems.includes(questId)) {
+                   updateSaveButtonUI(questId);
+                }
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    saveQuest(questId);
+                });
+            });
+
+            document.querySelectorAll('.action-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    // Start propagation to open the modal...
+                    const card = this.closest('.quest-card');
+                    if (card) openModal(card.dataset.id);
+                });
+            });
+
             // Modal Logic
             const modal = document.getElementById('questModal');
             const closeBtn = document.getElementById('closeModal');
@@ -949,13 +972,58 @@
                 }
             };
 
-            // Initialize all quest UIs
-            document.querySelectorAll('.quest-card').forEach(updateQuestUI);
+            // Enhanced Quest State / Progress Tracking
+            const savedItems = JSON.parse(localStorage.getItem('savedItems') || '[]');
 
-            document.querySelectorAll('.action-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    // Start propagation to open the modal instead of manually incrementing
-                    // since we now use the modal for dynamic forms.
+            function saveQuest(id) {
+                if(!savedItems.includes(id)) {
+                    savedItems.push(id);
+                    localStorage.setItem('savedItems', JSON.stringify(savedItems));
+                    updateSaveButtonUI(id);
+                }
+            }
+
+            function updateSaveButtonUI(id) {
+                document.querySelectorAll(`.save-bookmark-btn[data-id="${id}"]`).forEach(btn => {
+                    btn.innerHTML = '<i data-lucide="check" class="w-5 h-5 text-emerald-400"></i>';
+                    btn.setAttribute('title', 'Saved');
+                });
+                lucide.createIcons();
+            }
+
+            // ... (rest of the script)
+            
+            function updateQuestUI(card) {
+                const id = card.dataset.id;
+                const current = Number(card.dataset.current);
+                const target = Number(card.dataset.target);
+                const progress = (current / target) * 100;
+                
+                const bar = card.querySelector('.progress-bar');
+                const label = card.querySelector('.progress-label');
+                const btn = card.querySelector('.action-btn');
+                
+                if(bar) bar.style.width = `${Math.min(progress, 100)}%`;
+                if(label) label.textContent = `${current} / ${target} ${id === 'discord' ? 'Msgs' : id === 'twitter' ? 'Thread' : 'PR'}`;
+                
+                if(btn) {
+                    if (current < target) {
+                        // In-Progress / Reviewing state
+                        if (id === 'twitter') {
+                            btn.innerHTML = `Reviewing <i data-lucide="clock" class="w-3.5 h-3.5"></i>`;
+                            btn.className = 'action-btn text-sm font-semibold text-amber-500 cursor-wait flex items-center gap-1 bg-amber-500/10 px-3 py-1.5 rounded-lg border border-amber-500/20';
+                        } else {
+                            btn.innerHTML = `Contribute <i data-lucide="plus" class="w-3.5 h-3.5"></i>`;
+                            btn.className = 'action-btn text-sm font-semibold text-white hover:text-brand-blue flex items-center gap-1 transition-colors relative z-10';
+                        }
+                    } else {
+                        // Completed / Ready to Claim
+                        btn.innerHTML = `Claim Reward +1000 XP <i data-lucide="gift" class="w-3.5 h-3.5 items-center"></i>`;
+                        btn.className = 'action-btn bg-emerald-500 text-black px-4 py-1.5 rounded-lg text-sm font-bold shadow-[0_0_15px_rgba(16,185,129,0.5)] hover:bg-emerald-400 hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5 relative z-10 ring-2 ring-emerald-500/20 animate-pulse';
+                    }
+                }
+                lucide.createIcons();
+            }
                 });
             });
         });
