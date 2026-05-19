@@ -21,9 +21,9 @@
                         brand: {
                             blue: '#0070F3',
                             purple: '#8b5cf6',
-                            dark: 'var(--bg-dark, #000000)',
-                            light: 'var(--bg-light, #111111)',
-                            subtle: 'var(--bg-subtle, #222222)',
+                            dark: 'var(--bg-dark, #020817)',
+                            light: 'var(--bg-light, #0f172a)',
+                            subtle: 'var(--bg-subtle, #1e293b)',
                             text: 'var(--text-main, #EDEDED)',
                             muted: 'var(--text-muted, #A1A1AA)'
                         },
@@ -68,7 +68,7 @@
         }
         
         .glass-panel {
-            background: rgba(17, 17, 17, 0.6);
+            background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -82,7 +82,7 @@
         }
 
         .bento-card {
-            background: linear-gradient(145deg, rgba(34,34,34,0.4) 0%, rgba(17,17,17,0.8) 100%);
+            background: linear-gradient(145deg, rgba(15,23,42,0.6) 0%, rgba(2,8,23,0.9) 100%);
             border: 1px solid rgba(255,255,255,0.06);
             border-radius: 16px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -195,6 +195,9 @@
 </head>
 <body class="min-h-screen flex flex-col font-sans relative">
     
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-[200] flex flex-col gap-3 pointer-events-none"></div>
+
     <div class="glow-bg animate-pulse-slow"></div>
 
     <!-- Navbar -->
@@ -262,7 +265,11 @@
                 </div>
                 
                 <h1 class="text-4xl md:text-5xl font-display font-bold text-white mb-2 tracking-tight">Complete tasks.</h1>
-                <h1 class="text-4xl md:text-5xl font-display font-bold text-brand-purple mb-8 tracking-tight">Get paid onchain.</h1>
+                <h1 class="text-4xl md:text-5xl font-display font-bold text-brand-purple mb-6 tracking-tight">Get paid onchain.</h1>
+                
+                <p class="text-brand-muted text-lg font-light mb-8 max-w-3xl leading-relaxed">
+                    <strong class="text-white font-medium">ZA Scout</strong> is an AI powered DAO intelligence platform built for the Zero Authority ecosystem. It helps contributors discover grants, bounties, governance opportunities, and community reputation insights through a clean and accessible interface. The platform combines DAO analytics, AI powered discovery, and contributor reputation tracking into a single hub.
+                </p>
                 
                 <!-- Stats Row -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
@@ -570,7 +577,7 @@
                         <div id="modalOpReward" class="text-emerald-400 font-display font-bold text-2xl">$0.00</div>
                     </div>
                     <div class="flex gap-3 w-full sm:w-auto">
-                        <button class="flex-grow sm:flex-grow-0 border border-white/10 text-white px-6 py-3 rounded-xl font-bold hover:bg-white/5 transition-all text-sm">
+                        <button id="saveTaskBtn" class="flex-grow sm:flex-grow-0 border border-white/10 text-white px-6 py-3 rounded-xl font-bold hover:bg-white/5 transition-all text-sm">
                             Save Task
                         </button>
                         <button class="flex-grow sm:flex-grow-0 bg-white text-black px-8 py-3 rounded-xl font-bold hover:bg-gray-200 transition-all shadow-lg active:scale-95 text-sm">
@@ -642,6 +649,54 @@
                     const isLight = html.classList.contains('light');
                     themeToggleBtn.querySelector('.dark-icon').classList.toggle('hidden', !isLight);
                     themeToggleBtn.querySelector('.light-icon').classList.toggle('hidden', isLight);
+                });
+            }
+
+            // Toast Notification System
+            window.showToast = function(message, type = 'success') {
+                const container = document.getElementById('toastContainer');
+                if(!container) return;
+
+                const toast = document.createElement('div');
+                toast.className = `transform translate-y-8 opacity-0 transition-all duration-300 pointer-events-auto flex items-center gap-3 glass-panel px-4 py-3 rounded-xl shadow-2xl border-white/10 backdrop-blur-xl ${type === 'success' ? 'bg-emerald-500/10' : 'bg-brand-blue/10'}`;
+                
+                const iconHtml = type === 'success' 
+                    ? `<div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center"><i data-lucide="check" class="w-4 h-4"></i></div>`
+                    : `<div class="w-8 h-8 rounded-full bg-brand-blue/20 text-brand-blue flex items-center justify-center"><i data-lucide="info" class="w-4 h-4"></i></div>`;
+                
+                toast.innerHTML = `
+                    ${iconHtml}
+                    <span class="text-sm font-medium text-white">${message}</span>
+                `;
+                
+                container.appendChild(toast);
+                lucide.createIcons();
+
+                // Animate in
+                requestAnimationFrame(() => {
+                    toast.classList.remove('translate-y-8', 'opacity-0');
+                    toast.classList.add('translate-y-0', 'opacity-100');
+                });
+
+                // Auto remove after 3s
+                setTimeout(() => {
+                    toast.classList.remove('translate-y-0', 'opacity-100');
+                    toast.classList.add('translate-y-8', 'opacity-0');
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            };
+
+            // Save Task functionality
+            const saveTaskBtn = document.getElementById('saveTaskBtn');
+            if(saveTaskBtn) {
+                saveTaskBtn.addEventListener('click', function() {
+                    if(this.classList.contains('saved')) return; // already saved
+                    
+                    this.innerHTML = '<i data-lucide="check" class="w-4 h-4 inline mr-1"></i> Saved';
+                    this.classList.add('saved', 'border-emerald-500/50', 'text-emerald-400', 'bg-emerald-500/10');
+                    lucide.createIcons();
+                    
+                    window.showToast('Task added to your saved catalogue');
                 });
             }
 

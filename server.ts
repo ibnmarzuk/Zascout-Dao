@@ -84,6 +84,12 @@ app.use(express.static(path.join(process.cwd(), "public")));
         { id: "zap-4", title: "Thread on L2 scaling", type: "bounty", dao: "Arbitrum DAO", reward: 150, tags: ["Content"], status: "open" },
         { id: "zap-5", title: "Brand identity refresh", type: "bounty", dao: "Nouns DAO", reward: 600, tags: ["Design"], status: "open" },
         { id: "zap-6", title: "Tokenomics analysis", type: "bounty", dao: "Optimism", reward: 500, tags: ["Research"], status: "open" },
+        { id: "zap-7", title: "Core Protocol V2 Development", type: "grant", dao: "Zero Authority", reward: 15000, tags: ["Dev", "Architecture"], status: "active" },
+        { id: "zap-8", title: "Community Management Tooling", type: "grant", dao: "Optimism", reward: 5000, tags: ["Dev", "Social"], status: "open" },
+        { id: "zap-9", title: "DeFi Research Dashboard", type: "grant", dao: "Aave Grants", reward: 8000, tags: ["Dev", "Design", "Data"], status: "open" },
+        { id: "zap-10", title: "Write a deep dive on account abstraction", type: "quest", dao: "Zero Authority", reward: 100, tags: ["Writing"], status: "open" },
+        { id: "zap-11", title: "Review 5 PRs in core repo", type: "quest", dao: "Compound DAO", reward: 300, tags: ["Dev", "Review"], status: "open" },
+        { id: "zap-12", title: "Participate in weekly dev call", type: "quest", dao: "ENS DAO", reward: 50, tags: ["Community"], status: "completed" },
       ];
     }
     
