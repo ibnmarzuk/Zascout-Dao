@@ -76,12 +76,14 @@ app.use(express.static(path.join(process.cwd(), "public")));
         }));
       }
     } catch (e) {
-      // Meaningful mockup data based on Zero Authority domain if API is unreachable
+      // Meaningful mockup data based on the provided image
       opportunities = [
-        { id: "zap-1", title: "Implement MCP Server for AIBTC", type: "bounty", dao: "Zero Authority", reward: 2500, tags: ["AI", "Typescript", "MCP"], status: "open" },
-        { id: "zap-2", title: "Build DeGrant Front-end", type: "grant", dao: "Zero Authority", reward: 5000, tags: ["Frontend", "Design"], status: "active" },
-        { id: "zap-3", title: "Smart Contract Audit - SIP 10", type: "bounty", dao: "Security Council", reward: 8000, tags: ["Security", "Clarity"], status: "open" },
-        { id: "zap-4", title: "Claude Desktop Integration Guide", type: "quest", dao: "Zero Authority", reward: 500, tags: ["Writing", "Docs"], status: "open" },
+        { id: "zap-1", title: "Smart contract audit", type: "bounty", dao: "Compound DAO", reward: 800, tags: ["Dev"], status: "open" },
+        { id: "zap-2", title: "Frontend integration", type: "bounty", dao: "Aave Grants", reward: 400, tags: ["Dev"], status: "open" },
+        { id: "zap-3", title: "Governance explainer", type: "bounty", dao: "ENS DAO", reward: 200, tags: ["Content"], status: "open" },
+        { id: "zap-4", title: "Thread on L2 scaling", type: "bounty", dao: "Arbitrum DAO", reward: 150, tags: ["Content"], status: "open" },
+        { id: "zap-5", title: "Brand identity refresh", type: "bounty", dao: "Nouns DAO", reward: 600, tags: ["Design"], status: "open" },
+        { id: "zap-6", title: "Tokenomics analysis", type: "bounty", dao: "Optimism", reward: 500, tags: ["Research"], status: "open" },
       ];
     }
     

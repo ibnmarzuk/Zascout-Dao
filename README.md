@@ -2,7 +2,7 @@
 
 ZA Scout is a premium, responsive dashboard designed for the Zero Authority DAO ecosystem. It serves as a centralized intelligence hub to help contributors discover and track high-impact bounties, grants, and quests, empowered by Gemini 3.1 AI insights and the Model Context Protocol (MCP).
 
-## 🚀 Key Features
+## Key Features
 
 -   **Deep Discovery Explorer:** Real-time filtering for DAO opportunities based on reward amount, asset type (Bounty, Grant, Quest), and keyword tags. Featuring **high-fidelity detail overlays** for every opportunity.
 -   **Gemini AI Insights:** A dedicated Discovery Agent that analyzes search queries to suggest relevant DAOs, specific skill requirements, and high-level opportunity summaries.
@@ -11,7 +11,7 @@ ZA Scout is a premium, responsive dashboard designed for the Zero Authority DAO 
 -   **Premium Visual System:** A bento-grid based interface featuring glassmorphism, fluid animations (Framer Motion style via Tailwind), and zero-emoji professional branding.
 -   **Dynamic Theming:** Native support for both Dark (OLED midnight) and Light (High-contrast slate) modes with smooth transitions.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 -   **Backend:** Node.js, Express, TypeScript (run via `tsx`)
 -   **Templating:** EJS (Embedded JavaScript) with dynamic server-side rendering
@@ -20,7 +20,7 @@ ZA Scout is a premium, responsive dashboard designed for the Zero Authority DAO 
 -   **Build System:** esbuild for lightning-fast server bundling
 -   **Security:** Helmet.js, CSRF protection, and adaptive rate limiting
 
-## 🏁 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -47,7 +47,7 @@ ZA Scout is a premium, responsive dashboard designed for the Zero Authority DAO 
     ```
     Access the platform at `http://localhost:3000`.
 
-## 📡 MCP Integration
+## MCP Integration
 
 ZA Scout exposes a standardized Model Context Protocol interface. Contributors can empower their local AI agents by adding the following to their `claude_desktop_config.json`:
 
@@ -65,12 +65,12 @@ ZA Scout exposes a standardized Model Context Protocol interface. Contributors c
 }
 ```
 
-## 🏗️ Production Deployment
+## Production Deployment
 
 The project uses a specialized build pipeline:
 -   `npm run build`: Bundles `server.ts` into a standalone `dist/server.cjs` using esbuild.
 -   `npm run start`: Runs the production-optimized CommonJS server.
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License.

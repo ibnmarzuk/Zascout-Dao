@@ -346,17 +346,29 @@
 
     <!-- Footer -->
     <footer class="border-t border-white/5 py-8 mt-auto bg-brand-light/50 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-2 text-brand-muted text-sm font-medium">
-                <div class="w-5 h-5 rounded bg-brand-blue/20 flex items-center justify-center">
-                    <i data-lucide="zap" class="w-3 h-3 text-brand-blue"></i>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex flex-col gap-2">
+                <div class="flex items-center gap-2 text-white font-display font-medium">
+                    <div class="w-5 h-5 rounded bg-brand-blue/20 flex items-center justify-center">
+                        <i data-lucide="zap" class="w-3 h-3 text-brand-blue"></i>
+                    </div>
+                    zascout.xyz — Earn while you build
                 </div>
-                © <%= new Date().getFullYear() %> Zero Authority DAO.
+                <div class="text-brand-muted text-sm font-medium">
+                    © <%= new Date().getFullYear() %> Zero Authority DAO.
+                </div>
             </div>
-            <div class="flex items-center gap-6 text-sm font-medium text-brand-muted">
-                <a href="https://zeroauthoritydao.com/api-docs" target="_blank" class="hover:text-white transition-colors">API Specs</a>
-                <a href="/mcp" class="hover:text-white transition-colors">Model Context Protocol</a>
-                <a href="#" class="hover:text-white transition-colors">Terms</a>
+            
+            <div class="flex flex-col md:items-end gap-3">
+                <div class="flex items-center gap-4 text-sm font-medium text-brand-muted">
+                    <a href="https://x.com/zeroauthscout" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5"><i data-lucide="twitter" class="w-4 h-4"></i> @zeroauthscout</a>
+                    <a href="https://github.com/ibnmarzuk/Zascout-Dao" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5"><i data-lucide="github" class="w-4 h-4"></i> GitHub</a>
+                </div>
+                <div class="flex items-center gap-6 text-sm font-medium text-brand-muted">
+                    <span class="text-brand-purple/70 font-semibold tracking-wide">#ZAScout #DAOBounties #Earn</span>
+                    <a href="/mcp" class="hover:text-white transition-colors border-l border-white/10 pl-6">Model Context Protocol</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms</a>
+                </div>
             </div>
         </div>
     </footer>
