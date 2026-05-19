@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZA Scout | MCP Setup Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#3b82f6',
+                            purple: '#8b5cf6',
+                            dark: '#0f1115',
+                            light: '#1e2128'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: theme('colors.brand.dark'); color: #d1d5db; }
+        .glass-panel { background: rgba(30, 33, 40, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .code-block { background-color: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans">
+    
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 glass-panel border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded bg-brand-blue flex items-center justify-center text-white">
+                        <i data-lucide="zap" class="w-4 h-4"></i>
+                    </div>
+                    <span class="font-display font-bold text-xl text-white tracking-tight italic">ZA Scout</span>
+                </div>
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="/" class="text-gray-400 font-medium text-sm hover:text-white transition-colors">Explorer</a>
+                    <a href="/quests" class="text-gray-400 font-medium text-sm hover:text-white transition-colors">Quests</a>
+                    <a href="/mcp" class="text-white font-medium text-sm hover:text-brand-blue transition-colors">MCP Guide</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+        
+        <div class="mb-8">
+            <h1 class="text-4xl font-display font-bold text-white mb-4">Connect Zero Authority MCP to your AI</h1>
+            <p class="text-lg text-gray-400 leading-relaxed">
+                Connect your AI assistant (Claude Desktop, Cursor, or Claude Code) directly to gigs, bounties, and quests using our Model Context Protocol (MCP) server. 
+            </p>
+        </div>
+
+        <div class="glass-panel p-8 rounded-2xl mb-8 border-t-4 border-t-brand-purple">
+            <h2 class="text-2xl font-display font-bold text-white mb-6 flex items-center gap-3">
+                <i data-lucide="settings-2" class="w-6 h-6 text-brand-purple"></i> Configuration
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">1. Generate your API Key</h3>
+                    <p class="text-sm text-gray-400 mb-3">You need a Zero Authority API Key to authenticate the MCP client.</p>
+                    <button class="bg-brand-purple text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-600 transition-colors">
+                        Generate API Key
+                    </button>
+                </div>
+                
+                <div class="h-px bg-white/10 w-full my-4"></div>
+                
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">2. Add to Claude Desktop</h3>
+                    <p class="text-sm text-gray-400 mb-3">Add the following to your <code>claude_desktop_config.json</code>:</p>
+                    <div class="code-block rounded-xl p-4 overflow-x-auto">
+                        <pre class="text-sm text-emerald-400"><code>{
+  "mcpServers": {
+    "zero-authority": {
+      "command": "npx",
+      "args": ["-y", "@zeroauthority/mcp-server"],
+      "env": {
+        "ZA_API_KEY": "YOUR_ZA_API_KEY"
+      }
+    }
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass-panel p-6 rounded-xl hover:bg-white/[0.02] transition-colors">
+                <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                    <i data-lucide="bot" class="w-5 h-5 text-brand-blue"></i> Available Tools
+                </h3>
+                <ul class="space-y-3 text-sm text-gray-400">
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+                        <span><strong>get_bounties</strong>: Search for open gigs and bounties by keyword and tags.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+                        <span><strong>get_quests</strong>: Find community quests and ambassador tasks.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+                        <span><strong>apply_to_bounty</strong>: Draft an application directly from AI.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="glass-panel p-6 rounded-xl bg-gradient-to-br from-brand-blue/10 to-transparent">
+                <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                    <i data-lucide="terminal" class="w-5 h-5 text-brand-blue"></i> Try it with Claude Code
+                </h3>
+                <p class="text-sm text-gray-400 mb-4">Run this in your terminal to empower your CLI agent with DAO intelligence.</p>
+                <div class="code-block rounded p-3 overflow-x-auto text-xs text-white/90">
+                    <code>export ZA_API_KEY=YOUR_KEY</code><br>
+                    <code>claude mcp add zero-authority npx -y @zeroauthority/mcp-server</code>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

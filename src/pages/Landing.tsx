@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Sparkles, Shield, BarChart3, Users, Zap, ArrowRight, Github, Twitter, Search, Compass } from "lucide-react";
 import { motion } from "motion/react";
@@ -7,13 +7,28 @@ import { LogoIcon } from "../components/Header";
 import banner from "../assets/images/zascout_banner_1779052799939.png";
 
 export default function Landing() {
+  const [logoSrc, setLogoSrc] = useState<string | null>(null);
+
+  useEffect(() => {
+    const logoPath = "../assets/images/zascout_logo_1779052819094.png";
+    import(/* @vite-ignore */ logoPath)
+      .then((mod) => setLogoSrc(mod.default))
+      .catch((err) => {
+        console.error("Failed to load logo dynamically", err);
+      });
+  }, []);
+
   return (
     <div className="min-h-screen bg-brand-bg text-neutral-300 overflow-hidden font-sans">
       {/* Navigation */}
       <nav className="h-20 border-b border-neutral-800 flex items-center justify-between px-6 md:px-12 relative z-50">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded overflow-hidden">
-            <LogoIcon className="w-full h-full object-contain" />
+            {logoSrc ? (
+              <img src={logoSrc} alt="ZA Scout Logo" className="w-full h-full object-contain" onError={() => setLogoSrc(null)} />
+            ) : (
+              <LogoIcon className="w-full h-full object-contain" />
+            )}
           </div>
           <span className="font-display font-bold text-lg md:text-xl tracking-tight text-white uppercase italic">ZA Scout</span>
         </div>

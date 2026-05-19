@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, Compass, Trophy, User, Bookmark, BarChart3, Settings, LogOut, Search, X, HelpCircle } from "lucide-react";
 import { cn } from "@/src/lib/utils";
@@ -20,6 +20,16 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const location = useLocation();
+  const [logoSrc, setLogoSrc] = useState<string | null>(null);
+
+  useEffect(() => {
+    const logoPath = "../assets/images/zascout_logo_1779052819094.png";
+    import(/* @vite-ignore */ logoPath)
+      .then((mod) => setLogoSrc(mod.default))
+      .catch((err) => {
+        console.error("Failed to load logo dynamically", err);
+      });
+  }, []);
 
   return (
     <>
@@ -38,7 +48,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         <div className="flex items-center justify-between px-6 py-8">
           <Link to="/" className="flex items-center gap-3 group" onClick={onClose}>
             <div className="flex h-10 w-10 items-center justify-center rounded overflow-hidden group-hover:scale-110 transition-transform">
-              <LogoIcon className="w-full h-full object-contain" />
+              {logoSrc ? (
+                <img src={logoSrc} alt="ZA Scout Logo" className="w-full h-full object-contain" onError={() => setLogoSrc(null)} />
+              ) : (
+                <LogoIcon className="w-full h-full object-contain" />
+              )}
             </div>
             <span className="text-lg font-semibold tracking-tight text-text-main font-display uppercase italic">ZA Scout</span>
           </Link>
