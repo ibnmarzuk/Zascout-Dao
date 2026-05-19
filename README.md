@@ -30,7 +30,7 @@ ZA Scout is a modern, responsive web application designed to help contributors n
 
 1.  **Clone the repository:**
     ```bash
-    git clone <https://github.com/ibnmarzuk/Zascout-Dao>
+    git clone <repository-url>
     cd zascout
     ```
 

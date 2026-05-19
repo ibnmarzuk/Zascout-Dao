@@ -91,6 +91,10 @@ app.use(express.static(path.join(process.cwd(), "public")));
     });
   });
 
+  app.get('/quests', csrfProtection, (req, res) => {
+    res.render('quests', { csrfToken: (req as any).csrfToken() });
+  });
+
   app.get('/mcp', csrfProtection, (req, res) => {
     res.render('mcp', { csrfToken: (req as any).csrfToken() });
   });
@@ -108,7 +112,7 @@ app.use(express.static(path.join(process.cwd(), "public")));
   });
 
   if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
-    app.listen(PORT, () => {
+    app.listen(PORT as number, "0.0.0.0", () => {
       console.log(`Server running on http://localhost:${PORT}`);
     });
   }
