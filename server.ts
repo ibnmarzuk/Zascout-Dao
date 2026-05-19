@@ -99,6 +99,41 @@ app.use(express.static(path.join(process.cwd(), "public")));
     res.render('mcp', { csrfToken: (req as any).csrfToken() });
   });
 
+  // Gemini AI Discovery Agent
+  app.post("/api/ai/discover", csrfProtection, async (req, res) => {
+    try {
+      const { query } = req.body;
+      const response = await ai.models.generateContent({
+        model: "gemini-3.1-8b-pro",
+        contents: `You are ZA Scout AI, an expert DAO intelligence assistant. 
+        The user is asking: "${query}". 
+        Based on this, return a list of recommended DAO opportunity types (grant, bounty, proposal or quest), 
+        suggested keywords/tags for filtering, a brief summary, recommended DAOs, and specific skills needed.
+        Respond STRICTLY in JSON format without markdown wrapping, matching this exact schema: { 
+          "recommendations": string[], 
+          "keywords": string[],
+          "daos": string[],
+          "skills": string[],
+          "summary": string,
+          "filterHints": {
+            "status": "active" | "open" | "voting",
+            "type": "grant" | "bounty" | "proposal" | "quest"
+          }
+        }`,
+        config: {
+          responseMimeType: "application/json"
+        }
+      });
+      res.json(JSON.parse(response.text || "{}"));
+    } catch (error: any) {
+      if (error instanceof Error) {
+        res.status(500).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: "Unknown error" });
+      }
+    }
+  });
+
   // Zero Authority Bounties API
   app.get("/api/v1/:resource", async (req, res) => {
     const { resource } = req.params;

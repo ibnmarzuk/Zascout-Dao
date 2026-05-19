@@ -21,12 +21,14 @@
                         brand: {
                             blue: '#0070F3',
                             purple: '#8b5cf6',
-                            dark: '#000000',
-                            light: '#111111',
-                            subtle: '#222222',
-                            text: '#EDEDED',
-                            muted: '#A1A1AA'
-                        }
+                            dark: 'var(--bg-dark, #000000)',
+                            light: 'var(--bg-light, #111111)',
+                            subtle: 'var(--bg-subtle, #222222)',
+                            text: 'var(--text-main, #EDEDED)',
+                            muted: 'var(--text-muted, #A1A1AA)'
+                        },
+                        white: 'var(--text-white, #ffffff)',
+                        black: 'var(--text-black, #000000)'
                     },
                     animation: {
                         'fade-in': 'fadeIn 0.5s ease-out forwards',
@@ -48,10 +50,21 @@
         }
     </script>
     <style>
+        html.light {
+            --bg-dark: #f8fafc;
+            --bg-light: #ffffff;
+            --bg-subtle: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --text-white: #000000;
+            --text-black: #ffffff;
+        }
+
         body {
             background-color: theme('colors.brand.dark');
             color: theme('colors.brand.text');
             -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s, color 0.3s;
         }
         
         .glass-panel {
@@ -60,6 +73,12 @@
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        
+        html.light .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(0, 0, 0, 0.1);
         }
 
         .bento-card {
@@ -70,11 +89,22 @@
             position: relative;
             overflow: hidden;
         }
+        
+        html.light .bento-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,1) 100%);
+            border-color: rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
 
         .bento-card:hover {
             border-color: rgba(255,255,255,0.15);
             transform: translateY(-2px);
             box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+        
+        html.light .bento-card:hover {
+            border-color: rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
         }
 
         .bento-card::before {
@@ -86,6 +116,10 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
+        
+        html.light .bento-card::before {
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+        }
 
         .bento-card:hover::before {
             opacity: 1;
@@ -93,6 +127,13 @@
 
         .gradient-text {
             background: linear-gradient(to right, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        html.light .gradient-text {
+            background: linear-gradient(to right, #0f172a, #475569);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -108,6 +149,10 @@
             background: radial-gradient(circle, rgba(0, 112, 243, 0.15) 0%, rgba(0,0,0,0) 70%);
             pointer-events: none;
             z-index: -1;
+        }
+        
+        html.light .glow-bg {
+            opacity: 0.3;
         }
 
         .tab-btn {
@@ -163,18 +208,39 @@
                     <span class="font-display font-medium text-xl text-white tracking-tight">ZA Scout</span>
                 </div>
                 <div class="hidden md:flex items-center gap-8 bg-brand-light rounded-full px-6 py-2 border border-white/5">
-                    <a href="/" class="text-white font-medium text-sm transition-colors relative after:absolute after:-bottom-2 after:left-0 after:right-0 after:h-px after:bg-white after:rounded-full">Explorer</a>
-                    <a href="/quests" class="text-brand-muted font-medium text-sm hover:text-white transition-colors">Quests</a>
-                    <a href="/mcp" class="text-brand-muted font-medium text-sm hover:text-white transition-colors">MCP Setup</a>
+                    <a href="/" class="nav-link text-white font-medium text-sm transition-colors relative after:absolute after:-bottom-2 after:left-0 after:right-0 after:h-px after:bg-white after:rounded-full">Explorer</a>
+                    <a href="/quests" class="nav-link text-brand-muted font-medium text-sm hover:text-white transition-colors">Quests</a>
+                    <a href="/mcp" class="nav-link text-brand-muted font-medium text-sm hover:text-white transition-colors">MCP Setup</a>
                 </div>
-                <div class="flex items-center gap-4">
-                    <button class="text-brand-muted hover:text-white transition-colors rounded-full p-2 hover:bg-white/5">
-                        <i data-lucide="bell" class="w-4 h-4"></i>
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <div class="hidden sm:flex flex-col items-end gap-1">
+                        <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20">
+                            <div class="w-1.5 h-1.5 rounded-full bg-brand-purple animate-pulse"></div>
+                            <span class="text-[10px] font-bold text-brand-purple uppercase tracking-tighter">LVL 1</span>
+                        </div>
+                        <div class="w-16 h-1 bg-brand-subtle rounded-full overflow-hidden">
+                            <div class="h-full bg-brand-purple w-1/3 shadow-[0_0_8px_rgba(139,92,246,0.5)]"></div>
+                        </div>
+                    </div>
+                    <button class="text-brand-muted hover:text-white transition-colors rounded-full p-2 hover:bg-white/5" id="themeToggle" title="Toggle Dark/Light Mode">
+                        <i data-lucide="sun" class="w-4 h-4 hidden dark-icon"></i>
+                        <i data-lucide="moon" class="w-4 h-4 light-icon"></i>
                     </button>
-                    <button class="bg-white text-black hover:bg-gray-200 px-5 py-2 rounded-full text-sm font-medium transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95">
+                    <button class="bg-white text-black hover:bg-gray-200 px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-medium transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95">
                         Connect
                     </button>
+                    <button id="mobileMenuBtn" class="md:hidden text-brand-muted hover:text-white p-2">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
                 </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-white/5 bg-brand-dark/95 backdrop-blur-xl animate-fade-in">
+            <div class="px-4 pt-2 pb-6 space-y-1">
+                <a href="/" class="block px-3 py-4 text-base font-medium text-white border-b border-white/5 hover:bg-white/5 transition-colors">Explorer</a>
+                <a href="/quests" class="block px-3 py-4 text-base font-medium text-brand-muted hover:text-white border-b border-white/5 hover:bg-white/5 transition-colors">Quests</a>
+                <a href="/mcp" class="block px-3 py-4 text-base font-medium text-brand-muted hover:text-white hover:bg-white/5 transition-colors">MCP Setup</a>
             </div>
         </div>
     </nav>
@@ -183,7 +249,7 @@
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full animate-fade-in">
         
         <!-- Header -->
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
             <div class="max-w-2xl">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-blue/10 border border-brand-blue/20 text-brand-blue text-xs font-semibold uppercase tracking-widest mb-4">
                     <span class="relative flex h-2 w-2">
@@ -196,14 +262,73 @@
                 <p class="text-brand-muted text-lg font-light">Discover high-impact bounties, grants, and quests across the Zero Authority network. Filter, find, and contribute.</p>
             </div>
             
-            <!-- Global Search -->
-            <div class="w-full md:w-80 group">
-                <div class="relative">
-                    <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted group-focus-within:text-brand-blue transition-colors"></i>
-                    <input type="text" id="searchInput" placeholder="Search by title, tag, DAO..." class="w-full bg-brand-light border border-white/10 rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder:text-brand-muted focus:outline-none focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/10 transition-all shadow-inner">
+            <!-- Global Search and Filters -->
+            <div class="w-full lg:w-auto flex flex-col gap-3">
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-grow sm:w-80 group">
+                        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted group-focus-within:text-brand-blue transition-colors"></i>
+                        <input type="text" id="searchInput" placeholder="Search by title, tag, DAO..." class="w-full bg-brand-light border border-white/10 rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder:text-brand-muted focus:outline-none focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/10 transition-all shadow-inner">
+                    </div>
+                    <button id="aiSearchBtn" class="bg-brand-purple hover:bg-purple-600 text-white rounded-xl px-4 py-3 text-sm font-medium transition-all shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] flex items-center justify-center gap-2 whitespace-nowrap">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i> AI Search
+                    </button>
+                    <button id="toggleFiltersBtn" class="bg-brand-light border border-white/10 hover:bg-white/5 text-white rounded-xl px-4 py-3 text-sm font-medium transition-all flex items-center justify-center gap-2 lg:hidden">
+                        <i data-lucide="filter" class="w-4 h-4"></i> Filters
+                    </button>
+                </div>
+                
+                <!-- Filter Controls (Responsive) -->
+                <div id="filterPanel" class="hidden lg:flex flex-col sm:flex-row gap-3 p-4 lg:p-0 rounded-xl bg-brand-light border border-white/5 lg:bg-transparent lg:border-none w-full animate-slide-up origin-top">
+                    <select id="rewardFilter" class="bg-brand-dark/50 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/50 w-full sm:w-auto cursor-pointer">
+                        <option value="">Any Reward</option>
+                        <option value="0-1000">Under 1,000</option>
+                        <option value="1000-5000">1,000 - 5,000</option>
+                        <option value="5000+">5,000+</option>
+                    </select>
+                    
+                    <select id="typeFilter" class="bg-brand-dark/50 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/50 w-full sm:w-auto cursor-pointer">
+                        <option value="">All Types</option>
+                        <option value="bounty">Bounties</option>
+                        <option value="grant">Grants</option>
+                        <option value="quest">Quests</option>
+                    </select>
                 </div>
             </div>
         </div>
+		
+		<!-- AI Insight Panel -->
+		<div id="aiInsightPanel" class="hidden mb-12 bento-card p-6 border-brand-purple/30 relative overflow-hidden animate-slide-up">
+			<div class="absolute inset-0 bg-gradient-to-br from-brand-purple/10 to-transparent z-0"></div>
+			<div class="relative z-10 flex flex-col md:flex-row gap-6">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 rounded-xl bg-brand-purple/20 text-brand-purple flex items-center justify-center">
+                        <i data-lucide="bot" class="w-6 h-6"></i>
+                    </div>
+                </div>
+                <div class="flex-grow">
+                    <h3 class="text-xl font-display font-bold text-white mb-2">AI Insights</h3>
+                    <p id="aiSummary" class="text-brand-muted mb-4 leading-relaxed"></p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-black/20 rounded-lg p-4 border border-white/5">
+                            <h4 class="text-xs text-brand-muted uppercase font-bold tracking-wider mb-2">Recommended Tags</h4>
+                            <div id="aiTags" class="flex flex-wrap gap-2"></div>
+                        </div>
+                        <div class="bg-black/20 rounded-lg p-4 border border-white/5">
+                            <h4 class="text-xs text-brand-muted uppercase font-bold tracking-wider mb-2">Suggested DAOs</h4>
+                            <div id="aiDaos" class="flex flex-wrap gap-2"></div>
+                        </div>
+                        <div class="bg-black/20 rounded-lg p-4 border border-white/5">
+                            <h4 class="text-xs text-brand-muted uppercase font-bold tracking-wider mb-2">Required Skills</h4>
+                            <div id="aiSkills" class="flex flex-wrap gap-2"></div>
+                        </div>
+                    </div>
+                </div>
+                <button id="closeAiPanel" class="absolute top-4 right-4 text-brand-muted hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+			</div>
+		</div>
 
         <!-- Dashboard Bento Grid -->
         <div class="grid grid-cols-1 md:grid-cols-12 gap-5 mb-14 animate-slide-up" style="animation-delay: 0.1s;">
@@ -278,7 +403,13 @@
         <div id="opportunitiesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 animate-slide-up" style="animation-delay: 0.2s;">
             <% if (opportunities && opportunities.length > 0) { %>
                 <% opportunities.forEach(function(op, index) { %>
-                    <div class="opportunity-card bento-card p-5 group flex flex-col" data-type="<%= op.type.toLowerCase() %>" data-title="<%= op.title.toLowerCase() %>" data-dao="<%= op.dao.toLowerCase() %>" data-tags="<%= (op.tags || []).join(' ').toLowerCase() %>">
+                    <div class="opportunity-card bento-card p-5 group flex flex-col" 
+                         data-type="<%= op.type.toLowerCase() %>" 
+                         data-title="<%= op.title %>" 
+                         data-dao="<%= op.dao %>" 
+                         data-reward="<%= op.reward || 0 %>"
+                         data-id="<%= op.id %>"
+                         data-tags="<%= (op.tags || []).join(',') %>">
                         
                         <div class="flex justify-between items-start mb-4">
                             <div class="flex items-center gap-2">
@@ -325,7 +456,7 @@
                             </div>
                             
                             <!-- Tags -->
-                            <div class="flex flex-wrap gap-1.5 mb-5">
+                            <div class="flex flex-wrap gap-1.5 mb-5 tags-container">
                                 <% if (op.tags && op.tags.length > 0) { %>
                                     <% op.tags.slice(0, 3).forEach(function(tag) { %>
                                         <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-1 bg-white/5 border border-white/5 text-gray-400 rounded hover:bg-white/10 transition-colors"><%= tag %></span>
@@ -338,14 +469,14 @@
                         </div>
                         
                         <div class="pt-4 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0 mt-auto">
-                            <button class="w-full flex items-center justify-center gap-2 bg-white text-black font-semibold text-sm px-4 py-2.5 rounded-lg hover:bg-gray-200 transition-colors">
+                            <button class="view-details-btn w-full flex items-center justify-center gap-2 bg-brand-light text-white font-semibold text-sm px-4 py-2.5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
                                 View Details <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                             </button>
                         </div>
                     </div>
                 <% }); %>
             <% } else { %>
-                <div class="col-span-full py-20 flex flex-col items-center justify-center text-brand-muted border-2 border-dashed border-white/5 rounded-2xl">
+                <div id="emptyState" class="col-span-full py-20 flex flex-col items-center justify-center text-brand-muted border-2 border-dashed border-white/5 rounded-2xl">
                     <div class="w-16 h-16 rounded-full bg-brand-light flex items-center justify-center mb-4">
                         <i data-lucide="search-x" class="w-8 h-8"></i>
                     </div>
@@ -353,9 +484,84 @@
                     <p class="text-sm">Try adjusting your filters or search term.</p>
                 </div>
             <% } %>
+            <div id="hiddenEmptyState" class="hidden col-span-full py-20 flex flex-col items-center justify-center text-brand-muted border-2 border-dashed border-white/5 rounded-2xl">
+                <div class="w-16 h-16 rounded-full bg-brand-light flex items-center justify-center mb-4">
+                    <i data-lucide="search-x" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-white font-medium text-lg mb-1">No matches</h3>
+                <p class="text-sm">Try adjusting your filters or search term.</p>
+            </div>
         </div>
 
     </main>
+
+    <!-- Opportunity Detail Modal -->
+    <div id="detailModal" class="fixed inset-0 modal-backdrop hidden flex items-center justify-center p-4 animate-fade-in z-[100]">
+        <div class="modal-backdrop absolute inset-0 bg-black/80 backdrop-blur-md"></div>
+        <div class="bento-card max-w-2xl w-full max-h-[90vh] overflow-y-auto bg-brand-light p-0 border-white/10 shadow-2xl animate-slide-up relative z-10">
+            <div class="p-8 md:p-10">
+                <button id="closeDetailModal" class="absolute top-6 right-6 text-brand-muted hover:text-white transition-colors bg-white/5 p-2 rounded-full">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="px-2 py-0.5 rounded bg-brand-blue/10 border border-brand-blue/20 text-[10px] font-bold text-brand-blue uppercase tracking-widest" id="modalOpType">
+                        Bounty
+                    </div>
+                    <div class="flex items-center gap-1.5 hide-indicator" id="modalOpStatus">
+                        <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                        <span class="text-[10px] uppercase font-bold tracking-widest text-brand-muted">open</span>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="w-10 h-10 rounded-lg bg-brand-dark border border-white/5 flex items-center justify-center">
+                            <i data-lucide="building-2" class="w-5 h-5 text-brand-muted"></i>
+                         </div>
+                         <div class="flex flex-col">
+                            <span class="text-xs text-brand-muted font-bold uppercase tracking-widest">DAO</span>
+                            <span class="text-white font-display font-bold" id="modalOpDao">Zero Authority</span>
+                         </div>
+                    </div>
+                    <h2 id="modalOpTitle" class="text-3xl font-display font-bold text-white mb-4 leading-tight">Opportunity Title</h2>
+                    <p id="modalOpDescription" class="text-brand-muted leading-relaxed text-lg font-light">Loading mission parameters...</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-brand-muted mb-4">Technical Specs</h4>
+                        <div id="modalOpTags" class="flex flex-wrap gap-2">
+                            <!-- Tags injected here -->
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-brand-muted mb-4">Contribution Terms</h4>
+                        <ul class="space-y-2 text-sm text-brand-muted list-disc ml-4">
+                            <li>Must adhere to DAO constitution</li>
+                            <li>Payment released upon milestone approval</li>
+                            <li>Requires technical review from stewards</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex flex-col">
+                        <span class="text-xs font-bold uppercase tracking-widest text-brand-muted mb-1">Max Reward</span>
+                        <div id="modalOpReward" class="text-emerald-400 font-display font-bold text-2xl">$0.00</div>
+                    </div>
+                    <div class="flex gap-3 w-full sm:w-auto">
+                        <button class="flex-grow sm:flex-grow-0 border border-white/10 text-white px-6 py-3 rounded-xl font-bold hover:bg-white/5 transition-all text-sm">
+                            Save Task
+                        </button>
+                        <button class="flex-grow sm:flex-grow-0 bg-white text-black px-8 py-3 rounded-xl font-bold hover:bg-gray-200 transition-all shadow-lg active:scale-95 text-sm">
+                            Apply Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="border-t border-white/5 py-8 mt-auto bg-brand-light/50 backdrop-blur-md">
@@ -378,26 +584,78 @@
         // Initialize Lucide icons
         lucide.createIcons();
 
-        // Client-side filtering and search
         document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu Toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if(mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    if(mobileMenu.classList.contains('hidden')) {
+                        icon.setAttribute('data-lucide', 'menu');
+                    } else {
+                        icon.setAttribute('data-lucide', 'x');
+                    }
+                    lucide.createIcons();
+                });
+            }
+
+            // Theme toggling
+            const themeToggleBtn = document.getElementById('themeToggle');
+            if(themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', () => {
+                    const html = document.documentElement;
+                    html.classList.toggle('light');
+                    
+                    const isLight = html.classList.contains('light');
+                    themeToggleBtn.querySelector('.dark-icon').classList.toggle('hidden', !isLight);
+                    themeToggleBtn.querySelector('.light-icon').classList.toggle('hidden', isLight);
+                });
+            }
+
+            // Mobile filter panel toggle
+            const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
+            const filterPanel = document.getElementById('filterPanel');
+            if(toggleFiltersBtn && filterPanel) {
+                toggleFiltersBtn.addEventListener('click', () => {
+                    filterPanel.classList.toggle('hidden');
+                    filterPanel.classList.toggle('flex');
+                });
+            }
+
+            // Client-side filtering and search
             const searchInput = document.getElementById('searchInput');
-            const tabBtns = document.querySelectorAll('.tab-btn');
+            const typeFilter = document.getElementById('typeFilter');
+            const rewardFilter = document.getElementById('rewardFilter');
             const cards = document.querySelectorAll('.opportunity-card');
-            let currentFilter = 'all';
+            const hiddenEmptyState = document.getElementById('hiddenEmptyState');
 
             function filterCards() {
-                const searchTerm = searchInput.value.toLowerCase();
+                const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+                const typeVal = typeFilter ? typeFilter.value.toLowerCase() : '';
+                const rewardVal = rewardFilter ? rewardFilter.value : '';
                 
                 let visibleCount = 0;
                 
                 cards.forEach(card => {
                     const type = card.dataset.type;
-                    const textContent = `${card.dataset.title} ${card.dataset.dao} ${card.dataset.tags}`;
+                    const titleText = card.dataset.title;
+                    const daoText = card.dataset.dao;
+                    const tagsText = card.dataset.tags;
+                    const rewardAmt = parseInt(card.dataset.reward, 10) || 0;
                     
-                    const matchesTab = currentFilter === 'all' || type === currentFilter;
+                    const textContent = `${titleText} ${daoText} ${tagsText}`;
+                    
                     const matchesSearch = textContent.includes(searchTerm);
+                    const matchesType = typeVal === '' || type === typeVal;
                     
-                    if (matchesTab && matchesSearch) {
+                    let matchesReward = true;
+                    if(rewardVal === '0-1000') matchesReward = rewardAmt < 1000;
+                    else if(rewardVal === '1000-5000') matchesReward = rewardAmt >= 1000 && rewardAmt <= 5000;
+                    else if(rewardVal === '5000+') matchesReward = rewardAmt > 5000;
+                    
+                    if (matchesSearch && matchesType && matchesReward) {
                         card.classList.remove('hidden');
                         card.style.animation = 'none';
                         card.offsetHeight; /* trigger reflow */
@@ -408,24 +666,162 @@
                     }
                 });
                 
-                // Show empty state if needed based on visibleCount
-                // Setup for empty state element can go here.
+                if(hiddenEmptyState) {
+                    if(visibleCount === 0 && cards.length > 0) {
+                        hiddenEmptyState.classList.remove('hidden');
+                        hiddenEmptyState.classList.add('flex');
+                    } else {
+                        hiddenEmptyState.classList.add('hidden');
+                        hiddenEmptyState.classList.remove('flex');
+                    }
+                }
             }
 
-            searchInput.addEventListener('input', filterCards);
+            if(searchInput) searchInput.addEventListener('input', filterCards);
+            if(typeFilter) typeFilter.addEventListener('change', filterCards);
+            if(rewardFilter) rewardFilter.addEventListener('change', filterCards);
 
-            tabBtns.forEach(btn => {
+            // AI Search feature
+            const aiSearchBtn = document.getElementById('aiSearchBtn');
+            const aiInsightPanel = document.getElementById('aiInsightPanel');
+            const closeAiPanel = document.getElementById('closeAiPanel');
+            
+            if(aiSearchBtn) {
+                aiSearchBtn.addEventListener('click', async () => {
+                    const query = searchInput ? searchInput.value.trim() : '';
+                    if(!query) {
+                        alert('Please enter a search query first to get AI insights.');
+                        return;
+                    }
+                    
+                    const originalHtml = aiSearchBtn.innerHTML;
+                    aiSearchBtn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Analyzing...';
+                    aiSearchBtn.disabled = true;
+                    
+                    try {
+                        const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+                        // get cookies to find csrf if not in meta
+                        const csrfMatch = document.cookie.match(/(?:^|;)s*_csrf=([^;]*)/);
+                        
+                        const res = await fetch('/api/ai/discover', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'CSRF-Token': `<%= csrfToken %>`
+                            },
+                            body: JSON.stringify({ query })
+                        });
+                        
+                        const data = await res.json();
+                        if(data.error) throw new Error(data.error);
+                        
+                        // Populate panel
+                        document.getElementById('aiSummary').textContent = data.summary || 'Insight generated.';
+                        
+                        const tagsDiv = document.getElementById('aiTags');
+                        if(tagsDiv && data.keywords) {
+                            tagsDiv.innerHTML = data.keywords.map(t => `<span class="px-2 py-1 bg-white/5 rounded text-xs text-white">${t}</span>`).join('');
+                        }
+                        
+                        const daosDiv = document.getElementById('aiDaos');
+                        if(daosDiv && data.daos) {
+                            daosDiv.innerHTML = data.daos.map(d => `<span class="px-2 py-1 bg-brand-purple/20 text-brand-purple rounded text-xs font-semibold">${d}</span>`).join('');
+                        }
+                        
+                        const skillsDiv = document.getElementById('aiSkills');
+                        if(skillsDiv && data.skills) {
+                            skillsDiv.innerHTML = data.skills.map(s => `<span class="px-2 py-1 bg-brand-blue/20 text-brand-blue rounded text-xs font-semibold">${s}</span>`).join('');
+                        }
+                        
+                        // Show panel
+                        if(aiInsightPanel) {
+                            aiInsightPanel.classList.remove('hidden');
+                            aiInsightPanel.classList.add('block');
+                        }
+                        
+                        // Apply filter hints
+                        if(data.filterHints) {
+                            if(data.filterHints.type && typeFilter) {
+                                typeFilter.value = data.filterHints.type;
+                                filterCards();
+                            }
+                        }
+                        lucide.createIcons();
+                    } catch (e) {
+                         alert('AI Analysis failed. See console for details.');
+                         console.error(e);
+                    } finally {
+                         aiSearchBtn.innerHTML = originalHtml;
+                         aiSearchBtn.disabled = false;
+                         lucide.createIcons();
+                    }
+                });
+            }
+            
+            if(closeAiPanel && aiInsightPanel) {
+                closeAiPanel.addEventListener('click', () => {
+                    aiInsightPanel.classList.add('hidden');
+                    aiInsightPanel.classList.remove('block');
+                });
+            }
+
+            // Opportunity Detail Modal Logic
+            const detailModal = document.getElementById('detailModal');
+            const closeDetailModal = document.getElementById('closeDetailModal');
+            
+            const openOpDetail = (card) => {
+                const title = card.dataset.title;
+                const dao = card.dataset.dao;
+                const type = card.dataset.type;
+                const reward = parseInt(card.dataset.reward).toLocaleString();
+                const tags = card.dataset.tags ? card.dataset.tags.split(',') : [];
+
+                document.getElementById('modalOpTitle').textContent = title;
+                document.getElementById('modalOpDao').textContent = dao;
+                document.getElementById('modalOpType').textContent = type;
+                document.getElementById('modalOpReward').textContent = `$${reward}`;
+                
+                // Detailed descriptions based on type
+                const descriptions = {
+                    bounty: "The Zero Authority DAO is looking for a technical contributor to execute the parameters of this bounty. This task requires active participation in our Discord/Slack channels for coordination and adherence to the specified technical milestones.",
+                    grant: "This grant opportunity represents an open invitation to build core infrastructure or research for the DAO. Priority will be given to proposals that align with Zero Authority's roadmap and demonstrate long-term commitment to the ecosystem.",
+                    quest: "A recurring community quest designed to increase engagement and technical awareness. These tasks are typically low-barrier to entry but provide significant XP rewards toward steward governance roles."
+                };
+                
+                document.getElementById('modalOpDescription').textContent = descriptions[type.toLowerCase()] || descriptions.bounty;
+
+                const tagsContainer = document.getElementById('modalOpTags');
+                tagsContainer.innerHTML = tags.map(t => `
+                    <span class="px-2 py-1 bg-white/5 border border-white/5 rounded text-xs text-brand-muted">${t}</span>
+                `).join('');
+
+                detailModal.classList.remove('hidden');
+                detailModal.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+                lucide.createIcons();
+            };
+
+            const hideOpDetail = () => {
+                detailModal.classList.add('hidden');
+                detailModal.classList.remove('flex');
+                document.body.style.overflow = '';
+            };
+
+            document.querySelectorAll('.view-details-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    tabBtns.forEach(b => b.classList.remove('active', 'text-white'));
-                    tabBtns.forEach(b => b.classList.add('text-brand-muted'));
-                    
-                    e.target.classList.remove('text-brand-muted');
-                    e.target.classList.add('active', 'text-white');
-                    
-                    currentFilter = e.target.dataset.filter;
-                    filterCards();
+                    const card = e.currentTarget.closest('.opportunity-card');
+                    openOpDetail(card);
                 });
             });
+
+            if(closeDetailModal) closeDetailModal.addEventListener('click', hideOpDetail);
+            if(detailModal) {
+                detailModal.addEventListener('click', (e) => {
+                    if (e.target === detailModal || e.target.classList.contains('modal-backdrop')) {
+                        hideOpDetail();
+                    }
+                });
+            }
         });
     </script>
 </body>

@@ -21,12 +21,14 @@
                         brand: {
                             blue: '#0070F3',
                             purple: '#8b5cf6',
-                            dark: '#000000',
-                            light: '#111111',
-                            subtle: '#222222',
-                            text: '#EDEDED',
-                            muted: '#A1A1AA'
-                        }
+                            dark: 'var(--bg-dark, #000000)',
+                            light: 'var(--bg-light, #111111)',
+                            subtle: 'var(--bg-subtle, #222222)',
+                            text: 'var(--text-main, #EDEDED)',
+                            muted: 'var(--text-muted, #A1A1AA)'
+                        },
+                        white: 'var(--text-white, #ffffff)',
+                        black: 'var(--text-black, #000000)'
                     },
                     animation: {
                         'fade-in': 'fadeIn 0.5s ease-out forwards',
@@ -48,10 +50,21 @@
         }
     </script>
     <style>
+        html.light {
+            --bg-dark: #f8fafc;
+            --bg-light: #ffffff;
+            --bg-subtle: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --text-white: #000000;
+            --text-black: #ffffff;
+        }
+
         body {
             background-color: theme('colors.brand.dark');
             color: theme('colors.brand.text');
             -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s, color 0.3s;
         }
         
         .glass-panel {
@@ -60,6 +73,12 @@
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        
+        html.light .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(0, 0, 0, 0.1);
         }
 
         .bento-card {
@@ -70,11 +89,22 @@
             position: relative;
             overflow: hidden;
         }
+        
+        html.light .bento-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,1) 100%);
+            border-color: rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
 
         .bento-card:hover {
             border-color: rgba(255,255,255,0.15);
             transform: translateY(-2px);
             box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+        
+        html.light .bento-card:hover {
+            border-color: rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
         }
 
         .bento-card::before {
@@ -86,6 +116,10 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
+        
+        html.light .bento-card::before {
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+        }
 
         .bento-card:hover::before {
             opacity: 1;
@@ -93,6 +127,13 @@
 
         .gradient-text {
             background: linear-gradient(to right, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        html.light .gradient-text {
+            background: linear-gradient(to right, #0f172a, #475569);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -108,6 +149,10 @@
             background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(0,0,0,0) 70%); /* Purple glow for MCP page */
             pointer-events: none;
             z-index: -1;
+        }
+        
+        html.light .glow-bg {
+            opacity: 0.3;
         }
 
         .code-block { 
@@ -143,18 +188,39 @@
                     <span class="font-display font-medium text-xl text-white tracking-tight">ZA Scout</span>
                 </a>
                 <div class="hidden md:flex items-center gap-8 bg-brand-light rounded-full px-6 py-2 border border-white/5">
-                    <a href="/" class="text-brand-muted font-medium text-sm hover:text-white transition-colors">Explorer</a>
-                    <a href="/quests" class="text-brand-muted font-medium text-sm hover:text-white transition-colors">Quests</a>
-                    <a href="/mcp" class="text-white font-medium text-sm transition-colors relative after:absolute after:-bottom-2 after:left-0 after:right-0 after:h-px after:bg-white after:rounded-full">MCP Setup</a>
+                    <a href="/" class="nav-link text-brand-muted font-medium text-sm hover:text-white transition-colors">Explorer</a>
+                    <a href="/quests" class="nav-link text-brand-muted font-medium text-sm hover:text-white transition-colors">Quests</a>
+                    <a href="/mcp" class="nav-link text-white font-medium text-sm transition-colors relative after:absolute after:-bottom-2 after:left-0 after:right-0 after:h-px after:bg-white after:rounded-full">MCP Setup</a>
                 </div>
-                <div class="flex items-center gap-4">
-                    <button class="text-brand-muted hover:text-white transition-colors rounded-full p-2 hover:bg-white/5">
-                        <i data-lucide="bell" class="w-4 h-4"></i>
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <div class="hidden sm:flex flex-col items-end gap-1">
+                        <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20">
+                            <div class="w-1.5 h-1.5 rounded-full bg-brand-purple animate-pulse"></div>
+                            <span class="text-[10px] font-bold text-brand-purple uppercase tracking-tighter">LVL 1</span>
+                        </div>
+                        <div class="w-16 h-1 bg-brand-subtle rounded-full overflow-hidden">
+                            <div class="h-full bg-brand-purple w-1/3 shadow-[0_0_8px_rgba(139,92,246,0.5)]"></div>
+                        </div>
+                    </div>
+                    <button class="text-brand-muted hover:text-white transition-colors rounded-full p-2 hover:bg-white/5" id="themeToggle" title="Toggle Dark/Light Mode">
+                        <i data-lucide="sun" class="w-4 h-4 hidden dark-icon"></i>
+                        <i data-lucide="moon" class="w-4 h-4 light-icon"></i>
                     </button>
-                    <button class="bg-white text-black hover:bg-gray-200 px-5 py-2 rounded-full text-sm font-medium transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95">
+                    <button class="bg-white text-black hover:bg-gray-200 px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-medium transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95">
                         Connect
                     </button>
+                    <button id="mobileMenuBtn" class="md:hidden text-brand-muted hover:text-white p-2">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
                 </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-white/5 bg-brand-dark/95 backdrop-blur-xl animate-fade-in">
+            <div class="px-4 pt-2 pb-6 space-y-1">
+                <a href="/" class="block px-3 py-4 text-base font-medium text-brand-muted hover:text-white border-b border-white/5 hover:bg-white/5 transition-colors">Explorer</a>
+                <a href="/quests" class="block px-3 py-4 text-base font-medium text-brand-muted hover:text-white border-b border-white/5 hover:bg-white/5 transition-colors">Quests</a>
+                <a href="/mcp" class="block px-3 py-4 text-base font-medium text-white hover:bg-white/5 transition-colors">MCP Setup</a>
             </div>
         </div>
     </nav>
@@ -327,6 +393,35 @@
                 }
             });
         });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if(mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                const icon = mobileMenuBtn.querySelector('i');
+                if(mobileMenu.classList.contains('hidden')) {
+                    icon.setAttribute('data-lucide', 'menu');
+                } else {
+                    icon.setAttribute('data-lucide', 'x');
+                }
+                lucide.createIcons();
+            });
+        }
+
+        // Theme toggling
+        const themeToggleBtn = document.getElementById('themeToggle');
+        if(themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const html = document.documentElement;
+                html.classList.toggle('light');
+                
+                const isLight = html.classList.contains('light');
+                themeToggleBtn.querySelector('.dark-icon').classList.toggle('hidden', !isLight);
+                themeToggleBtn.querySelector('.light-icon').classList.toggle('hidden', isLight);
+            });
+        }
     </script>
 </body>
 </html>
