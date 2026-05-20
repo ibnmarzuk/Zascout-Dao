@@ -62,14 +62,14 @@ app.use(express.static(path.join(process.cwd(), "public")));
   app.get('/', csrfProtection, async (req, res) => {
     let opportunities = [];
     try {
-      // Attempt to hit Zero Authority API
+      // Attempt to hit ZA Scout API
       const response = await axios.get("https://zeroauthoritydao.com/api/v1/bounties", { timeout: 3000 });
       if (response.data && Array.isArray(response.data)) {
         opportunities = response.data.map((b: Record<string, unknown>) => ({
           id: b.id || crypto.randomUUID(),
           title: b.title || "Untitled Opportunity",
           type: "bounty",
-          dao: "Zero Authority",
+          dao: "ZA Scout",
           reward: b.reward || 0,
           tags: Array.isArray(b.tags) ? b.tags : [],
           status: b.status || "open"
@@ -84,10 +84,10 @@ app.use(express.static(path.join(process.cwd(), "public")));
         { id: "zap-4", title: "Thread on L2 scaling", type: "bounty", dao: "Arbitrum DAO", reward: 150, tags: ["Content"], status: "open" },
         { id: "zap-5", title: "Brand identity refresh", type: "bounty", dao: "Nouns DAO", reward: 600, tags: ["Design"], status: "open" },
         { id: "zap-6", title: "Tokenomics analysis", type: "bounty", dao: "Optimism", reward: 500, tags: ["Research"], status: "open" },
-        { id: "zap-7", title: "Core Protocol V2 Development", type: "grant", dao: "Zero Authority", reward: 15000, tags: ["Dev", "Architecture"], status: "active" },
+        { id: "zap-7", title: "Core Protocol V2 Development", type: "grant", dao: "ZA Scout", reward: 15000, tags: ["Dev", "Architecture"], status: "active" },
         { id: "zap-8", title: "Community Management Tooling", type: "grant", dao: "Optimism", reward: 5000, tags: ["Dev", "Social"], status: "open" },
         { id: "zap-9", title: "DeFi Research Dashboard", type: "grant", dao: "Aave Grants", reward: 8000, tags: ["Dev", "Design", "Data"], status: "open" },
-        { id: "zap-10", title: "Write a deep dive on account abstraction", type: "quest", dao: "Zero Authority", reward: 100, tags: ["Writing"], status: "open" },
+        { id: "zap-10", title: "Write a deep dive on account abstraction", type: "quest", dao: "ZA Scout", reward: 100, tags: ["Writing"], status: "open" },
         { id: "zap-11", title: "Review 5 PRs in core repo", type: "quest", dao: "Compound DAO", reward: 300, tags: ["Dev", "Review"], status: "open" },
         { id: "zap-12", title: "Participate in weekly dev call", type: "quest", dao: "ENS DAO", reward: 50, tags: ["Community"], status: "completed" },
       ];
@@ -109,6 +109,10 @@ app.use(express.static(path.join(process.cwd(), "public")));
 
   app.get('/gigs', csrfProtection, (req, res) => {
     res.render('gigs', { csrfToken: (req as any).csrfToken() });
+  });
+
+  app.get('/grants', csrfProtection, (req, res) => {
+    res.render('grants', { csrfToken: (req as any).csrfToken() });
   });
 
   app.get('/events', csrfProtection, (req, res) => {
@@ -148,13 +152,13 @@ app.use(express.static(path.join(process.cwd(), "public")));
         { id: "zap-4", title: "Thread on L2 scaling", type: "Bounty", dao: "Arbitrum DAO", reward: "$150", tags: ["Content", "Social"], description: "Draft a high-quality, comprehensive analysis thread explaining Arbitrum Nitro performance enhancements, sequencer limits, and batch compression systems." },
         { id: "zap-5", title: "Brand identity refresh", type: "Bounty", dao: "Nouns DAO", reward: "$600", tags: ["Design", "Art"], description: "Develop unique vector visual identity assets including high-fidelity banner templates, color guidelines, and media kits suited for public marketing." },
         { id: "zap-6", title: "Tokenomics analysis", type: "Bounty", dao: "Optimism", reward: "$500", tags: ["Research", "DeFi"], description: "Analyze weekly liquid velocity, token release emissions, liquidity incentives models, and deliver comprehensive analytical spreadsheets & PDF summaries." },
-        { id: "zap-7", title: "Core Protocol V2 Development", type: "Grant", dao: "Zero Authority", reward: "$15,000", tags: ["Dev", "Architecture"], description: "Full stack architectural upgrades to core protocol registries, handling decentralized multi-governance protocols and storage adapters securely." },
+        { id: "zap-7", title: "Core Protocol V2 Development", type: "Grant", dao: "ZA Scout", reward: "$15,000", tags: ["Dev", "Architecture"], description: "Full stack architectural upgrades to core protocol registries, handling decentralized multi-governance protocols and storage adapters securely." },
         { id: "zap-8", title: "Community Management Tooling", type: "Grant", dao: "Optimism", reward: "$5,000", tags: ["Dev", "Social"], description: "Create automated tools, bot relays, and analytics dashboards that bridge community discord, forums and active snapshot protocols." },
         { id: "zap-9", title: "DeFi Research Dashboard", type: "Grant", dao: "Aave Grants", reward: "$8,000", tags: ["Dev", "Design", "Data"], description: "Interactive dashboards presenting real-time asset utilization, borrow ratios, health metrics, and liquidations models with fully open-source React views." },
-        { id: "zap-10", title: "Write deep dive on account abstraction", type: "Quest", dao: "Zero Authority", reward: "$100", tags: ["Writing"], description: "Compose an engaging technical article highlighting ERC-4337, paymasters, and user operations workflow targeted for native multi-sig developers." },
+        { id: "zap-10", title: "Write deep dive on account abstraction", type: "Quest", dao: "ZA Scout", reward: "$100", tags: ["Writing"], description: "Compose an engaging technical article highlighting ERC-4337, paymasters, and user operations workflow targeted for native multi-sig developers." },
         { id: "zap-11", title: "Review 5 PRs in core repo", type: "Quest", dao: "Compound DAO", reward: "$300", tags: ["Dev", "Review"], description: "Help maintain Compound DAO security standards by evaluating, testing, and leaving clear code reviews on 5 active pull requests." },
         { id: "zap-12", title: "Participate in weekly dev call", type: "Quest", dao: "ENS DAO", reward: "$50", tags: ["Community"], description: "Attend the weekly call, engage in ongoing developer initiatives, and help outline milestones for upcoming naming protocol releases." },
-        { id: "trending-1", title: "Develop MCP Submorphic Plugin", type: "Bounty", dao: "Zero Authority DAO", reward: "$1,200", tags: ["Typescript", "Node.js"], description: "Design a sub-module protocol supporting dynamic schema registrations and model coordination endpoints following general MCP specifications." },
+        { id: "trending-1", title: "Develop MCP Submorphic Plugin", type: "Bounty", dao: "ZA Scout", reward: "$1,200", tags: ["Typescript", "Node.js"], description: "Design a sub-module protocol supporting dynamic schema registrations and model coordination endpoints following general MCP specifications." },
         { id: "trending-2", title: "Smart Contract Vault Audit", type: "Bounty", dao: "Compound DAO", reward: "$500", tags: ["Solidity", "Security"], description: "Perform gas optimizations and access state checks on nested multi-sig deposit storage vaults to eliminate withdrawal vectors." },
         { id: "trending-3", title: "Design UI Kit for Governance", type: "Bounty", dao: "ENS DAO", reward: "$300", tags: ["Design", "Figma"], description: "Create a visual system framework covering proposals lists, delegate weights, voting panels, and user profile fields with pixel-perfect responsive metrics." },
         { id: "gig-1", title: "Frontend Developer (React/Web3)", type: "Gig", dao: "Uniswap Labs", reward: "$3,000 - $5,000/mo", tags: ["Frontend", "React", "Ethers.js"], description: "Full-time support for the Web3 web interface, connecting liquidity pools, and drafting core components." },
@@ -205,7 +209,7 @@ app.use(express.static(path.join(process.cwd(), "public")));
     }
   });
 
-  // Zero Authority Live Quests API
+  // ZA Scout Live Quests API
   app.get("/api/quests/fetched", async (req, res) => {
     try {
       const response = await axios.get("https://zeroauthoritydao.com/api/quest/all", {
@@ -237,12 +241,69 @@ app.use(express.static(path.join(process.cwd(), "public")));
         }
       });
     } catch (error: any) {
-      console.error("Error fetching quests from Zero Authority:", error.message);
+      console.error("Error fetching quests from ZA Scout:", error.message);
       res.status(500).json({ success: false, error: error.message || "Unknown error" });
     }
   });
 
-  // Zero Authority Bounties API
+  // ZA Scout Events API
+  app.get("/api/events/fetched", async (req, res) => {
+    try {
+      const response = await axios.get("https://zeroauthoritydao.com/api/events", {
+        headers: { "Authorization": "Bearer za_1a77fc60f98dafd7993383ddacce5bc3769e4db86c53fca1df1d108344cf1244" },
+        timeout: 5000
+      });
+      const items = response.data?.data || Array.isArray(response.data) ? response.data : [];
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 6;
+      const offset = (page - 1) * limit;
+      res.json({
+        success: true,
+        data: items.slice(offset, offset + limit),
+        pagination: { page, limit, totalItems: items.length, totalPages: Math.ceil(items.length / limit) }
+      });
+    } catch (e: any) { res.status(500).json({ success: false, error: e.message }); }
+  });
+
+  // ZA Scout Gigs API
+  app.get("/api/gigs/fetched", async (req, res) => {
+    try {
+      const response = await axios.get("https://zeroauthoritydao.com/api/gigs", {
+        headers: { "Authorization": "Bearer za_1a77fc60f98dafd7993383ddacce5bc3769e4db86c53fca1df1d108344cf1244" },
+        timeout: 5000
+      });
+      const items = response.data?.data || Array.isArray(response.data) ? response.data : [];
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 6;
+      const offset = (page - 1) * limit;
+      res.json({
+        success: true,
+        data: items.slice(offset, offset + limit),
+        pagination: { page, limit, totalItems: items.length, totalPages: Math.ceil(items.length / limit) }
+      });
+    } catch (e: any) { res.status(500).json({ success: false, error: e.message }); }
+  });
+
+  // ZA Scout Grants API
+  app.get("/api/grants/fetched", async (req, res) => {
+    try {
+      const response = await axios.get("https://zeroauthoritydao.com/api/grant", {
+        headers: { "Authorization": "Bearer za_1a77fc60f98dafd7993383ddacce5bc3769e4db86c53fca1df1d108344cf1244" },
+        timeout: 5000
+      });
+      const items = response.data?.data || Array.isArray(response.data) ? response.data : [];
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 6;
+      const offset = (page - 1) * limit;
+      res.json({
+        success: true,
+        data: items.slice(offset, offset + limit),
+        pagination: { page, limit, totalItems: items.length, totalPages: Math.ceil(items.length / limit) }
+      });
+    } catch (e: any) { res.status(500).json({ success: false, error: e.message }); }
+  });
+
+  // ZA Scout Bounties API
   app.get("/api/v1/:resource", async (req, res) => {
     const { resource } = req.params;
     const zapApiUrl = `https://zeroauthoritydao.com/api/v1/${resource}`;

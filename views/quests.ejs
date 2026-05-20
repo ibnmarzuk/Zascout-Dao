@@ -63,6 +63,22 @@
                             <button onclick="setRepFilter(300)" id="rep-300" class="px-3.5 py-1.5 text-xs font-medium rounded-lg border border-white/5 text-brand-muted hover:text-white hover:bg-white/5 transition-all">300+ REP</button>
                         </div>
                     </div>
+
+                    <!-- Advanced Dropdown Filters Group -->
+                    <div>
+                        <span class="block text-xs font-bold text-brand-muted uppercase tracking-wider mb-2.5 font-mono">Advanced Filters</span>
+                        <div class="flex flex-col gap-2">
+                            <select id="daoFilter" onchange="filterQuests()" class="bg-black/20 border border-white/5 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-blue/50 appearance-none w-full">
+                                <option value="all">Any DAO / Campaign</option>
+                            </select>
+                            <select id="repLevelFilter" onchange="filterQuests()" class="bg-black/20 border border-white/5 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-blue/50 appearance-none w-full">
+                                <option value="all">Any Rep Level</option>
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -89,7 +105,7 @@
                             </div>
                         </div>
                         <h3 class="text-base font-semibold text-white mb-2 group-hover:text-brand-purple transition-colors line-clamp-2">Develop MCP Submorphic Plugin</h3>
-                        <div class="text-sm text-brand-muted mb-4">Zero Authority DAO</div>
+                        <div class="text-sm text-brand-muted mb-4">ZA Scout</div>
                         <div class="flex items-center justify-between mt-auto pt-4 border-t border-white/5">
                             <div class="flex items-center gap-1.5 text-xs font-medium text-orange-400">
                                 <i data-lucide="clock" class="w-3.5 h-3.5"></i> 2 days left
@@ -362,7 +378,7 @@
                 paginationControls.classList.add('hidden');
                 
                 try {
-                    const response = await fetch(`/api/quests/fetched?page=${page}&limit=3`);
+                    const response = await fetch(`/api/quests/fetched?page=${page}&limit=20`);
                     const result = await response.json();
                     
                     skeleton.classList.add('hidden');
@@ -371,6 +387,22 @@
                         activeQuests = result.data;
                         currentQuestPage = result.pagination.page;
                         totalQuestPages = result.pagination.totalPages;
+
+                        // Dynamically populate DAO Filter
+                        const daoFilter = document.getElementById('daoFilter');
+                        if (daoFilter) {
+                            const currentVal = daoFilter.value;
+                            const daos = [...new Set(activeQuests.map(q => q.campaign?.name || q.creator?.username || 'ZA Scout'))].filter(Boolean);
+                            let optionsHTML = '<option value="all">Any DAO / Campaign</option>';
+                            daos.forEach(d => {
+                                optionsHTML += `<option value="${d}">${d}</option>`;
+                            });
+                            daoFilter.innerHTML = optionsHTML;
+                            // Restore state if valid
+                            if (daos.includes(currentVal)) {
+                                daoFilter.value = currentVal;
+                            }
+                        }
                         
                         // Apply any existing active filter
                         filterQuests();
@@ -483,6 +515,24 @@
                 if (currentRepFilter > 0) {
                     filtered = filtered.filter(q => (q.totalRep || 100) >= currentRepFilter);
                 }
+
+                // Advanced dropdown filters
+                const daoVal = document.getElementById('daoFilter')?.value || 'all';
+                const repVal = document.getElementById('repLevelFilter')?.value || 'all';
+
+                if (daoVal !== 'all') {
+                    filtered = filtered.filter(q => {
+                        const qDao = q.campaign?.name || q.creator?.username || 'ZA Scout';
+                        return qDao === daoVal;
+                    });
+                }
+                
+                if (repVal !== 'all') {
+                    filtered = filtered.filter(q => {
+                        const repLevel = (q.activities && q.activities.length > 0 && q.activities[0].repLevel) ? q.activities[0].repLevel : '';
+                        return repLevel.toLowerCase() === repVal.toLowerCase();
+                    });
+                }
                 
                 // Text search query filter
                 if (query) {
@@ -567,7 +617,7 @@
                                     <img src="${q.campaign?.avatarUrl || q.creator?.avatarUrl || 'https://zeroauthoritydao.com/favicon.ico'}" class="w-10 h-10 rounded-full border border-white/10 shrink-0" referrerpolicy="no-referrer">
                                     <div>
                                         <h3 class="text-base font-semibold text-white group-hover:text-brand-blue transition-colors line-clamp-1">${q.title}</h3>
-                                        <div class="text-xs text-brand-muted font-medium mt-0.5">${q.campaign?.name || q.creator?.username || 'Zero Authority'}</div>
+                                        <div class="text-xs text-brand-muted font-medium mt-0.5">${q.campaign?.name || q.creator?.username || 'ZA Scout'}</div>
                                     </div>
                                 </div>
                                 
@@ -832,8 +882,8 @@
                     });
                 }
                 if (links.length === 0) {
-                    links.push({ title: 'Campaign Hub', url: 'https://zeroauthoritydao.com' });
-                    links.push({ title: 'Zero Authority Forum', url: 'https://zeroauthoritydao.com/forum' });
+                    links.push({ title: 'Campaign Hub', url: '#' });
+                    links.push({ title: 'ZA Scout Forum', url: '#' });
                 }
                 
                 const linksHtml = links.map(link => `
@@ -849,7 +899,7 @@
                         <div>
                             <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 bg-brand-purple/15 text-brand-purple rounded">Ecosystem Quest</span>
                             <h2 class="text-xl md:text-2xl font-display font-bold text-white mt-1.5 leading-tight">${q.title}</h2>
-                            <div class="text-xs text-brand-muted mt-1 font-mono">Hosted by <span class="text-white">${q.campaign?.name || q.creator?.username || 'Zero Authority'}</span></div>
+                            <div class="text-xs text-brand-muted mt-1 font-mono">Hosted by <span class="text-white">${q.campaign?.name || q.creator?.username || 'ZA Scout'}</span></div>
                         </div>
                     </div>
                     

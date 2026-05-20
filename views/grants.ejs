@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <%- include('partials/head', { title: 'Grants' }) %>
+</head>
+<body class="min-h-screen flex font-sans text-brand-text bg-brand-dark relative overflow-x-hidden">
+    
+    <%- include('partials/sidebar', { activePage: 'grants' }) %>
+
+    <div class="flex-grow flex flex-col min-w-0 lg:pl-64">
+        <%- include('partials/topbar') %>
+
+        <main class="flex-grow p-4 sm:p-6 lg:p-10 w-full animate-fade-in max-w-7xl mx-auto">
+            
+            <div class="mb-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                <div>
+                    <h1 class="text-3xl lg:text-4xl font-display font-bold text-white mb-2 tracking-tight">Ecosystem Grants</h1>
+                    <p class="text-brand-muted text-base max-w-xl">Apply for equity-free funding to build tools, infrastructure, and public goods.</p>
+                </div>
+            </div>
+
+            <!-- Grants Grid -->
+            <div id="grantsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Hydrated via JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="grantsEmpty" class="bento-card p-12 flex flex-col items-center justify-center text-center hidden">
+                <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4">
+                    <i data-lucide="gift" class="w-6 h-6 text-brand-muted"></i>
+                </div>
+                <span class="text-brand-text font-bold text-base">No grants found</span>
+            </div>
+
+        </main>
+    </div>
+
+    <%- include('partials/footer_scripts') %>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGrants();
+        });
+
+        async function loadGrants() {
+            try {
+                const response = await fetch('/api/grants/fetched?limit=20');
+                const result = await response.json();
+                
+                const grid = document.getElementById('grantsGrid');
+                const empty = document.getElementById('grantsEmpty');
+                
+                if (result.success && result.data && result.data.length > 0) {
+                    grid.innerHTML = '';
+                    result.data.forEach((grant, index) => {
+                        const grantId = grant.id || 'grant-' + index;
+                        const title = grant.title || grant.name || 'Grant Program';
+                        const daoName = grant.campaign?.name || grant.creator?.username || 'ZA Project';
+                        const amount = grant.totalRep ? grant.totalRep + ' REP' : (grant.amount || 'Variable Funding');
+                        
+                        grid.innerHTML += `
+                            <div class="bento-card p-6 flex flex-col group hover:border-brand-purple/30 transition-all cursor-pointer relative" onclick="openGlobalBountyDetail('${grantId}')">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                                            <i data-lucide="gift" class="w-5 h-5 text-brand-muted"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-base font-bold text-white group-hover:text-brand-purple transition-colors leading-snug">${title}</h3>
+                                            <div class="text-sm text-brand-muted">${daoName}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1 mb-5 text-xs text-brand-muted">
+                                    <i data-lucide="coins" class="w-3.5 h-3.5"></i>
+                                    <span class="font-bold text-white">${amount}</span>
+                                </div>
+                                <div class="text-[12px] text-brand-muted line-clamp-2 mb-4">${grant.description || 'No description provided.'}</div>
+                                <div class="flex items-center justify-between mt-auto pt-4 border-t border-white/5">
+                                    <button class="bg-brand-blue hover:bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-all">Apply Now</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    lucide.createIcons();
+                } else {
+                    grid.classList.add('hidden');
+                    empty.classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error("Grants api error", err);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -93,15 +93,15 @@
         { id: "zap-4", title: "Thread on L2 scaling", type: "Bounty", dao: "Arbitrum DAO", reward: "$150", tags: ["Content", "Social"], description: "Draft a high-quality, comprehensive analysis thread explaining Arbitrum Nitro performance enhancements, sequencer limits, and batch compression systems.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://arbitrum.io" },
         { id: "zap-5", title: "Brand identity refresh", type: "Bounty", dao: "Nouns DAO", reward: "$600", tags: ["Design", "Art"], description: "Develop unique vector visual identity assets including high-fidelity banner templates, color guidelines, and media kits suited for public marketing.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://nouns.wtf" },
         { id: "zap-6", title: "Tokenomics analysis", type: "Bounty", dao: "Optimism", reward: "$500", tags: ["Research", "DeFi"], description: "Analyze weekly liquid velocity, token release emissions, liquidity incentives models, and deliver comprehensive analytical spreadsheets & PDF summaries.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://optimism.io" },
-        { id: "zap-7", title: "Core Protocol V2 Development", type: "Grant", dao: "Zero Authority", reward: "$15,000", tags: ["Dev", "Architecture"], description: "Full stack architectural upgrades to core protocol registries, handling decentralized multi-governance protocols and storage adapters securely.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://zeroauthoritydao.com" },
+        { id: "zap-7", title: "Core Protocol V2 Development", type: "Grant", dao: "ZA Scout", reward: "$15,000", tags: ["Dev", "Architecture"], description: "Full stack architectural upgrades to core protocol registries, handling decentralized multi-governance protocols and storage adapters securely.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "#" },
         { id: "zap-8", title: "Community Management Tooling", type: "Grant", dao: "Optimism", reward: "$5,000", tags: ["Dev", "Social"], description: "Create automated tools, bot relays, and analytics dashboards that bridge community discord, forums and active snapshot protocols.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://optimism.io" },
         { id: "zap-9", title: "DeFi Research Dashboard", type: "Grant", dao: "Aave Grants", reward: "$8,000", tags: ["Dev", "Design", "Data"], description: "Interactive dashboards presenting real-time asset utilization, borrow ratios, health metrics, and liquidations models with fully open-source React views.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://aave.com" },
-        { id: "zap-10", title: "Write deep dive on account abstraction", type: "Quest", dao: "Zero Authority", reward: "$100", tags: ["Writing"], description: "Compose an engaging technical article highlighting ERC-4337, paymasters, and user operations workflow targeted for native multi-sig developers.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://zeroauthoritydao.com" },
+        { id: "zap-10", title: "Write deep dive on account abstraction", type: "Quest", dao: "ZA Scout", reward: "$100", tags: ["Writing"], description: "Compose an engaging technical article highlighting ERC-4337, paymasters, and user operations workflow targeted for native multi-sig developers.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "#" },
         { id: "zap-11", title: "Review 5 PRs in core repo", type: "Quest", dao: "Compound DAO", reward: "$300", tags: ["Dev", "Review"], description: "Help maintain Compound DAO security standards by evaluating, testing, and leaving clear code reviews on 5 active pull requests.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://compound.finance" },
         { id: "zap-12", title: "Participate in weekly dev call", type: "Quest", dao: "ENS DAO", reward: "$50", tags: ["Community"], description: "Attend the weekly call, engage in ongoing developer initiatives, and help outline milestones for upcoming naming protocol releases.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://ens.domains" },
         
         // Quests / Trending
-        { id: "trending-1", title: "Develop MCP Submorphic Plugin", type: "Bounty", dao: "Zero Authority DAO", reward: "$1,200", tags: ["Typescript", "Node.js"], description: "Design a sub-module protocol supporting dynamic schema registrations and model coordination endpoints following general MCP specifications.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://zeroauthoritydao.com" },
+        { id: "trending-1", title: "Develop MCP Submorphic Plugin", type: "Bounty", dao: "ZA Scout", reward: "$1,200", tags: ["Typescript", "Node.js"], description: "Design a sub-module protocol supporting dynamic schema registrations and model coordination endpoints following general MCP specifications.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "#" },
         { id: "trending-2", title: "Smart Contract Vault Audit", type: "Bounty", dao: "Compound DAO", reward: "$500", tags: ["Solidity", "Security"], description: "Perform gas optimizations and access state checks on nested multi-sig deposit storage vaults to eliminate withdrawal vectors.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://compound.finance" },
         { id: "trending-3", title: "Design UI Kit for Governance", type: "Bounty", dao: "ENS DAO", reward: "$300", tags: ["Design", "Figma"], description: "Create a visual system framework covering proposals lists, delegate weights, voting panels, and user profile fields with pixel-perfect responsive metrics.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://ens.domains" },
         
@@ -157,7 +157,7 @@
                     targetBounty = {
                         id: quest.id,
                         title: quest.title,
-                        dao: quest.campaign?.name || quest.creator?.username || 'Zero Authority',
+                        dao: quest.campaign?.name || quest.creator?.username || 'ZA Scout',
                         reward: quest.totalRep ? `${quest.totalRep} REP` : '100 REP',
                         type: 'Quest',
                         tags: quest.status ? [quest.status] : ['Active'],
@@ -420,7 +420,7 @@
                 addBountyToDropdown({
                     id: id,
                     title: "Saved Contributor Task",
-                    dao: "Zero Authority Quest",
+                    dao: "ZA Scout Quest",
                     reward: "XP / REP",
                     type: "Quest",
                     logo: "https://zeroauthoritydao.com/favicon.ico"
@@ -505,7 +505,7 @@
                     b = {
                         id: quest.id,
                         title: quest.title,
-                        dao: quest.campaign?.name || quest.creator?.username || 'Zero Authority',
+                        dao: quest.campaign?.name || quest.creator?.username || 'ZA Scout',
                         reward: quest.totalRep ? `${quest.totalRep} REP` : '100 REP',
                         type: 'Quest',
                         tags: quest.status ? [quest.status] : ['Active'],

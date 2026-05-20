@@ -1,6 +1,6 @@
 {
   "name": "ZA Scout",
-  "description": "AI-powered DAO intelligence platform for the Zero Authority ecosystem. Discover grants, bounties, and governance opportunities.",
+  "description": "AI-powered DAO intelligence platform and ecosystem contributor hub. Discover grants, bounties, and governance opportunities.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
