@@ -512,9 +512,14 @@
                             </div>
                         </div>
 
-                        <div class="mt-auto pt-3 border-t border-white/5">
+                        <div class="mt-auto pt-3 border-t border-white/5 relative">
                             <button onclick="event.stopPropagation(); switchView('calendar'); selectCalendarDate(${event.year}, ${event.month}, ${event.day});" class="w-full bg-white/5 hover:bg-brand-purple/10 border border-white/5 hover:border-brand-purple/20 text-white hover:text-brand-purple py-2.5 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2 active:scale-[0.98]">
                                 <i data-lucide="calendar-check" class="w-4 h-4"></i> Schedule details
+                            </button>
+                            
+                            <!-- Quick RSVP on Hover -->
+                            <button onclick="event.stopPropagation(); toggleRSVP('${event.id}');" class="absolute -top-3 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-brand-blue text-black text-[10px] font-bold px-3 py-1 rounded-full shadow-lg hover:scale-105 active:scale-95">
+                                Simple RSVP
                             </button>
                         </div>
                     </div>
