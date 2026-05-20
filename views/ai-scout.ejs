@@ -41,14 +41,29 @@
             <div id="chatHistory" class="flex-grow overflow-y-auto pr-2 pb-4 flex flex-col gap-6 custom-scrollbar">
                 
                 <!-- Initial Welcome State -->
-                <div class="flex flex-col items-center justify-center h-full text-center px-4" id="welcomeState">
-                    <div class="w-16 h-16 rounded-2xl bg-brand-purple/10 text-brand-purple flex items-center justify-center mb-6 border border-brand-purple/20">
+                <div class="flex flex-col items-center justify-center min-h-[70%] text-center px-4 py-6" id="welcomeState">
+                    <div class="w-16 h-16 rounded-2xl bg-brand-purple/10 text-brand-purple flex items-center justify-center mb-4 border border-brand-purple/20">
                         <i data-lucide="bot" class="w-8 h-8"></i>
                     </div>
                     <h1 class="text-3xl font-display font-bold text-white mb-2">How can I help you find work?</h1>
-                    <p class="text-brand-muted max-w-md mx-auto mb-8">I analyze thousands of active bounties, grants, and freelance gigs across the Web3 ecosystem to find your perfect match.</p>
+                    <p class="text-brand-muted max-w-sm mx-auto mb-6 text-sm">I analyze thousands of active bounties, grants, and freelance gigs across the Web3 ecosystem to find your perfect match.</p>
                     
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl">
+                    <!-- Premium AI Scout Status Panel -->
+                    <div class="mb-6 flex flex-wrap gap-2.5 items-center justify-center text-[11px]">
+                        <div class="bg-brand-purple/10 border border-brand-purple/20 px-3 py-1.5 rounded-full text-brand-purple flex items-center gap-1.5 font-mono">
+                            <span class="relative flex h-2 w-2">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-purple opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-purple"></span>
+                            </span>
+                            Ecosystem Scout Online
+                        </div>
+                        <div class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-full text-brand-muted flex items-center gap-1.5 font-mono">
+                            <i data-lucide="bookmark" class="w-3.5 h-3.5 text-brand-purple"></i>
+                            <span id="savedCountSpan" class="text-white font-bold">0</span> Bookmarked
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl mb-6">
                         <button class="prompt-suggestion text-left p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-brand-purple/30 transition-all group">
                             <span class="block text-sm font-semibold text-white mb-1 group-hover:text-brand-purple transition-colors">"Find frontend DAO gigs"</span>
                             <span class="block text-xs text-brand-muted">React, Web3, and UI bounties</span>
@@ -65,6 +80,20 @@
                             <span class="block text-sm font-semibold text-white mb-1 group-hover:text-brand-purple transition-colors">"Opportunities for designers"</span>
                             <span class="block text-xs text-brand-muted">UX research, branding, UI kits</span>
                         </button>
+                    </div>
+
+                    <!-- Bookmarked Opportunities Stash Dashboard -->
+                    <div id="savedOpportunitiesDashboard" class="w-full max-w-2xl mt-4 pt-6 border-t border-white/5 text-left hidden">
+                        <div class="flex items-center justify-between mb-3 px-1">
+                            <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                <i data-lucide="bookmark-check" class="w-4 h-4 text-brand-purple fill-[currentcolor]"></i>
+                                Scout Saved Stash
+                            </h3>
+                            <span class="text-[10px] text-brand-muted font-mono" id="savedCountLabel">0 saved</span>
+                        </div>
+                        <div id="savedItemsList" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-52 overflow-y-auto custom-scrollbar pr-1">
+                            <!-- populated dynamically -->
+                        </div>
                     </div>
                 </div>
 
@@ -222,23 +251,82 @@
             // Build suggestion cards based on metadata
             let cardsHtml = '';
             
-            // We use dummy matched opportunities logically inferred from AI response
-            // Alternatively, in a real app, the backend would actually query the DB using the AI's filterHints
-            if (data.recommendations && data.recommendations.length > 0) {
+            let matches = data.matches || [];
+            if (matches.length === 0 && data.recommendations && data.recommendations.length > 0) {
+                // Map legacy predictions/recommendations structure to matches array dynamically
+                matches = data.recommendations.map((rec, i) => {
+                    const id = `scout-rec-${i}`;
+                    const dao = (data.daos && data.daos[i]) || "Web3 DAO";
+                    const isGig = rec.toLowerCase().includes("developer") || rec.toLowerCase().includes("writer") || rec.toLowerCase().includes("manager");
+                    return {
+                        id: id,
+                        title: rec,
+                        type: isGig ? "Gig" : "Bounty",
+                        dao: dao,
+                        reward: isGig ? "$2,500/mo" : "250 OP",
+                        tags: data.skills || ["General"],
+                        matchReason: `Suggested by expert matching for "${data.keywords ? data.keywords.join(', ') : 'ecosystem'}"`
+                    };
+                });
+            }
+            
+            if (matches.length > 0) {
                 cardsHtml = `
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
-                        ${data.recommendations.map((rec, i) => `
-                            <div class="p-4 rounded-xl bg-black/20 border border-white/5 hover:bg-white/5 transition-colors cursor-pointer group">
-                                <div class="flex items-center gap-2 mb-2 text-xs font-bold uppercase tracking-wider text-brand-muted">
-                                    <i data-lucide="zap" class="w-3 h-3 group-hover:text-brand-purple"></i> 
-                                    ${data.daos && data.daos[i] ? data.daos[i] : 'Web3 DAO'}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                        ${matches.map((m) => {
+                            const isSaved = getSavedBounties().includes(m.id);
+                            const cardId = `bounty-card-${m.id}`;
+                            const saveIconId = `save-icon-${m.id}`;
+                            const badgeColor = m.type?.toLowerCase() === 'grant' ? 'bg-brand-blue/10 text-brand-blue border-brand-blue/20' : 'bg-brand-purple/10 text-brand-purple border-brand-purple/20';
+                            
+                            return `
+                                <div id="${cardId}" onclick="openGlobalBountyDetail('${m.id}')" 
+                                     class="bento-card p-5 group flex flex-col justify-between cursor-pointer border ${isSaved ? 'border-brand-purple/40 bg-brand-purple/[0.02]' : 'border-white/5'} hover:border-brand-purple/30 transition-all relative">
+                                    
+                                    <div>
+                                        <div class="flex justify-between items-start gap-4 mb-2">
+                                            <span class="px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider border ${badgeColor}">
+                                                ${m.type || 'Bounty'}
+                                            </span>
+                                            
+                                            <div class="flex items-center gap-2">
+                                                ${isSaved ? `
+                                                    <span class="saved-pill-badge px-2 py-0.5 rounded-full bg-brand-purple/10 border border-brand-purple/30 text-brand-purple text-[10px] font-bold font-mono uppercase tracking-wider scale-95 animate-fade-in shrink-0">
+                                                        <i class="w-3 h-3 inline mr-1 leading-none" data-lucide="bookmark-check"></i>Saved
+                                                    </span>
+                                                ` : ''}
+                                                <button onclick="toggleSaveBounty(event, '${m.id}')" 
+                                                        class="${isSaved ? 'bg-brand-purple/10 border-brand-purple/20 text-brand-purple' : 'bg-white/5 border-white/5 text-brand-muted'} p-1.5 rounded-md border hover:border-brand-purple/20 hover:text-brand-purple hover:bg-brand-purple/10 transition-all flex items-center justify-center shrink-0" 
+                                                        title="Save Opportunity">
+                                                    <i data-lucide="bookmark" class="w-4 h-4 ${isSaved ? 'text-brand-purple fill-[currentcolor]' : 'text-brand-muted'}" id="${saveIconId}"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <h4 class="text-white font-bold text-sm mb-1 group-hover:text-brand-purple transition-colors line-clamp-1">
+                                            ${m.title}
+                                        </h4>
+                                        <p class="text-xs text-brand-muted mb-3 font-mono">
+                                            <span>${m.dao}</span> • <span class="text-emerald-400 font-bold">${m.reward}</span>
+                                        </p>
+                                        
+                                        ${m.matchReason ? `
+                                            <div class="text-[11px] text-brand-muted bg-white/[0.02] border border-white/5 rounded-lg p-2.5 mb-3 leading-normal">
+                                                <span class="text-brand-purple font-semibold">Match:</span> ${m.matchReason}
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                    
+                                    <div class="flex gap-1.5 flex-wrap mt-auto">
+                                        ${(m.tags || []).slice(0, 3).map(tag => `
+                                            <span class="px-2 py-0.5 rounded bg-white/5 border border-white/5 text-brand-text text-[10px] font-medium font-mono">
+                                                ${tag}
+                                            </span>
+                                        `).join('')}
+                                    </div>
                                 </div>
-                                <h4 class="text-white font-medium text-sm mb-2 group-hover:text-brand-purple transition-colors">${rec}</h4>
-                                <div class="flex gap-1.5 flex-wrap mt-auto">
-                                   ${(data.skills || []).slice(0, 2).map(skill => `<span class="px-2 py-0.5 rounded bg-brand-purple/10 text-brand-purple text-[10px] font-bold uppercase tracking-wider">${skill}</span>`).join('')}
-                                </div>
-                            </div>
-                        `).join('')}
+                            `;
+                        }).join('')}
                     </div>
                 `;
             }
@@ -249,12 +337,12 @@
                         <div class="shrink-0 w-8 h-8 rounded-full bg-brand-purple/20 text-brand-purple flex items-center justify-center border border-brand-purple/30">
                             <i data-lucide="bot" class="w-4 h-4"></i>
                         </div>
-                        <div class="bg-brand-light border border-white/5 rounded-2xl rounded-tl-sm p-5 shadow-lg w-full">
+                        <div class="bg-brand-light border border-white/5 rounded-2xl rounded-tl-sm p-4 sm:p-5 shadow-lg w-full">
                             <p class="text-brand-text text-sm leading-relaxed">${summary}</p>
                             ${cardsHtml}
                             <div class="mt-4 pt-3 border-t border-white/5 flex gap-2">
-                                <button class="text-xs font-medium text-brand-muted hover:text-white px-3 py-1.5 rounded bg-white/5 hover:bg-white/10 transition-colors">Apply Filters</button>
-                                <button class="text-xs font-medium text-brand-muted hover:text-white px-3 py-1.5 rounded bg-white/5 hover:bg-white/10 transition-colors">Start New Search</button>
+                                <button onclick="aiInput.value='Developer'; chatForm.dispatchEvent(new Event('submit'));" class="text-xs font-medium text-brand-muted hover:text-white px-3 py-1.5 rounded bg-white/5 hover:bg-white/10 transition-colors">Apply Filters</button>
+                                <button onclick="aiInput.focus();" class="text-xs font-medium text-brand-muted hover:text-white px-3 py-1.5 rounded bg-white/5 hover:bg-white/10 transition-colors">Start New Search</button>
                             </div>
                         </div>
                     </div>
@@ -270,6 +358,67 @@
                 behavior: 'smooth'
             });
         }
+
+        function loadScoutSavedDashboard() {
+            const savedIds = getSavedBounties();
+            const badgeSpan = document.getElementById('savedCountSpan');
+            if (badgeSpan) badgeSpan.textContent = savedIds.length;
+            
+            const dashboard = document.getElementById('savedOpportunitiesDashboard');
+            const listContainer = document.getElementById('savedItemsList');
+            const countLabel = document.getElementById('savedCountLabel');
+            
+            if (!dashboard || !listContainer) return;
+            
+            if (savedIds.length === 0) {
+                dashboard.classList.add('hidden');
+                return;
+            }
+            
+            dashboard.classList.remove('hidden');
+            if (countLabel) countLabel.textContent = `${savedIds.length} saved`;
+            
+            listContainer.innerHTML = '';
+            
+            savedIds.forEach(id => {
+                let item = GLOBAL_BOUNTIES_DB.find(b => b.id === id);
+                if (!item) {
+                     item = {
+                         id: id,
+                         title: "Decentralized Challenge",
+                         dao: "Web3 Partner",
+                         reward: "+100 REP",
+                         type: "Bounty"
+                     };
+                }
+                
+                const itemHtml = `
+                    <div id="stash-item-${item.id}" onclick="openGlobalBountyDetail('${item.id}')" class="p-3 bg-white/5 border border-white/5 hover:border-brand-purple/20 hover:bg-white/[0.08] transition-all rounded-xl flex items-center justify-between cursor-pointer group">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center shrink-0 border border-white/10">
+                                <i data-lucide="award" class="w-4 h-4 text-brand-purple/70 group-hover:text-brand-purple transition-all"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h4 class="text-xs font-bold text-white truncate group-hover:text-brand-purple transition-colors">${item.title}</h4>
+                                <p class="text-[10px] text-brand-muted truncate">${item.dao} • <span class="text-emerald-400 font-medium">${item.reward}</span></p>
+                            </div>
+                        </div>
+                        <button onclick="toggleSaveBounty(event, '${item.id}'); setTimeout(loadScoutSavedDashboard, 100);" class="p-1.5 bg-white/5 hover:bg-red-500/10 border border-white/10 text-brand-muted hover:text-red-400 rounded-lg transition-all ml-2" title="Remove">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                `;
+                listContainer.insertAdjacentHTML('beforeend', itemHtml);
+            });
+            lucide.createIcons();
+        }
+
+        // Register window access and trigger initialization
+        window.loadScoutSavedDashboard = loadScoutSavedDashboard;
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            loadScoutSavedDashboard();
+        });
     </script>
 </body>
 </html>

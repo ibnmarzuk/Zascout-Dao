@@ -8,14 +8,20 @@
     if (mobileMenuBtn && mobileMenu) {
         mobileMenuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
-            const icon = mobileMenuBtn.querySelector('i');
-            if (icon) {
+            const menuIcon = mobileMenuBtn.querySelector('.menu-icon');
+            const closeIcon = mobileMenuBtn.querySelector('.close-icon');
+            if (menuIcon && closeIcon) {
                 if (mobileMenu.classList.contains('hidden')) {
-                    icon.setAttribute('data-lucide', 'menu');
+                    menuIcon.classList.remove('hidden');
+                    menuIcon.classList.add('block');
+                    closeIcon.classList.add('hidden');
+                    closeIcon.classList.remove('block');
                 } else {
-                    icon.setAttribute('data-lucide', 'x');
+                    menuIcon.classList.add('hidden');
+                    menuIcon.classList.remove('block');
+                    closeIcon.classList.remove('hidden');
+                    closeIcon.classList.add('block');
                 }
-                lucide.createIcons();
             }
         });
     }
@@ -302,6 +308,11 @@
                 }
             }
         });
+
+        // Trigger dynamic AI Scout welcome list refreshes if registered
+        if (typeof window.loadScoutSavedDashboard === 'function') {
+            window.loadScoutSavedDashboard();
+        }
     }
 
     // Activate/Deactivate topbar badge dot

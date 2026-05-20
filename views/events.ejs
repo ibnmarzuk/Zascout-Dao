@@ -17,97 +17,470 @@
                     <h1 class="text-3xl lg:text-4xl font-display font-bold text-white mb-2 tracking-tight">Events Hub</h1>
                     <p class="text-brand-muted text-base max-w-xl">Discover hackathons, Twitter Spaces, community calls, and workshops across the ecosystem.</p>
                 </div>
-                <div class="flex gap-3">
-                    <button class="bg-white/5 border border-white/5 hover:bg-white/10 text-white rounded-lg px-4 py-2 text-sm font-medium transition-all flex items-center justify-center gap-2">
-                        <i data-lucide="layout-grid" class="w-4 h-4"></i> Grid
+                <div class="flex gap-3 bg-white/5 p-1 rounded-xl border border-white/5">
+                    <button id="viewGridBtn" onclick="switchView('grid')" class="bg-brand-blue/10 border border-brand-blue/20 text-brand-blue px-4 py-2 text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2 hover:bg-brand-blue/15 cursor-pointer">
+                        <i data-lucide="layout-grid" class="w-4 h-4"></i> Grid View
                     </button>
-                    <button class="bg-brand-blue border border-brand-blue hover:bg-blue-600 text-white rounded-lg px-4 py-2 text-sm font-medium transition-all flex items-center justify-center gap-2">
-                        <i data-lucide="calendar" class="w-4 h-4"></i> Calendar
+                    <button id="viewCalendarBtn" onclick="switchView('calendar')" class="text-brand-muted hover:text-white px-4 py-2 text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2 hover:bg-white/5 cursor-pointer">
+                        <i data-lucide="calendar" class="w-4 h-4"></i> Calendar View
                     </button>
                 </div>
             </div>
             
             <!-- Trending Event -->
-            <div class="bento-card p-6 md:p-8 mb-12 relative overflow-hidden group cursor-pointer border-brand-blue/30">
+            <div class="bento-card p-6 md:p-8 mb-12 relative overflow-hidden group cursor-pointer border-brand-blue/30" onclick="switchView('calendar'); selectCalendarDate(2026, 4, 15);">
                 <div class="absolute inset-0 bg-gradient-to-r from-brand-blue/10 to-transparent z-0"></div>
                 <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div class="flex-grow">
-                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-brand-blue/20 text-brand-blue text-xs font-bold uppercase tracking-wider mb-4 border border-brand-blue/30">
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-brand-blue/20 text-brand-blue text-xs font-bold uppercase tracking-wider mb-4 border border-brand-blue/30 font-mono">
                             <i data-lucide="flame" class="w-3 h-3"></i> Featured Hackathon
                         </div>
                         <h2 class="text-3xl font-display font-bold text-white mb-2">Zero Authority Global Hackathon</h2>
                         <p class="text-brand-muted max-w-xl mb-6">Build the next generation of decentralized intelligence tools using MCP. Compete for over $50k in stablecoin prizes and receive direct mentorship from core contributors.</p>
                         
-                        <div class="flex flex-wrap items-center gap-6 text-sm text-brand-muted">
+                        <div class="flex flex-wrap items-center gap-6 text-sm text-brand-muted font-mono">
                             <div class="flex items-center gap-2">
-                                <i data-lucide="calendar" class="w-4 h-4 text-white"></i> Nov 1 - Nov 15
+                                <i data-lucide="calendar" class="w-4 h-4 text-brand-purple"></i> May 15 - May 30
                             </div>
                             <div class="flex items-center gap-2">
-                                <i data-lucide="globe" class="w-4 h-4 text-white"></i> Virtual (Global)
+                                <i data-lucide="globe" class="w-4 h-4 text-emerald-400"></i> Virtual (Global)
                             </div>
                             <div class="flex items-center gap-2">
-                                <i data-lucide="users" class="w-4 h-4 text-white"></i> 450+ Registered
+                                <i data-lucide="users" class="w-4 h-4 text-brand-blue"></i> 450+ Registered
                             </div>
                         </div>
                     </div>
                     <div class="shrink-0 flex flex-col gap-3 min-w-[200px]">
-                        <button class="w-full bg-white text-black hover:bg-gray-200 py-3 rounded-xl font-bold transition-all text-center">
+                        <button onclick="event.stopPropagation(); switchView('calendar'); selectCalendarDate(2026, 4, 15);" class="w-full bg-white text-black hover:bg-gray-200 py-3 rounded-xl font-bold transition-all text-center text-sm shadow-md cursor-pointer">
                             Register Now
                         </button>
-                        <button class="w-full bg-white/5 border border-white/5 hover:bg-white/10 text-white py-3 rounded-xl font-bold transition-all text-center">
+                        <button onclick="event.stopPropagation(); switchView('calendar'); selectCalendarDate(2026, 4, 15);" class="w-full bg-white/5 border border-white/5 hover:bg-white/10 text-white py-3 rounded-xl font-bold transition-all text-center text-sm cursor-pointer">
                             View Details
                         </button>
-                    </div>
+            <!-- Layout View Containers -->
+            <div id="gridViewContainer" class="block animate-fade-in space-y-6">
+                <h3 class="font-display font-bold text-xl text-white">Upcoming Schedule</h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <% const mockEvents = [
+                        { id: 'evt-2', title: 'DeFi Governance Space', host: 'Zero Authority', date: 'May 12', time: '18:00 UTC', type: 'Twitter Space', icon: 'mic', color: 'blue' },
+                        { id: 'evt-3', title: 'Smart Contract Workshop', host: 'Optimism', date: 'May 15', time: '14:00 UTC', type: 'Workshop', icon: 'code', color: 'purple' },
+                        { id: 'evt-4', title: 'Core Devs Call #45', host: 'Ethereum', date: 'May 18', time: '16:00 UTC', type: 'Community Call', icon: 'users', color: 'gray' },
+                        { id: 'evt-6', title: 'Global DAO Governance Call', host: 'Zero Authority', date: 'May 20', time: '15:00 UTC', type: 'Community Call', icon: 'users', color: 'emerald' },
+                        { id: 'evt-8', title: 'AI Agent Hackathon Kickoff', host: 'Zero Authority', date: 'May 25', time: '12:00 UTC', type: 'Hackathon', icon: 'rocket', color: 'emerald' }
+                    ]; %>
+
+                    <% mockEvents.forEach(function(event) { %>
+                        <div class="bento-card p-5 group flex flex-col hover:border-brand-purple/30 transition-all cursor-pointer" onclick="switchView('calendar'); selectCalendarDate(2026, 4, <%= event.date.split(' ')[1] %>);">
+                            <div class="flex items-start gap-4 mb-4">
+                                <div class="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex flex-col items-center justify-center shrink-0">
+                                    <span class="text-[10px] font-bold uppercase text-brand-muted"><%= event.date.split(' ')[0] %></span>
+                                    <span class="text-xl font-display font-bold text-white leading-none"><%= event.date.split(' ')[1] %></span>
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider text-brand-muted mb-1 font-mono">
+                                        <i data-lucide="<%= event.icon %>" class="w-3 h-3 text-brand-purple"></i> <%= event.type %>
+                                    </div>
+                                    <h4 class="text-base font-bold text-white leading-tight group-hover:text-brand-purple transition-colors"><%= event.title %></h4>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col gap-2 mb-6">
+                                <div class="flex items-center gap-2 text-sm text-brand-muted font-mono">
+                                    <i data-lucide="building-2" class="w-3.5 h-3.5"></i> Hosted by <%= event.host %>
+                                </div>
+                                <div class="flex items-center gap-2 text-sm text-brand-muted font-mono">
+                                    <i data-lucide="clock" class="w-3.5 h-3.5"></i> <%= event.time %>
+                                </div>
+                            </div>
+
+                            <div class="mt-auto pt-3 border-t border-white/5">
+                                <button onclick="event.stopPropagation(); switchView('calendar'); selectCalendarDate(2026, 4, <%= event.date.split(' ')[1] %>);" class="w-full bg-white/5 hover:bg-brand-purple/10 border border-white/5 hover:border-brand-purple/20 text-white hover:text-brand-purple py-2.5 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2">
+                                    <i data-lucide="calendar-check" class="w-4 h-4"></i> Schedule details
+                                </button>
+                            </div>
+                        </div>
+                    <% }); %>
                 </div>
             </div>
 
-            <h3 class="font-display font-bold text-xl text-white mb-6">Upcoming Schedule</h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                <% const mockEvents = [
-                    { title: 'DeFi Governance Space', host: 'Zero Authority', date: 'Oct 12', time: '18:00 UTC', type: 'Twitter Space', icon: 'mic', color: 'blue' },
-                    { title: 'Smart Contract Workshop', host: 'Optimism', date: 'Oct 15', time: '14:00 UTC', type: 'Workshop', icon: 'code', color: 'purple' },
-                    { title: 'Core Devs Call #45', host: 'Ethereum', date: 'Oct 18', time: '16:00 UTC', type: 'Community Call', icon: 'users', color: 'gray' },
-                    { title: 'Local Node Meetup', host: 'ZA Scout Berlin', date: 'Oct 20', time: '19:00 CET', type: 'IRL Meetup', icon: 'map-pin', color: 'orange' },
-                    { title: 'AI Agent Hackathon Kickoff', host: 'Zero Authority', date: 'Nov 1', time: '12:00 UTC', type: 'Hackathon', icon: 'rocket', color: 'emerald' }
-                ]; %>
-
-                <% mockEvents.forEach(function(event) { %>
-                    <div class="bento-card p-5 group flex flex-col hover:border-white/20 transition-all">
-                        <div class="flex items-start gap-4 mb-4">
-                            <div class="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex flex-col items-center justify-center shrink-0">
-                                <span class="text-[10px] font-bold uppercase text-brand-muted"><%= event.date.split(' ')[0] %></span>
-                                <span class="text-xl font-display font-bold text-white leading-none"><%= event.date.split(' ')[1] %></span>
+            <!-- Calendar View Container -->
+            <div id="calendarViewContainer" class="hidden animate-fade-in space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Monthly Grid Column -->
+                    <div class="lg:col-span-2 bento-card p-6 border border-white/5 bg-black/30 backdrop-blur-xl">
+                        <!-- Navigation controls -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-white/5 pb-5">
+                            <div>
+                                <h3 id="calendarMonthYear" class="text-xl font-display font-bold text-white">May 2026</h3>
+                                <span class="text-[11px] text-brand-purple font-mono font-bold uppercase tracking-wider block mt-0.5">Ecosystem Schedule Planner</span>
                             </div>
-                            <div class="flex-grow">
-                                <div class="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider text-brand-muted mb-1">
-                                    <i data-lucide="<%= event.icon %>" class="w-3 h-3"></i> <%= event.type %>
-                                </div>
-                                <h4 class="text-base font-bold text-white leading-tight group-hover:text-brand-blue transition-colors"><%= event.title %></h4>
+                            <div class="flex items-center gap-2">
+                                <button onclick="navigateMonth(-1)" class="w-9 h-9 flex items-center justify-center rounded-lg bg-white/5 border border-white/5 text-brand-muted hover:text-white hover:bg-white/10 transition-all cursor-pointer" title="Previous Month">
+                                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="setToday()" class="px-3 h-9 flex items-center justify-center rounded-lg bg-white/5 border border-white/5 text-white hover:bg-white/10 text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer">
+                                    Current
+                                </button>
+                                <button onclick="navigateMonth(1)" class="w-9 h-9 flex items-center justify-center rounded-lg bg-white/5 border border-white/5 text-brand-muted hover:text-white hover:bg-white/10 transition-all cursor-pointer" title="Next Month">
+                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                </button>
                             </div>
                         </div>
 
-                        <div class="flex flex-col gap-2 mb-6">
-                            <div class="flex items-center gap-2 text-sm text-brand-muted">
-                                <i data-lucide="building-2" class="w-3.5 h-3.5"></i> Hosted by <%= event.host %>
-                            </div>
-                            <div class="flex items-center gap-2 text-sm text-brand-muted">
-                                <i data-lucide="clock" class="w-3.5 h-3.5"></i> <%= event.time %>
-                            </div>
+                        <!-- Days label row -->
+                        <div class="grid grid-cols-7 text-center text-[10px] font-mono font-bold uppercase tracking-wider text-brand-muted mb-4 border-b border-white/5 pb-2">
+                            <div class="text-red-400">Sun</div>
+                            <div>Mon</div>
+                            <div>Tue</div>
+                            <div>Wed</div>
+                            <div>Thu</div>
+                            <div>Fri</div>
+                            <div class="text-brand-blue">Sat</div>
                         </div>
 
-                        <div class="mt-auto">
-                            <button class="w-full bg-white/5 hover:bg-white/10 border border-white/5 text-white py-2 rounded-lg text-sm font-semibold transition-all">
-                                RSVP
-                            </button>
+                        <!-- Days cells element -->
+                        <div id="calendarDaysGrid" class="grid grid-cols-7 gap-1.5 sm:gap-2 min-h-[300px]">
+                            <!-- Hydrated in JS -->
                         </div>
                     </div>
-                <% }); %>
+
+                    <!-- Sidepanel Details Column -->
+                    <div class="bento-card p-6 border border-white/5 bg-black/45 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between border-b border-white/5 pb-4 mb-5">
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-[10px] text-brand-muted font-mono font-bold uppercase tracking-wider">Viewing Events on</span>
+                                    <h4 id="selectedDateString" class="text-base font-bold text-white truncate">May 20, 2026</h4>
+                                </div>
+                                <div class="w-10 h-10 rounded-xl bg-brand-purple/10 border border-brand-purple/25 flex items-center justify-center text-brand-purple shrink-0">
+                                    <i data-lucide="calendar" class="w-5 h-5"></i>
+                                </div>
+                            </div>
+
+                            <h5 class="text-[11px] font-mono font-bold uppercase tracking-widest text-brand-muted mb-4">Agenda</h5>
+                            <div id="dayEventsContainer" class="flex flex-col gap-4 max-h-[340px] overflow-y-auto custom-scrollbar pr-1">
+                                <!-- Hydrated in JS -->
+                            </div>
+                        </div>
+
+                        <!-- Help legends -->
+                        <div class="mt-6 pt-4 border-t border-white/5 space-y-2">
+                            <span class="text-[10px] text-brand-muted block uppercase font-bold tracking-widest">Legends & Tips</span>
+                            <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
+                                <div class="flex items-center gap-1.5 text-brand-muted font-mono text-[11px]">
+                                    <span class="w-2 h-2 rounded-full bg-brand-purple inline-block relative">
+                                        <span class="animate-ping absolute inset-0 rounded-full bg-brand-purple opacity-75"></span>
+                                    </span> 
+                                    Event
+                                </div>
+                                <div class="flex items-center gap-1.5 text-brand-muted font-mono text-[11px]">
+                                    <span class="w-2.5 h-2.5 rounded border border-brand-blue bg-brand-blue/10 inline-block"></span> 
+                                    Current Day
+                                </div>
+                                <div class="flex items-center gap-1.5 text-brand-muted font-mono text-[11px]">
+                                    <span class="w-2.5 h-2.5 rounded-full border border-brand-purple inline-block"></span> 
+                                    Selected
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </main>
     </div>
 
     <%- include('partials/footer_scripts') %>
+
+    <!-- Calendar Javascript Controller -->
+    <script>
+        // May 2026 scheduling database aligned with the real clock
+        const ECOSYSTEM_EVENTS = [
+            { id: "evt-1", title: "Zero Authority Global Hackathon", host: "Zero Authority", type: "Hackathon", desc: "Build modular multi-governance components, storage connectors and developer tools using MCP and Gemini. $50,000 in ecosystem grants and prizes.", year: 2026, month: 4, day: 15, duration: 15, icon: "award", color: "blue", time: "All Day", link: "#" },
+            { id: "evt-2", title: "DeFi Governance Spaces Panel", host: "Zero Authority", type: "Twitter Space", desc: "Speaker discussion regarding dynamic voting weight delegations, rep accrual mechanisms and treasury distribution parameters.", year: 2026, month: 4, day: 12, duration: 1, icon: "mic", color: "purple", time: "18:00 UTC", link: "#" },
+            { id: "evt-3", title: "Smart Contract Safety Workshop", host: "Optimism", type: "Workshop", desc: "Deep dive into access control patterns, storage layout checks and gas audits for nested deposit vault architectures.", year: 2026, month: 4, day: 15, duration: 1, icon: "code", color: "purple", time: "14:00 UTC", link: "#" },
+            { id: "evt-4", title: "DAO Core Devs Call #45", host: "Ethereum", type: "Community Call", desc: "Open developer review sync on protocol execution layers, future testnet structures and naming registry release milestones.", year: 2026, month: 4, day: 18, duration: 1, icon: "users", color: "gray", time: "16:00 UTC", link: "#" },
+            { id: "evt-5", title: "Local Node Meetup Live", host: "ZA Scout Berlin", type: "IRL Meetup", desc: "In-person developer meetup focused on local consensus validation setups, test node triggers and smart contract debugging.", year: 2026, month: 4, day: 20, duration: 1, icon: "map-pin", color: "orange", time: "19:00 CET", link: "#" },
+            { id: "evt-6", title: "Global DAO Governance Call", host: "Zero Authority", type: "Community Call", desc: "Contributor community roundtable. Evaluating active developer proposal drafts, capital budgets and active quests listings.", year: 2026, month: 4, day: 20, duration: 1, icon: "users", color: "blue", time: "15:00 UTC", link: "#" },
+            { id: "evt-7", title: "Twitter Spaces: L2 Scaling Solutions", host: "Arbitrum", type: "Twitter Space", desc: "Ask me anything session with lead rollup experts discussing nitro sequences, compression limits and execution pipelines.", year: 2026, month: 4, day: 22, duration: 1, icon: "mic", color: "purple", time: "17:30 UTC", link: "#" },
+            { id: "evt-8", title: "AI Ecosystem Agent Hackathon Kickoff", host: "Zero Authority", type: "Hackathon", desc: "Launch call for the smart agents intelligence challenge. Learn how to connect to Google Gemini models using TypeScript.", year: 2026, month: 4, day: 25, duration: 1, icon: "rocket", color: "emerald", time: "12:00 UTC", link: "#" },
+            { id: "evt-9", title: "MCP Schema Working Group", host: "Zero Authority", type: "Workshop", desc: "Technical session designing interoperable schema parameters and database triggers for AI agents following standardized specifications.", year: 2026, month: 5, day: 3, duration: 1, icon: "server-cog", color: "emerald", time: "14:30 UTC", link: "#" }
+        ];
+
+        // State machine
+        let activeView = "grid";
+        
+        // Match the real clock May 2026
+        const REAL_TODAY_YEAR = 2026;
+        const REAL_TODAY_MONTH = 4; // May
+        const REAL_TODAY_DAY = 20;
+
+        let calendarYear = REAL_TODAY_YEAR;
+        let calendarMonth = REAL_TODAY_MONTH; // May
+
+        let selectedYear = REAL_TODAY_YEAR;
+        let selectedMonth = REAL_TODAY_MONTH;
+        let selectedDay = REAL_TODAY_DAY;
+
+        const MONTH_NAMES = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        // Toggle layout tabs
+        function switchView(view) {
+            activeView = view;
+            const gridBtn = document.getElementById('viewGridBtn');
+            const calendarBtn = document.getElementById('viewCalendarBtn');
+            const gridContainer = document.getElementById('gridViewContainer');
+            const calendarContainer = document.getElementById('calendarViewContainer');
+
+            if (view === 'grid') {
+                gridContainer.classList.remove('hidden');
+                gridContainer.classList.add('block');
+                calendarContainer.classList.add('hidden');
+                calendarContainer.classList.remove('block');
+
+                gridBtn.className = "bg-brand-blue/10 border border-brand-blue/20 text-brand-blue px-4 py-2 text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2 hover:bg-brand-blue/15 cursor-pointer";
+                calendarBtn.className = "text-brand-muted hover:text-white px-4 py-2 text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2 hover:bg-white/5 cursor-pointer";
+            } else {
+                calendarContainer.classList.remove('hidden');
+                calendarContainer.classList.add('block');
+                gridContainer.classList.add('hidden');
+                gridContainer.classList.remove('block');
+
+                calendarBtn.className = "bg-brand-blue/10 border border-brand-blue/20 text-brand-blue px-4 py-2 text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2 hover:bg-brand-blue/15 cursor-pointer";
+                gridBtn.className = "text-brand-muted hover:text-white px-4 py-2 text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2 hover:bg-white/5 cursor-pointer";
+                
+                renderCalendar();
+            }
+        }
+
+        // Navigate month helper
+        function navigateMonth(direction) {
+            calendarMonth += direction;
+            if (calendarMonth < 0) {
+                calendarMonth = 11;
+                calendarYear--;
+            } else if (calendarMonth > 11) {
+                calendarMonth = 0;
+                calendarYear++;
+            }
+            renderCalendar();
+        }
+
+        // Reset to real clock Today
+        function setToday() {
+            calendarYear = REAL_TODAY_YEAR;
+            calendarMonth = REAL_TODAY_MONTH;
+            selectedYear = REAL_TODAY_YEAR;
+            selectedMonth = REAL_TODAY_MONTH;
+            selectedDay = REAL_TODAY_DAY;
+            renderCalendar();
+        }
+
+        // Select a calendar date manually
+        function selectCalendarDate(year, month, day) {
+            selectedYear = year;
+            selectedMonth = month;
+            selectedDay = day;
+            
+            // Sync calendar month/year viewport if different
+            if (calendarYear !== year || calendarMonth !== month) {
+                calendarYear = year;
+                calendarMonth = month;
+            }
+            
+            renderCalendar();
+        }
+
+        // Extract RSVP entries from localStorage
+        function getMyRSVPs() {
+            try {
+                const rsvps = localStorage.getItem('ecosystem_rsvps');
+                return rsvps ? JSON.parse(rsvps) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        // Toggle user RSVP status
+        function toggleRSVP(eventId) {
+            let rsvps = getMyRSVPs();
+            if (rsvps.includes(eventId)) {
+                rsvps = rsvps.filter(id => id !== eventId);
+            } else {
+                rsvps.push(eventId);
+            }
+            localStorage.setItem('ecosystem_rsvps', JSON.stringify(rsvps));
+            renderCalendar();
+        }
+
+        // Render dynamic monthly items
+        function renderCalendar() {
+            // Update calendar label
+            const label = document.getElementById('calendarMonthYear');
+            if (label) label.textContent = `${MONTH_NAMES[calendarMonth]} ${calendarYear}`;
+
+            // Initialize Grid
+            const grid = document.getElementById('calendarDaysGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            // Calculate calendar details
+            const firstDayIndex = new Date(calendarYear, calendarMonth, 1).getDay();
+            const totalDaysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
+
+            // Populate padding nodes
+            for (let i = 0; i < firstDayIndex; i++) {
+                const pad = document.createElement('div');
+                pad.className = "p-2 min-h-[48px] border border-white/[0.02] bg-white/[0.01] rounded-lg opacity-20 text-center text-xs text-brand-muted select-none flex items-center justify-center";
+                pad.textContent = "";
+                grid.appendChild(pad);
+            }
+
+            // Populate real monthly days
+            for (let day = 1; day <= totalDaysInMonth; day++) {
+                const isSelected = (day === selectedDay && calendarMonth === selectedMonth && calendarYear === selectedYear);
+                const isToday = (day === REAL_TODAY_DAY && calendarMonth === REAL_TODAY_MONTH && calendarYear === REAL_TODAY_YEAR);
+                
+                // Determine scheduled events on this day
+                const dayEvents = ECOSYSTEM_EVENTS.filter(evt => {
+                    // Normalize multi-day checks
+                    const eventDate = new Date(evt.year, evt.month, evt.day);
+                    const checkDate = new Date(calendarYear, calendarMonth, day);
+                    const endDate = new Date(evt.year, evt.month, evt.day + (evt.duration || 1) - 1);
+                    return checkDate >= eventDate && checkDate <= endDate;
+                });
+
+                const cell = document.createElement('button');
+                cell.type = "button";
+                cell.onclick = () => {
+                    selectedYear = calendarYear;
+                    selectedMonth = calendarMonth;
+                    selectedDay = day;
+                    renderCalendar();
+                };
+
+                let borderClass = "border-white/5 bg-white/[0.02]";
+                let textClass = "text-white font-medium";
+
+                if (isToday) {
+                    borderClass = "border-brand-blue bg-brand-blue/10";
+                    textClass = "text-brand-blue font-bold";
+                }
+                if (isSelected) {
+                    borderClass = "border-brand-purple bg-brand-purple/10 scale-102 shadow-[0_0_12px_rgba(139,92,246,0.25)]";
+                    textClass = "text-brand-purple font-bold";
+                }
+
+                cell.className = `p-2 min-h-[52px] sm:min-h-[58px] border ${borderClass} rounded-xl hover:border-brand-purple/35 transition-all text-center flex flex-col justify-between items-center group relative cursor-pointer`;
+
+                // Day numbering
+                const numSpan = document.createElement('span');
+                numSpan.className = `text-xs sm:text-sm ${textClass}`;
+                numSpan.textContent = day;
+                cell.appendChild(numSpan);
+
+                // Scheduled event dots helper
+                if (dayEvents.length > 0) {
+                    const dotsWrap = document.createElement('span');
+                    dotsWrap.className = "flex gap-1 items-center justify-center mt-1";
+                    
+                    dayEvents.slice(0, 3).forEach(evt => {
+                        const dot = document.createElement('span');
+                        dot.className = `w-1.5 h-1.5 rounded-full ${evt.color === 'blue' ? 'bg-brand-blue' : evt.color === 'emerald' ? 'bg-emerald-400' : 'bg-brand-purple'} relative`;
+                        dotsWrap.appendChild(dot);
+                    });
+                    cell.appendChild(dotsWrap);
+                } else {
+                    const emptyPlaceholder = document.createElement('span');
+                    emptyPlaceholder.className = "h-1.5 block opacity-0";
+                    emptyPlaceholder.textContent = ".";
+                    cell.appendChild(emptyPlaceholder);
+                }
+
+                grid.appendChild(cell);
+            }
+
+            // Hydrate sidebar agenda details
+            hydrateAgendaPanel();
+            
+            // Re-bind Lucide icons
+            lucide.createIcons();
+        }
+
+        // Render the Selected Day Events Panel
+        function hydrateAgendaPanel() {
+            const panelTitle = document.getElementById('selectedDateString');
+            if (panelTitle) {
+                panelTitle.textContent = `${MONTH_NAMES[selectedMonth]} ${selectedDay}, ${selectedYear}`;
+            }
+
+            const container = document.getElementById('dayEventsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            // Filter system events
+            const selectedDateEvents = ECOSYSTEM_EVENTS.filter(evt => {
+                const eventDate = new Date(evt.year, evt.month, evt.day);
+                const checkDate = new Date(selectedYear, selectedMonth, selectedDay);
+                const endDate = new Date(evt.year, evt.month, evt.day + (evt.duration || 1) - 1);
+                return checkDate >= eventDate && checkDate <= endDate;
+            });
+
+            if (selectedDateEvents.length === 0) {
+                container.innerHTML = `
+                    <div class="p-6 text-center text-brand-muted border border-white/5 bg-white/[0.01] rounded-xl flex flex-col items-center justify-center min-h-[140px]">
+                        <i data-lucide="calendar-off" class="w-8 h-8 opacity-40 mb-2"></i>
+                        <p class="text-xs font-semibold leading-normal">No scheduled events found for this date.</p>
+                        <p class="text-[10px] text-brand-muted/70 mt-1 max-w-[180px]">Select days with highlighted action dots to view active timelines.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const userRsvpIds = getMyRSVPs();
+
+            selectedDateEvents.forEach(evt => {
+                const isRsvped = userRsvpIds.includes(evt.id);
+                const badgeColor = evt.color === 'blue' ? 'bg-brand-blue/10 text-brand-blue border-brand-blue/20' : 'bg-brand-purple/10 text-brand-purple border-brand-purple/20';
+                
+                const card = document.createElement('div');
+                card.className = "p-4 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-all relative overflow-hidden group";
+                
+                card.innerHTML = `
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                        <span class="px-2 py-0.5 rounded text-[9px] uppercase font-bold tracking-wider font-mono border ${badgeColor}">
+                            ${evt.type}
+                        </span>
+                        <span class="text-[10px] text-brand-muted font-mono bg-white/5 px-2 py-0.5 rounded border border-white/5 flex items-center gap-1">
+                            <i data-lucide="clock" class="w-3 h-3 text-brand-purple"></i> ${evt.time}
+                        </span>
+                    </div>
+
+                    <h4 class="text-sm font-extrabold text-white mb-1 group-hover:text-brand-purple transition-colors">${evt.title}</h4>
+                    <p class="text-[11px] text-brand-muted leading-relaxed mb-3.5">${evt.desc}</p>
+                    
+                    <div class="flex items-center justify-between border-t border-white/5 pt-3 mt-1.5">
+                        <span class="text-[10px] text-brand-muted font-mono flex items-center gap-1">
+                            <i data-lucide="building-2" class="w-2.5 h-2.5"></i> ${evt.host}
+                        </span>
+                        <button onclick="toggleRSVP('${evt.id}')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${isRsvped ? 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20' : 'bg-white hover:bg-gray-200 text-black shadow-md'}">
+                            <i data-lucide="${isRsvped ? 'check-circle' : 'plus-circle'}" class="w-3.5 h-3.5"></i>
+                            ${isRsvped ? 'RSVP\'d!' : 'RSVP Now'}
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Initialize view states
+        window.addEventListener('DOMContentLoaded', () => {
+            switchView('grid'); // Default View
+        });
+    </script>
 </body>
 </html>

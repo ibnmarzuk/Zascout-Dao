@@ -1,13 +1,14 @@
 <!-- Topbar -->
-<nav class="sticky top-0 z-30 glass-panel border-b border-white/5 bg-brand-dark/95 backdrop-blur-xl">
+<nav class="sticky top-0 z-50 glass-panel border-b border-white/5 bg-brand-dark/95 backdrop-blur-xl">
     <div class="px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
             <!-- Mobile Menu Toggle & Logo -->
             <div class="flex items-center gap-4 lg:hidden">
-                <button id="mobileMenuBtn" class="text-brand-muted hover:text-white p-1 transition-colors">
-                    <i data-lucide="menu" class="w-6 h-6"></i>
+                <button id="mobileMenuBtn" class="text-brand-muted hover:text-white p-1 transition-colors relative flex items-center justify-center min-w-8 min-h-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-purple/20">
+                    <i data-lucide="menu" class="w-6 h-6 block menu-icon transform transition-transform hover:scale-110"></i>
+                    <i data-lucide="x" class="w-6 h-6 hidden close-icon transform transition-transform hover:scale-110"></i>
                 </button>
-                <span class="font-display font-bold text-lg text-white">ZA Scout</span>
+                <span class="font-display font-semibold text-lg text-white tracking-wide">ZA Scout</span>
             </div>
 
             <!-- Global Search (Desktop) -->
@@ -62,20 +63,36 @@
     </div>
     
     <!-- Mobile Menu Overlay -->
-    <div id="mobileMenu" class="hidden lg:hidden border-t border-white/5 bg-brand-dark/95 backdrop-blur-xl absolute w-full left-0 animate-fade-in shadow-2xl pb-4">
-        <div class="px-3 pt-2 space-y-1">
-            <a href="/" class="block px-3 py-3 text-sm font-medium text-brand-muted hover:text-white hover:bg-white/5 rounded-lg transition-colors">Dashboard</a>
-            <a href="/opportunities" class="block px-3 py-3 text-sm font-medium text-brand-muted hover:text-white hover:bg-white/5 rounded-lg transition-colors">Opportunities</a>
-            <a href="/bounties" class="block px-3 py-3 text-sm font-medium text-brand-muted hover:text-white hover:bg-white/5 rounded-lg transition-colors">Bounties</a>
-            <a href="/gigs" class="block px-3 py-3 text-sm font-medium text-brand-muted hover:text-white hover:bg-white/5 rounded-lg transition-colors">Gigs</a>
-            <a href="/events" class="block px-3 py-3 text-sm font-medium text-brand-muted hover:text-white hover:bg-white/5 rounded-lg transition-colors">Events</a>
-            <a href="/reputation" class="block px-3 py-3 text-sm font-medium text-brand-muted hover:text-white hover:bg-white/5 rounded-lg transition-colors">Reputation</a>
-            <a href="/ai-scout" class="block px-3 py-3 text-sm font-medium text-brand-purple hover:bg-brand-purple/10 rounded-lg transition-colors">AI Scout Activity</a>
-            <a href="/mcp" class="block px-3 py-3 text-sm font-medium text-brand-muted hover:text-white hover:bg-white/5 rounded-lg transition-colors">MCP Setup</a>
+    <div id="mobileMenu" class="hidden lg:hidden border-b border-t border-white/5 bg-brand-dark/98 backdrop-blur-2xl absolute w-full left-0 animate-fade-in shadow-2xl pb-6 z-50" style="background-color: var(--bg-dark, #020817);">
+        <div class="px-5 pt-3 space-y-1">
+            <a href="/" class="block px-4 py-3.5 text-sm font-semibold text-brand-muted hover:text-white hover:bg-white/5 rounded-xl transition-all flex items-center gap-3">
+                <i data-lucide="layout-dashboard" class="w-4.5 h-4.5 text-brand-muted/70"></i> Dashboard
+            </a>
+            <a href="/opportunities" class="block px-4 py-3.5 text-sm font-semibold text-brand-muted hover:text-white hover:bg-white/5 rounded-xl transition-all flex items-center gap-3">
+                <i data-lucide="compass" class="w-4.5 h-4.5 text-brand-muted/70"></i> Opportunities
+            </a>
+            <a href="/bounties" class="block px-4 py-3.5 text-sm font-semibold text-brand-muted hover:text-white hover:bg-white/5 rounded-xl transition-all flex items-center gap-3">
+                <i data-lucide="target" class="w-4.5 h-4.5 text-brand-muted/70"></i> Bounties
+            </a>
+            <a href="/gigs" class="block px-4 py-3.5 text-sm font-semibold text-brand-muted hover:text-white hover:bg-white/5 rounded-xl transition-all flex items-center gap-3">
+                <i data-lucide="briefcase" class="w-4.5 h-4.5 text-brand-muted/70"></i> Gigs
+            </a>
+            <a href="/events" class="block px-4 py-3.5 text-sm font-semibold text-brand-muted hover:text-white hover:bg-white/5 rounded-xl transition-all flex items-center gap-3">
+                <i data-lucide="calendar" class="w-4.5 h-4.5 text-brand-muted/70"></i> Events
+            </a>
+            <a href="/reputation" class="block px-4 py-3.5 text-sm font-semibold text-brand-muted hover:text-white hover:bg-white/5 rounded-xl transition-all flex items-center gap-3">
+                <i data-lucide="award" class="w-4.5 h-4.5 text-brand-muted/70"></i> Reputation
+            </a>
+            <a href="/ai-scout" class="block px-4 py-3.5 text-sm font-semibold text-brand-purple hover:bg-brand-purple/10 rounded-xl transition-all flex items-center gap-3">
+                <i data-lucide="sparkles" class="w-4.5 h-4.5 text-brand-purple/80"></i> AI Scout Activity
+            </a>
+            <a href="/mcp" class="block px-4 py-3.5 text-sm font-semibold text-brand-muted hover:text-white hover:bg-white/5 rounded-xl transition-all flex items-center gap-3">
+                <i data-lucide="server-cog" class="w-4.5 h-4.5 text-brand-muted/70"></i> MCP Setup
+            </a>
         </div>
         <!-- Mobile Wallet Connection Button -->
-        <div class="px-6 pt-4 border-t border-white/5 mt-3 sm:hidden">
-            <button class="w-full flex items-center justify-center gap-2 bg-white text-black hover:bg-gray-200 py-3 rounded-full text-sm font-bold transition-all shadow-md">
+        <div class="px-8 pt-4 border-t border-white/5 mt-4 sm:hidden">
+            <button class="w-full flex items-center justify-center gap-2 bg-white text-black hover:bg-gray-200 py-3.5 rounded-xl text-sm font-bold transition-all shadow-lg hover:scale-102">
                 <i data-lucide="wallet" class="w-4 h-4"></i> Connect Wallet
             </button>
         </div>

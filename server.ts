@@ -141,22 +141,55 @@ app.use(express.static(path.join(process.cwd(), "public")));
   app.post("/api/ai/discover", csrfProtection, async (req, res) => {
     try {
       const { query } = req.body;
+      const ECOSYSTEM_BOUNTIES = [
+        { id: "zap-1", title: "Smart contract audit", type: "Bounty", dao: "Compound DAO", reward: "$800", tags: ["Dev", "Auditing"], description: "Evaluate and audit smart contract codebase for vulnerabilities, reentrancy issues, storage leaks, and protocol logic correctness to ensure absolute settlement security." },
+        { id: "zap-2", title: "Frontend integration", type: "Bounty", dao: "Aave Grants", reward: "$400", tags: ["Dev", "Web3 UI"], description: "Connect the newly deployed collateral risk protocol UI dashboard with mainnet and testnet client ethers/viem providers. Optimize responsive render latency." },
+        { id: "zap-3", title: "Governance explainer", type: "Bounty", dao: "ENS DAO", reward: "$200", tags: ["Content", "Marketing"], description: "Create a highly engaging educational video overview or comprehensive graphics carousel explaining ENS DAO delegation voting weight parameters." },
+        { id: "zap-4", title: "Thread on L2 scaling", type: "Bounty", dao: "Arbitrum DAO", reward: "$150", tags: ["Content", "Social"], description: "Draft a high-quality, comprehensive analysis thread explaining Arbitrum Nitro performance enhancements, sequencer limits, and batch compression systems." },
+        { id: "zap-5", title: "Brand identity refresh", type: "Bounty", dao: "Nouns DAO", reward: "$600", tags: ["Design", "Art"], description: "Develop unique vector visual identity assets including high-fidelity banner templates, color guidelines, and media kits suited for public marketing." },
+        { id: "zap-6", title: "Tokenomics analysis", type: "Bounty", dao: "Optimism", reward: "$500", tags: ["Research", "DeFi"], description: "Analyze weekly liquid velocity, token release emissions, liquidity incentives models, and deliver comprehensive analytical spreadsheets & PDF summaries." },
+        { id: "zap-7", title: "Core Protocol V2 Development", type: "Grant", dao: "Zero Authority", reward: "$15,000", tags: ["Dev", "Architecture"], description: "Full stack architectural upgrades to core protocol registries, handling decentralized multi-governance protocols and storage adapters securely." },
+        { id: "zap-8", title: "Community Management Tooling", type: "Grant", dao: "Optimism", reward: "$5,000", tags: ["Dev", "Social"], description: "Create automated tools, bot relays, and analytics dashboards that bridge community discord, forums and active snapshot protocols." },
+        { id: "zap-9", title: "DeFi Research Dashboard", type: "Grant", dao: "Aave Grants", reward: "$8,000", tags: ["Dev", "Design", "Data"], description: "Interactive dashboards presenting real-time asset utilization, borrow ratios, health metrics, and liquidations models with fully open-source React views." },
+        { id: "zap-10", title: "Write deep dive on account abstraction", type: "Quest", dao: "Zero Authority", reward: "$100", tags: ["Writing"], description: "Compose an engaging technical article highlighting ERC-4337, paymasters, and user operations workflow targeted for native multi-sig developers." },
+        { id: "zap-11", title: "Review 5 PRs in core repo", type: "Quest", dao: "Compound DAO", reward: "$300", tags: ["Dev", "Review"], description: "Help maintain Compound DAO security standards by evaluating, testing, and leaving clear code reviews on 5 active pull requests." },
+        { id: "zap-12", title: "Participate in weekly dev call", type: "Quest", dao: "ENS DAO", reward: "$50", tags: ["Community"], description: "Attend the weekly call, engage in ongoing developer initiatives, and help outline milestones for upcoming naming protocol releases." },
+        { id: "trending-1", title: "Develop MCP Submorphic Plugin", type: "Bounty", dao: "Zero Authority DAO", reward: "$1,200", tags: ["Typescript", "Node.js"], description: "Design a sub-module protocol supporting dynamic schema registrations and model coordination endpoints following general MCP specifications." },
+        { id: "trending-2", title: "Smart Contract Vault Audit", type: "Bounty", dao: "Compound DAO", reward: "$500", tags: ["Solidity", "Security"], description: "Perform gas optimizations and access state checks on nested multi-sig deposit storage vaults to eliminate withdrawal vectors." },
+        { id: "trending-3", title: "Design UI Kit for Governance", type: "Bounty", dao: "ENS DAO", reward: "$300", tags: ["Design", "Figma"], description: "Create a visual system framework covering proposals lists, delegate weights, voting panels, and user profile fields with pixel-perfect responsive metrics." },
+        { id: "gig-1", title: "Frontend Developer (React/Web3)", type: "Gig", dao: "Uniswap Labs", reward: "$3,000 - $5,000/mo", tags: ["Frontend", "React", "Ethers.js"], description: "Full-time support for the Web3 web interface, connecting liquidity pools, and drafting core components." },
+        { id: "gig-2", title: "Technical Content Writer", type: "Gig", dao: "Arbitrum", reward: "$500 per article", tags: ["Writing", "Layer 2", "DeFi"], description: "Deliver deep technical articles explaining Rollup engineering, safety assumptions, and developer portals." },
+        { id: "gig-3", title: "Smart Contract Auditor", type: "Gig", dao: "Aave", reward: "Up to $15k per audit", tags: ["Solidity", "Security"], description: "Comprehensive audit reviews of smart contract upgrades, liquidity vaults, and yield aggregation modules." },
+        { id: "gig-4", title: "Community Manager", type: "Gig", dao: "Lens Protocol", reward: "$2,000/mo", tags: ["Social", "Discord", "Growth"], description: "Manage growing community groups, organize content calendars, and assist in moderation and support tickets." }
+      ];
+
       const response = await ai.models.generateContent({
-        model: "gemini-3.1-8b-pro",
+        model: "gemini-3.5-flash",
         contents: `You are ZA Scout AI, an expert DAO intelligence assistant. 
         The user is asking: "${query}". 
-        Based on this, return a list of recommended DAO opportunity types (grant, bounty, proposal or quest), 
-        suggested keywords/tags for filtering, a brief summary, recommended DAOs, and specific skills needed.
-        Respond STRICTLY in JSON format without markdown wrapping, matching this exact schema: { 
-          "recommendations": string[], 
+        
+        Analyze this user query and match it with the best active opportunities from the ecosystem database:
+        ${JSON.stringify(ECOSYSTEM_BOUNTIES, null, 2)}
+        
+        Select up to 4 closest matching opportunities. Format each match exactly with its real "id", "title", "type", "dao", "reward", "tags", and include a custom "matchReason" explaining why it matches the user's skills or desires.
+        
+        If the user's request is extremely broad, general, or doesn't have a perfect match in the database, select 1 or 2 similar database items, and you may ALSO generate 1 custom tailored reward opportunity (use ID starting with "scout-gen-" e.g. "scout-gen-1") with an appropriate title, DAO, reward, tags and matchReason to perfectly satisfy their search.
+        
+        Respond STRICTLY in JSON format without markdown wrapping, matching this exact schema: {
+          "summary": "A friendly, professional 2-3 sentence explanation of the found matches and how they fit user's request.",
+          "matches": [
+            {
+              "id": string,
+              "title": string,
+              "type": string,
+              "dao": string,
+              "reward": string,
+              "tags": string[],
+              "matchReason": string
+            }
+          ],
           "keywords": string[],
-          "daos": string[],
-          "skills": string[],
-          "summary": string,
-          "filterHints": {
-            "status": "active" | "open" | "voting",
-            "type": "grant" | "bounty" | "proposal" | "quest"
-          }
+          "skills": string[]
         }`,
         config: {
           responseMimeType: "application/json"
