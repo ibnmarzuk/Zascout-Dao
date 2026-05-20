@@ -240,22 +240,65 @@
     function updateBookmarkIcons(itemId, isActive) {
         const icons = document.querySelectorAll(`[id^="save-icon-${itemId}"]`);
         icons.forEach(icon => {
+            const btn = icon.closest('button');
             if (isActive) {
                 icon.classList.add('text-brand-purple', 'fill-[currentcolor]');
                 icon.classList.remove('text-brand-muted');
-                // Ensure parent button states align
-                const btn = icon.closest('button');
-                if (btn && btn.id === 'modal-save-btn') {
-                    btn.innerHTML = `<i data-lucide="bookmark-check" class="w-4 h-4 text-brand-purple fill-[currentcolor]"></i> Bookmarked`;
-                    lucide.createIcons();
+                if (btn) {
+                    btn.classList.add('bg-brand-purple/10', 'border-brand-purple/20', 'text-brand-purple');
+                    btn.classList.remove('bg-white/5', 'border-white/5', 'text-brand-muted');
+                    if (btn.id === 'modal-save-btn') {
+                        btn.innerHTML = `<i data-lucide="bookmark-check" class="w-4 h-4 text-brand-purple fill-[currentcolor]"></i> Bookmarked`;
+                        lucide.createIcons();
+                    }
                 }
             } else {
                 icon.classList.remove('text-brand-purple', 'fill-[currentcolor]');
                 icon.classList.add('text-brand-muted');
-                const btn = icon.closest('button');
-                if (btn && btn.id === 'modal-save-btn') {
-                    btn.innerHTML = `<i data-lucide="bookmark" class="w-4 h-4"></i> Save Bounty`;
-                    lucide.createIcons();
+                if (btn) {
+                    btn.classList.remove('bg-brand-purple/10', 'border-brand-purple/20', 'text-brand-purple');
+                    btn.classList.add('bg-white/5', 'border-white/5', 'text-brand-muted');
+                    if (btn.id === 'modal-save-btn') {
+                        btn.innerHTML = `<i data-lucide="bookmark" class="w-4 h-4"></i> Save Bounty`;
+                        lucide.createIcons();
+                    }
+                }
+            }
+        });
+
+        // Toggle visual border and background state on card container itself
+        const cards = document.querySelectorAll(`#bounty-card-${itemId}, #quest-card-${itemId}`);
+        cards.forEach(card => {
+            if (card) {
+                if (isActive) {
+                    card.classList.add('border-brand-purple/40', 'bg-brand-purple/[0.02]');
+                    card.classList.remove('border-white/5');
+                    
+                    // Add a tiny saved float badge inside if not already present
+                    if (!card.querySelector('.saved-pill-badge')) {
+                        const pbContainer = card.querySelector('.flex.justify-between, .flex.items-start');
+                        if (pbContainer) {
+                            // Only add if card allows
+                            const badge = document.createElement('span');
+                            badge.className = 'saved-pill-badge px-2 py-0.5 rounded-full bg-brand-purple/10 border border-brand-purple/30 text-brand-purple text-[10px] font-bold font-mono uppercase tracking-wider scale-95 animate-fade-in shrink-0 ml-2';
+                            badge.innerHTML = '<i data-lucide="bookmark-check" class="w-3 h-3 inline mr-1 leading-none"></i>Saved';
+                            
+                            // Find element next to the action button to insert
+                            const rightHeader = pbContainer.querySelector('.flex.items-center.gap-2, .flex.items-center');
+                            if (rightHeader) {
+                                rightHeader.insertBefore(badge, rightHeader.firstChild);
+                                lucide.createIcons();
+                            }
+                        }
+                    }
+                } else {
+                    card.classList.remove('border-brand-purple/40', 'bg-brand-purple/[0.02]');
+                    card.classList.add('border-white/5');
+                    
+                    const badge = card.querySelector('.saved-pill-badge');
+                    if (badge) {
+                        badge.remove();
+                    }
                 }
             }
         });
