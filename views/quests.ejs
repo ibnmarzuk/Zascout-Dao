@@ -601,6 +601,7 @@
                     }
                     
                     const isCompleted = typeof getCompletedQuests !== 'undefined' && getCompletedQuests().includes(q.id);
+                    const isSaved = typeof getSavedBounties !== 'undefined' && getSavedBounties().includes(q.id);
                     
                     const cardHtml = `
                         <div id="quest-card-${q.id}" class="bento-card p-4 sm:p-5 flex flex-col gap-4 group cursor-pointer hover:bg-white/[0.02] relative overflow-hidden transition-all duration-300 ${isCompleted ? 'border-emerald-500/20 bg-emerald-500/[0.01]' : ''}" onclick="openQuestModal('${q.id}')">
@@ -614,18 +615,21 @@
                             
                             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10 w-full">
                                 <div class="flex items-center gap-3">
-                                    <img src="${q.campaign?.avatarUrl || q.creator?.avatarUrl || 'https://zeroauthoritydao.com/favicon.ico'}" class="w-10 h-10 rounded-full border border-white/10 shrink-0" referrerpolicy="no-referrer">
+                                    <img src="${q.campaign?.avatarUrl || q.creator?.avatarUrl || 'https://ui-avatars.com/api/?name=ZA&background=random'}" class="w-10 h-10 rounded-full border border-white/10 shrink-0" referrerpolicy="no-referrer">
                                     <div>
                                         <h3 class="text-base font-semibold text-white group-hover:text-brand-blue transition-colors line-clamp-1">${q.title}</h3>
                                         <div class="text-xs text-brand-muted font-medium mt-0.5">${q.campaign?.name || q.creator?.username || 'ZA Scout'}</div>
                                     </div>
                                 </div>
                                 
-                                <div class="text-left sm:text-right shrink-0">
+                                <div class="flex items-center sm:items-end gap-3 sm:flex-col shrink-0">
                                     <div class="font-display font-bold text-base text-brand-purple flex items-center gap-1 sm:justify-end">
                                         <i data-lucide="award" class="w-4 h-4 text-brand-purple shrink-0"></i>
                                         ${q.totalRep || 100} <span class="text-[10px] text-brand-muted font-sans font-medium">REP</span>
                                     </div>
+                                    <button onclick="toggleSaveBounty(event, '${q.id}')" class="p-1.5 rounded-lg hover:border-brand-purple/30 hover:text-brand-purple hover:bg-brand-purple/10 transition-all pointer-events-auto shrink-0 ${isSaved ? 'bg-brand-purple/10 border border-brand-purple/30 text-brand-purple' : 'bg-white/5 border border-white/5 text-brand-muted'}" title="Save Quest">
+                                        <i data-lucide="bookmark" class="w-4 h-4 ${isSaved ? 'text-brand-purple fill-[currentcolor]' : 'text-brand-muted'}" id="save-icon-${q.id}"></i>
+                                    </button>
                                 </div>
                             </div>
                             
@@ -895,7 +899,7 @@
                 
                 modalArea.innerHTML = `
                     <div class="mb-6 flex items-start gap-4 mr-6">
-                        <img src="${q.campaign?.avatarUrl || q.creator?.avatarUrl || 'https://zeroauthoritydao.com/favicon.ico'}" class="w-14 h-14 rounded-full border border-white/10 shrink-0" referrerpolicy="no-referrer">
+                        <img src="${q.campaign?.avatarUrl || q.creator?.avatarUrl || 'https://ui-avatars.com/api/?name=ZA&background=random'}" class="w-14 h-14 rounded-full border border-white/10 shrink-0" referrerpolicy="no-referrer">
                         <div>
                             <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 bg-brand-purple/15 text-brand-purple rounded">Ecosystem Quest</span>
                             <h2 class="text-xl md:text-2xl font-display font-bold text-white mt-1.5 leading-tight">${q.title}</h2>
@@ -938,9 +942,15 @@
                             </div>
                             
                             <!-- Trigger Action -->
-                            <button onclick="triggerCompleteFromModal(event, '${q.id}')" class="w-full py-3 px-4 bg-emerald-500 hover:bg-emerald-600 text-black font-bold rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all flex items-center justify-center gap-2 text-sm active:scale-[0.98]">
-                                <i data-lucide="check-circle" class="w-4 h-4 text-black"></i> Claim Quest Reward
-                            </button>
+                            <div class="flex flex-col gap-3">
+                                <button onclick="triggerCompleteFromModal(event, '${q.id}')" class="w-full py-3 px-4 bg-emerald-500 hover:bg-emerald-600 text-black font-bold rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all flex items-center justify-center gap-2 text-sm active:scale-[0.98]">
+                                    <i data-lucide="check-circle" class="w-4 h-4 text-black"></i> Claim Quest Reward
+                                </button>
+                                
+                                <button id="modal-save-btn" onclick="toggleSaveBounty(event, '${q.id}')" class="w-full py-2.5 px-4 rounded-xl border transition-all text-sm font-semibold flex items-center justify-center gap-2 ${typeof getSavedBounties !== 'undefined' && getSavedBounties().includes(q.id) ? 'bg-brand-purple/10 border-brand-purple/30 text-brand-purple' : 'bg-white/5 border-white/5 text-brand-muted hover:border-brand-purple/20 hover:bg-brand-purple/5'}">
+                                    ${typeof getSavedBounties !== 'undefined' && getSavedBounties().includes(q.id) ? '<i data-lucide="bookmark-check" class="w-4 h-4 text-brand-purple fill-[currentcolor]" id="save-icon-' + q.id + '-modal"></i> Bookmarked' : '<i data-lucide="bookmark" class="w-4 h-4" id="save-icon-' + q.id + '-modal"></i> Save'}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;

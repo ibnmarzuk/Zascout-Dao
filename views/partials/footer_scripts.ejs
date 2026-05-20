@@ -87,29 +87,29 @@
     // --- GLOBAL BOUNTIES DB ---
     const GLOBAL_BOUNTIES_DB = [
         // Dashboard / live opportunities
-        { id: "zap-1", title: "Smart contract audit", type: "Bounty", dao: "Compound DAO", reward: "$800", tags: ["Dev", "Auditing"], description: "Evaluate and audit smart contract codebase for vulnerabilities, reentrancy issues, storage leaks, and protocol logic correctness to ensure absolute settlement security.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://compound.finance" },
-        { id: "zap-2", title: "Frontend integration", type: "Bounty", dao: "Aave Grants", reward: "$400", tags: ["Dev", "Web3 UI"], description: "Connect the newly deployed collateral risk protocol UI dashboard with mainnet and testnet client ethers/viem providers. Optimize responsive render latency.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://aave.com" },
-        { id: "zap-3", title: "Governance explainer", type: "Bounty", dao: "ENS DAO", reward: "$200", tags: ["Content", "Marketing"], description: "Create a highly engaging educational video overview or comprehensive graphics carousel explaining ENS DAO delegation voting weight parameters.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://ens.domains" },
-        { id: "zap-4", title: "Thread on L2 scaling", type: "Bounty", dao: "Arbitrum DAO", reward: "$150", tags: ["Content", "Social"], description: "Draft a high-quality, comprehensive analysis thread explaining Arbitrum Nitro performance enhancements, sequencer limits, and batch compression systems.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://arbitrum.io" },
-        { id: "zap-5", title: "Brand identity refresh", type: "Bounty", dao: "Nouns DAO", reward: "$600", tags: ["Design", "Art"], description: "Develop unique vector visual identity assets including high-fidelity banner templates, color guidelines, and media kits suited for public marketing.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://nouns.wtf" },
-        { id: "zap-6", title: "Tokenomics analysis", type: "Bounty", dao: "Optimism", reward: "$500", tags: ["Research", "DeFi"], description: "Analyze weekly liquid velocity, token release emissions, liquidity incentives models, and deliver comprehensive analytical spreadsheets & PDF summaries.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://optimism.io" },
-        { id: "zap-7", title: "Core Protocol V2 Development", type: "Grant", dao: "ZA Scout", reward: "$15,000", tags: ["Dev", "Architecture"], description: "Full stack architectural upgrades to core protocol registries, handling decentralized multi-governance protocols and storage adapters securely.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "#" },
-        { id: "zap-8", title: "Community Management Tooling", type: "Grant", dao: "Optimism", reward: "$5,000", tags: ["Dev", "Social"], description: "Create automated tools, bot relays, and analytics dashboards that bridge community discord, forums and active snapshot protocols.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://optimism.io" },
-        { id: "zap-9", title: "DeFi Research Dashboard", type: "Grant", dao: "Aave Grants", reward: "$8,000", tags: ["Dev", "Design", "Data"], description: "Interactive dashboards presenting real-time asset utilization, borrow ratios, health metrics, and liquidations models with fully open-source React views.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://aave.com" },
-        { id: "zap-10", title: "Write deep dive on account abstraction", type: "Quest", dao: "ZA Scout", reward: "$100", tags: ["Writing"], description: "Compose an engaging technical article highlighting ERC-4337, paymasters, and user operations workflow targeted for native multi-sig developers.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "#" },
-        { id: "zap-11", title: "Review 5 PRs in core repo", type: "Quest", dao: "Compound DAO", reward: "$300", tags: ["Dev", "Review"], description: "Help maintain Compound DAO security standards by evaluating, testing, and leaving clear code reviews on 5 active pull requests.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://compound.finance" },
-        { id: "zap-12", title: "Participate in weekly dev call", type: "Quest", dao: "ENS DAO", reward: "$50", tags: ["Community"], description: "Attend the weekly call, engage in ongoing developer initiatives, and help outline milestones for upcoming naming protocol releases.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://ens.domains" },
+        { id: "zap-1", title: "Smart contract audit", type: "Bounty", dao: "Compound DAO", reward: "$800", tags: ["Dev", "Auditing"], description: "Evaluate and audit smart contract codebase for vulnerabilities, reentrancy issues, storage leaks, and protocol logic correctness to ensure absolute settlement security.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "https://compound.finance" },
+        { id: "zap-2", title: "Frontend integration", type: "Bounty", dao: "Aave Grants", reward: "$400", tags: ["Dev", "Web3 UI"], description: "Connect the newly deployed collateral risk protocol UI dashboard with mainnet and testnet client ethers/viem providers. Optimize responsive render latency.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "https://aave.com" },
+        { id: "zap-3", title: "Governance explainer", type: "Bounty", dao: "ENS DAO", reward: "$200", tags: ["Content", "Marketing"], description: "Create a highly engaging educational video overview or comprehensive graphics carousel explaining ENS DAO delegation voting weight parameters.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "https://ens.domains" },
+        { id: "zap-4", title: "Thread on L2 scaling", type: "Bounty", dao: "Arbitrum DAO", reward: "$150", tags: ["Content", "Social"], description: "Draft a high-quality, comprehensive analysis thread explaining Arbitrum Nitro performance enhancements, sequencer limits, and batch compression systems.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "https://arbitrum.io" },
+        { id: "zap-5", title: "Brand identity refresh", type: "Bounty", dao: "Nouns DAO", reward: "$600", tags: ["Design", "Art"], description: "Develop unique vector visual identity assets including high-fidelity banner templates, color guidelines, and media kits suited for public marketing.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "https://nouns.wtf" },
+        { id: "zap-6", title: "Tokenomics analysis", type: "Bounty", dao: "Optimism", reward: "$500", tags: ["Research", "DeFi"], description: "Analyze weekly liquid velocity, token release emissions, liquidity incentives models, and deliver comprehensive analytical spreadsheets & PDF summaries.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "https://optimism.io" },
+        { id: "zap-7", title: "Core Protocol V2 Development", type: "Grant", dao: "ZA Scout", reward: "$15,000", tags: ["Dev", "Architecture"], description: "Full stack architectural upgrades to core protocol registries, handling decentralized multi-governance protocols and storage adapters securely.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "#" },
+        { id: "zap-8", title: "Community Management Tooling", type: "Grant", dao: "Optimism", reward: "$5,000", tags: ["Dev", "Social"], description: "Create automated tools, bot relays, and analytics dashboards that bridge community discord, forums and active snapshot protocols.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "https://optimism.io" },
+        { id: "zap-9", title: "DeFi Research Dashboard", type: "Grant", dao: "Aave Grants", reward: "$8,000", tags: ["Dev", "Design", "Data"], description: "Interactive dashboards presenting real-time asset utilization, borrow ratios, health metrics, and liquidations models with fully open-source React views.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "https://aave.com" },
+        { id: "zap-10", title: "Write deep dive on account abstraction", type: "Quest", dao: "ZA Scout", reward: "$100", tags: ["Writing"], description: "Compose an engaging technical article highlighting ERC-4337, paymasters, and user operations workflow targeted for native multi-sig developers.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "#" },
+        { id: "zap-11", title: "Review 5 PRs in core repo", type: "Quest", dao: "Compound DAO", reward: "$300", tags: ["Dev", "Review"], description: "Help maintain Compound DAO security standards by evaluating, testing, and leaving clear code reviews on 5 active pull requests.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "https://compound.finance" },
+        { id: "zap-12", title: "Participate in weekly dev call", type: "Quest", dao: "ENS DAO", reward: "$50", tags: ["Community"], description: "Attend the weekly call, engage in ongoing developer initiatives, and help outline milestones for upcoming naming protocol releases.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "https://ens.domains" },
         
         // Quests / Trending
-        { id: "trending-1", title: "Develop MCP Submorphic Plugin", type: "Bounty", dao: "ZA Scout", reward: "$1,200", tags: ["Typescript", "Node.js"], description: "Design a sub-module protocol supporting dynamic schema registrations and model coordination endpoints following general MCP specifications.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "#" },
-        { id: "trending-2", title: "Smart Contract Vault Audit", type: "Bounty", dao: "Compound DAO", reward: "$500", tags: ["Solidity", "Security"], description: "Perform gas optimizations and access state checks on nested multi-sig deposit storage vaults to eliminate withdrawal vectors.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://compound.finance" },
-        { id: "trending-3", title: "Design UI Kit for Governance", type: "Bounty", dao: "ENS DAO", reward: "$300", tags: ["Design", "Figma"], description: "Create a visual system framework covering proposals lists, delegate weights, voting panels, and user profile fields with pixel-perfect responsive metrics.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://ens.domains" },
+        { id: "trending-1", title: "Develop MCP Submorphic Plugin", type: "Bounty", dao: "ZA Scout", reward: "$1,200", tags: ["Typescript", "Node.js"], description: "Design a sub-module protocol supporting dynamic schema registrations and model coordination endpoints following general MCP specifications.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "#" },
+        { id: "trending-2", title: "Smart Contract Vault Audit", type: "Bounty", dao: "Compound DAO", reward: "$500", tags: ["Solidity", "Security"], description: "Perform gas optimizations and access state checks on nested multi-sig deposit storage vaults to eliminate withdrawal vectors.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "https://compound.finance" },
+        { id: "trending-3", title: "Design UI Kit for Governance", type: "Bounty", dao: "ENS DAO", reward: "$300", tags: ["Design", "Figma"], description: "Create a visual system framework covering proposals lists, delegate weights, voting panels, and user profile fields with pixel-perfect responsive metrics.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "https://ens.domains" },
         
         // Gigs
-        { id: "gig-1", title: "Frontend Developer (React/Web3)", type: "Gig", dao: "Uniswap Labs", reward: "$3,000 - $5,000/mo", tags: ["Frontend", "React", "Ethers.js"], description: "Full-time support for the Web3 web interface, connecting liquidity pools, and drafting core components.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://uniswap.org" },
-        { id: "gig-2", title: "Technical Content Writer", type: "Gig", dao: "Arbitrum", reward: "$500 per article", tags: ["Writing", "Layer 2", "DeFi"], description: "Deliver deep technical articles explaining Rollup engineering, safety assumptions, and developer portals.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://arbitrum.io" },
-        { id: "gig-3", title: "Smart Contract Auditor", type: "Gig", dao: "Aave", reward: "Up to $15k per audit", tags: ["Solidity", "Security"], description: "Comprehensive audit reviews of smart contract upgrades, liquidity vaults, and yield aggregation modules.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://aave.com" },
-        { id: "gig-4", title: "Community Manager", type: "Gig", dao: "Lens Protocol", reward: "$2,000/mo", tags: ["Social", "Discord", "Growth"], description: "Manage growing community groups, organize content calendars, and assist in moderation and support tickets.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://lens.xyz" }
+        { id: "gig-1", title: "Frontend Developer (React/Web3)", type: "Gig", dao: "Uniswap Labs", reward: "$3,000 - $5,000/mo", tags: ["Frontend", "React", "Ethers.js"], description: "Full-time support for the Web3 web interface, connecting liquidity pools, and drafting core components.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "https://uniswap.org" },
+        { id: "gig-2", title: "Technical Content Writer", type: "Gig", dao: "Arbitrum", reward: "$500 per article", tags: ["Writing", "Layer 2", "DeFi"], description: "Deliver deep technical articles explaining Rollup engineering, safety assumptions, and developer portals.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "https://arbitrum.io" },
+        { id: "gig-3", title: "Smart Contract Auditor", type: "Gig", dao: "Aave", reward: "Up to $15k per audit", tags: ["Solidity", "Security"], description: "Comprehensive audit reviews of smart contract upgrades, liquidity vaults, and yield aggregation modules.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "https://aave.com" },
+        { id: "gig-4", title: "Community Manager", type: "Gig", dao: "Lens Protocol", reward: "$2,000/mo", tags: ["Social", "Discord", "Growth"], description: "Manage growing community groups, organize content calendars, and assist in moderation and support tickets.", logo: "https://ui-avatars.com/api/?name=ZA&background=random", link: "https://lens.xyz" }
     ];
 
     // Initialize Toast Container dynamically if not already present
@@ -162,7 +162,7 @@
                         type: 'Quest',
                         tags: quest.status ? [quest.status] : ['Active'],
                         description: quest.description || 'Custom active contributor challenge.',
-                        logo: quest.campaign?.avatarUrl || quest.creator?.avatarUrl || 'https://zeroauthoritydao.com/favicon.ico',
+                        logo: quest.campaign?.avatarUrl || quest.creator?.avatarUrl || 'https://ui-avatars.com/api/?name=ZA&background=random',
                         link: 'https://zeroauthoritydao.com'
                     };
                 }
@@ -179,7 +179,7 @@
                 type: "Bounty",
                 tags: ["Web3"],
                 description: "Collaborative contributor bounty for scaling infrastructure and community initiatives.",
-                logo: "https://zeroauthoritydao.com/favicon.ico",
+                logo: "https://ui-avatars.com/api/?name=ZA&background=random",
                 link: "https://zeroauthoritydao.com"
             };
         }
@@ -265,7 +265,7 @@
                     btn.classList.remove('bg-brand-purple/10', 'border-brand-purple/20', 'text-brand-purple');
                     btn.classList.add('bg-white/5', 'border-white/5', 'text-brand-muted');
                     if (btn.id === 'modal-save-btn') {
-                        btn.innerHTML = `<i data-lucide="bookmark" class="w-4 h-4"></i> Save Bounty`;
+                        btn.innerHTML = `<i data-lucide="bookmark" class="w-4 h-4"></i> Save`;
                         lucide.createIcons();
                     }
                 }
@@ -423,7 +423,7 @@
                     dao: "ZA Scout Quest",
                     reward: "XP / REP",
                     type: "Quest",
-                    logo: "https://zeroauthoritydao.com/favicon.ico"
+                    logo: "https://ui-avatars.com/api/?name=ZA&background=random"
                 });
             }
         });
@@ -510,7 +510,7 @@
                         type: 'Quest',
                         tags: quest.status ? [quest.status] : ['Active'],
                         description: quest.description || 'Custom active contributor challenge.',
-                        logo: quest.campaign?.avatarUrl || quest.creator?.avatarUrl || 'https://zeroauthoritydao.com/favicon.ico',
+                        logo: quest.campaign?.avatarUrl || quest.creator?.avatarUrl || 'https://ui-avatars.com/api/?name=ZA&background=random',
                         link: 'https://zeroauthoritydao.com'
                     };
                 }
@@ -527,7 +527,7 @@
                 type: "Bounty",
                 tags: ["Web3"],
                 description: "Collaborative building and development challenge focused on resolving open source issues, smart contracts audit reviews, and expanding community reach across top Layer-2 structures.",
-                logo: "https://zeroauthoritydao.com/favicon.ico",
+                logo: "https://ui-avatars.com/api/?name=ZA&background=random",
                 link: "https://zeroauthoritydao.com"
             };
         }
