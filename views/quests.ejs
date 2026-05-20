@@ -7,10 +7,10 @@
     
     <%- include('partials/sidebar', { activePage: 'bounties' }) %>
 
-    <div class="flex-grow flex flex-col min-w-0">
+    <div class="flex-grow flex flex-col min-w-0 lg:pl-64">
         <%- include('partials/topbar') %>
 
-        <main class="flex-grow p-4 sm:p-6 lg:p-10 w-full animate-fade-in lg:ml-64 max-w-7xl mx-auto">
+        <main class="flex-grow p-4 sm:p-6 lg:p-10 w-full animate-fade-in max-w-7xl mx-auto">
             
             <!-- Header section -->
             <div class="mb-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
@@ -22,9 +22,9 @@
                 <div class="flex flex-col sm:flex-row gap-3">
                     <div class="relative w-full sm:w-64 group">
                         <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted group-focus-within:text-brand-blue transition-colors"></i>
-                        <input type="text" placeholder="Search bounties..." class="w-full bg-black/20 border border-white/5 rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-brand-blue/50 focus:ring-2 focus:ring-brand-blue/20 transition-all">
+                        <input id="questSearchInput" type="text" placeholder="Search bounties & quests..." class="w-full bg-black/20 border border-white/5 rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-brand-blue/50 focus:ring-2 focus:ring-brand-blue/20 transition-all">
                     </div>
-                    <button class="bg-white/5 border border-white/5 hover:bg-white/10 text-white rounded-lg px-4 py-2 text-sm font-medium transition-all flex items-center justify-center gap-2">
+                    <button id="toggleFilterBtn" class="bg-white/5 border border-white/5 hover:bg-white/10 text-white rounded-lg px-4 py-2 text-sm font-medium transition-all flex items-center justify-center gap-2">
                         <i data-lucide="filter" class="w-4 h-4"></i> Filter
                     </button>
                 </div>
@@ -39,14 +39,17 @@
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                     <!-- Card 1 -->
-                    <div class="bento-card p-5 group flex flex-col cursor-pointer border-brand-purple/20 relative overflow-hidden">
+                    <div class="bento-card p-5 group flex flex-col cursor-pointer border-brand-purple/20 relative overflow-hidden hover:border-brand-purple/40 transition-all" onclick="openGlobalBountyDetail('trending-1')">
                         <div class="absolute top-0 right-0 w-24 h-24 bg-brand-purple/10 blur-2xl -mr-10 -mt-10 rounded-full"></div>
-                        <div class="flex justify-between items-start mb-4 relative">
+                        <div class="flex justify-between items-start mb-4 relative z-10">
                             <div class="w-10 h-10 rounded bg-white/5 border border-white/10 flex items-center justify-center">
                                 <i data-lucide="code-2" class="w-5 h-5 text-brand-muted"></i>
                             </div>
-                            <div class="text-right">
+                            <div class="flex items-center gap-2">
                                 <div class="font-display font-bold text-lg text-brand-purple">$1,200 <span class="text-xs text-brand-muted font-sans font-medium">USDC</span></div>
+                                <button onclick="toggleSaveBounty(event, 'trending-1')" class="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:border-brand-purple/20 text-brand-muted hover:text-brand-purple hover:bg-brand-purple/10 transition-all pointer-events-auto" title="Save Bounty">
+                                    <i data-lucide="bookmark" class="w-3.5 h-3.5" id="save-icon-trending-1"></i>
+                                </button>
                             </div>
                         </div>
                         <h3 class="text-base font-semibold text-white mb-2 group-hover:text-brand-purple transition-colors line-clamp-2">Develop MCP Submorphic Plugin</h3>
@@ -62,14 +65,17 @@
                     </div>
                     
                     <!-- Card 2 -->
-                    <div class="bento-card p-5 group flex flex-col cursor-pointer relative overflow-hidden">
+                    <div class="bento-card p-5 group flex flex-col cursor-pointer hover:border-brand-blue/30 relative overflow-hidden transition-all" onclick="openGlobalBountyDetail('trending-2')">
                         <div class="absolute top-0 right-0 w-24 h-24 bg-brand-blue/10 blur-2xl -mr-10 -mt-10 rounded-full"></div>
-                        <div class="flex justify-between items-start mb-4 relative">
+                        <div class="flex justify-between items-start mb-4 relative z-10">
                             <div class="w-10 h-10 rounded bg-white/5 border border-white/10 flex items-center justify-center">
                                 <i data-lucide="bug" class="w-5 h-5 text-brand-muted"></i>
                             </div>
-                            <div class="text-right">
+                            <div class="flex items-center gap-2">
                                 <div class="font-display font-bold text-lg text-white">$500 <span class="text-xs text-brand-muted font-sans font-medium">USDC</span></div>
+                                <button onclick="toggleSaveBounty(event, 'trending-2')" class="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:border-brand-purple/20 text-brand-muted hover:text-brand-purple hover:bg-brand-purple/10 transition-all pointer-events-auto" title="Save Bounty">
+                                    <i data-lucide="bookmark" class="w-3.5 h-3.5" id="save-icon-trending-2"></i>
+                                </button>
                             </div>
                         </div>
                         <h3 class="text-base font-semibold text-white mb-2 group-hover:text-brand-blue transition-colors line-clamp-2">Smart Contract Vault Audit</h3>
@@ -83,15 +89,18 @@
                             </div>
                         </div>
                     </div>
-
+ 
                     <!-- Card 3 -->
-                    <div class="bento-card p-5 group flex flex-col cursor-pointer relative overflow-hidden hidden md:flex">
-                        <div class="flex justify-between items-start mb-4 relative">
+                    <div class="bento-card p-5 group flex flex-col cursor-pointer hover:border-gray-500/30 relative overflow-hidden hidden md:flex transition-all" onclick="openGlobalBountyDetail('trending-3')">
+                        <div class="flex justify-between items-start mb-4 relative z-10">
                             <div class="w-10 h-10 rounded bg-white/5 border border-white/10 flex items-center justify-center">
                                 <i data-lucide="pen-tool" class="w-5 h-5 text-brand-muted"></i>
                             </div>
-                            <div class="text-right">
+                            <div class="flex items-center gap-2">
                                 <div class="font-display font-bold text-lg text-white">$300 <span class="text-xs text-brand-muted font-sans font-medium">USDC</span></div>
+                                <button onclick="toggleSaveBounty(event, 'trending-3')" class="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:border-brand-purple/20 text-brand-muted hover:text-brand-purple hover:bg-brand-purple/10 transition-all pointer-events-auto" title="Save Bounty">
+                                    <i data-lucide="bookmark" class="w-3.5 h-3.5" id="save-icon-trending-3"></i>
+                                </button>
                             </div>
                         </div>
                         <h3 class="text-base font-semibold text-white mb-2 group-hover:text-white transition-colors line-clamp-2">Design UI Kit for Governance</h3>
@@ -111,56 +120,585 @@
             <!-- All Bounties List -->
             <div>
                 <div class="flex items-center justify-between px-2 mb-4 border-b border-white/5 pb-4">
-                    <h2 class="font-display font-bold text-lg text-white">All Bounties</h2>
-                    <!-- Mini Filters -->
-                    <div class="hidden sm:flex gap-4">
-                        <button class="text-xs font-bold uppercase tracking-wider text-white border-b-2 border-brand-blue pb-1">Latest</button>
-                        <button class="text-xs font-bold uppercase tracking-wider text-brand-muted hover:text-white pb-1 transition-colors">Highest Value</button>
-                        <button class="text-xs font-bold uppercase tracking-wider text-brand-muted hover:text-white pb-1 transition-colors">Ending Soon</button>
+                    <h2 class="font-display font-bold text-lg text-white">Available Quests</h2>
+                    <!-- Filters/Sorting -->
+                    <div class="hidden sm:flex gap-4" id="questSortTags">
+                        <button onclick="setFilterSort('all')" class="text-xs font-bold uppercase tracking-wider text-white border-b-2 border-brand-blue pb-1 transition-all" id="filter-all">All</button>
+                        <button onclick="setFilterSort('active')" class="text-xs font-bold uppercase tracking-wider text-brand-muted hover:text-white pb-1 transition-all" id="filter-active">Active</button>
+                        <button onclick="setFilterSort('expired')" class="text-xs font-bold uppercase tracking-wider text-brand-muted hover:text-white pb-1 transition-all" id="filter-expired">Expired</button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 gap-3">
-                    <% const mockBounties = [
-                        { title: 'Write tests for Core Protocol', dao: 'Aave', reward: 150, time: '7 days', tag: 'Testing', color: 'blue' },
-                        { title: 'Update documentation for V3', dao: 'Optimism', reward: 100, time: '3 days', tag: 'Content', color: 'gray' },
-                        { title: 'Fix CSS bug in modal component', dao: 'ZA Scout', reward: 50, time: '2 days', tag: 'Frontend', color: 'purple' },
-                        { title: 'Create tutorial video', dao: 'Arbitrum', reward: 250, time: '10 days', tag: 'Media', color: 'orange' },
-                        { title: 'Translate wiki to Spanish', dao: 'ENS', reward: 120, time: '5 days', tag: 'Translation', color: 'gray' }
-                    ]; %>
+                <!-- Live Dynamic Quest List Container -->
+                <div id="quest-list-container" class="grid grid-cols-1 gap-4">
+                    <!-- Loaded dynamically via client-side fetch -->
+                </div>
 
-                    <% mockBounties.forEach(function(b) { %>
-                        <div class="bento-card p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group cursor-pointer hover:bg-white/[0.02]">
+                <!-- Custom Skeleton Loading state -->
+                <div id="quest-skeleton-container" class="grid grid-cols-1 gap-4 hidden">
+                    <% for(let i = 0; i < 3; i++) { %>
+                        <div class="bento-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-pulse">
                             <div class="flex items-start gap-4 flex-grow">
-                                <div class="w-10 h-10 rounded-full bg-white/5 border border-white/10 items-center justify-center shrink-0 hidden sm:flex">
-                                    <i data-lucide="target" class="w-4 h-4 text-brand-muted group-hover:text-<%= b.color %>-400 transition-colors"></i>
+                                <div class="w-10 h-10 rounded-full bg-white/5 shrink-0 hidden sm:flex"></div>
+                                <div class="flex-grow space-y-2.5">
+                                    <div class="h-4 bg-white/10 rounded w-1/3"></div>
+                                    <div class="h-3 bg-white/5 rounded w-1/4"></div>
+                                    <div class="h-3 bg-white/5 rounded w-1/2"></div>
                                 </div>
-                                <div>
-                                    <h3 class="text-base font-semibold text-white group-hover:text-brand-blue transition-colors"><%= b.title %></h3>
-                                    <div class="flex flex-wrap items-center gap-3 mt-1.5">
-                                        <span class="text-sm text-brand-muted"><%= b.dao %></span>
-                                        <span class="w-1 h-1 rounded-full bg-white/10"></span>
-                                        <span class="text-xs font-medium text-brand-muted flex items-center gap-1">
-                                            <i data-lucide="clock" class="w-3 h-3"></i> <%= b.time %> left
-                                        </span>
+                            </div>
+                            <div class="w-full sm:w-auto h-8 bg-white/5 rounded sm:w-24"></div>
+                        </div>
+                    <% } %>
+                </div>
+
+                <!-- Empty State -->
+                <div id="quest-empty-container" class="bento-card p-12 flex flex-col items-center justify-center text-center hidden">
+                    <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4">
+                        <i data-lucide="compass" class="w-6 h-6 text-brand-muted"></i>
+                    </div>
+                    <span class="text-brand-text font-bold text-base">No quests or bounties found</span>
+                    <span class="text-brand-muted text-xs mt-1">Check back later or try clearing your search keyword</span>
+                </div>
+
+                <!-- Pagination controls -->
+                <div id="pagination-controls" class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 px-2 hidden">
+                    <div class="text-xs text-brand-muted font-mono" id="pagination-info">
+                        Showing 0-0 of 0 items
+                    </div>
+                    <div class="flex items-center gap-1.5" id="pagination-buttons">
+                        <!-- Navigation arrows loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toast Pop-up Notification Center -->
+            <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+            <!-- Detailed Quest Modal View Backdrop -->
+            <div id="quest-modal" class="fixed inset-0 z-50 items-center justify-center p-4 bg-black/85 backdrop-blur-md hidden transition-all duration-300 opacity-0 pointer-events-none">
+                <div id="quest-modal-container" class="relative w-full max-w-2xl bg-brand-dark border border-white/15 rounded-2xl shadow-[0_0_50px_rgba(0,112,243,0.15)] overflow-hidden transform scale-95 transition-all duration-300 pointer-events-auto">
+                    <!-- Close Handle -->
+                    <button onclick="closeQuestModal()" class="absolute top-4 right-4 p-2 rounded-full bg-white/5 border border-white/5 text-brand-muted hover:text-white hover:bg-white/10 transition-colors z-20">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                    <!-- Body Area Content -->
+                    <div class="p-6 md:p-8 max-h-[85vh] overflow-y-auto" id="modal-content-area"></div>
+                </div>
+            </div>
+
+            <style>
+            @keyframes successPulse {
+              0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); border-color: rgba(16, 185, 129, 0.4); }
+              50% { transform: scale(1.02); box-shadow: 0 0 25px 8px rgba(16, 185, 129, 0.25); border-color: rgba(16, 185, 129, 0.7); }
+              100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); border-color: rgba(16, 185, 129, 0.1); }
+            }
+            .card-success-glow {
+              animation: successPulse 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+              background: rgba(16, 185, 129, 0.04) !important;
+              border-color: rgba(16, 185, 129, 0.3) !important;
+            }
+            @keyframes floatParticle {
+              0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+              100% { transform: translateY(-50px) scale(0.3) rotate(180deg); opacity: 0; }
+            }
+            .success-particle {
+              position: absolute;
+              pointer-events: none;
+              background: #10b981;
+              box-shadow: 0 0 8px #10b981;
+              border-radius: 50%;
+              animation: floatParticle 0.7s ease-out forwards;
+              z-index: 50;
+            }
+            </style>
+
+            <script>
+            let currentQuestPage = 1;
+            let totalQuestPages = 1;
+            let activeQuests = [];
+            let currentFilterSort = 'all';
+
+            // Start up
+            document.addEventListener('DOMContentLoaded', () => {
+                loadQuests(1);
+                
+                // Real-time search filter binding
+                const searchInput = document.getElementById('questSearchInput');
+                if (searchInput) {
+                    searchInput.addEventListener('input', () => {
+                        filterQuests();
+                    });
+                }
+            });
+
+            async function loadQuests(page = 1) {
+                const listContainer = document.getElementById('quest-list-container');
+                const skeleton = document.getElementById('quest-skeleton-container');
+                const emptyContainer = document.getElementById('quest-empty-container');
+                const paginationControls = document.getElementById('pagination-controls');
+                
+                if (!listContainer) return;
+                
+                listContainer.classList.add('hidden');
+                emptyContainer.classList.add('hidden');
+                skeleton.classList.remove('hidden');
+                paginationControls.classList.add('hidden');
+                
+                try {
+                    const response = await fetch(`/api/quests/fetched?page=${page}&limit=3`);
+                    const result = await response.json();
+                    
+                    skeleton.classList.add('hidden');
+                    
+                    if (result.success && result.data && result.data.length > 0) {
+                        activeQuests = result.data;
+                        currentQuestPage = result.pagination.page;
+                        totalQuestPages = result.pagination.totalPages;
+                        
+                        // Apply any existing active filter
+                        filterQuests();
+                        renderPaginationInfo(result.pagination);
+                        
+                        listContainer.classList.remove('hidden');
+                        paginationControls.classList.remove('hidden');
+                    } else {
+                        emptyContainer.classList.remove('hidden');
+                    }
+                } catch (e) {
+                    console.error("Error loading quests:", e);
+                    skeleton.classList.add('hidden');
+                    emptyContainer.classList.remove('hidden');
+                }
+            }
+
+            function setFilterSort(filter) {
+                currentFilterSort = filter;
+                const buttons = ['all', 'active', 'expired'];
+                buttons.forEach(b => {
+                    const btn = document.getElementById(`filter-${b}`);
+                    if (btn) {
+                        if (b === filter) {
+                            btn.className = "text-xs font-bold uppercase tracking-wider text-white border-b-2 border-brand-blue pb-1 transition-all";
+                        } else {
+                            btn.className = "text-xs font-bold uppercase tracking-wider text-brand-muted hover:text-white pb-1 transition-all";
+                        }
+                    }
+                });
+                
+                filterQuests();
+            }
+
+            function filterQuests() {
+                const queryInput = document.getElementById('questSearchInput');
+                const query = queryInput ? queryInput.value.toLowerCase().trim() : '';
+                
+                let filtered = activeQuests;
+                
+                // Tag status filter
+                if (currentFilterSort === 'active') {
+                    filtered = filtered.filter(q => q.status !== 'expired');
+                } else if (currentFilterSort === 'expired') {
+                    filtered = filtered.filter(q => q.status === 'expired');
+                }
+                
+                // Text search query filter
+                if (query) {
+                    filtered = filtered.filter(q => {
+                        const titleMatch = q.title && q.title.toLowerCase().includes(query);
+                        const descMatch = q.description && q.description.toLowerCase().includes(query);
+                        const campaignMatch = q.campaign?.name && q.campaign.name.toLowerCase().includes(query);
+                        return titleMatch || descMatch || campaignMatch;
+                    });
+                }
+                
+                if (filtered.length > 0) {
+                    document.getElementById('quest-empty-container').classList.add('hidden');
+                    document.getElementById('quest-list-container').classList.remove('hidden');
+                    renderQuestsGrid(filtered);
+                } else {
+                    document.getElementById('quest-list-container').classList.add('hidden');
+                    document.getElementById('quest-empty-container').classList.remove('hidden');
+                }
+            }
+
+            function renderQuestsGrid(quests) {
+                const listContainer = document.getElementById('quest-list-container');
+                listContainer.innerHTML = '';
+                
+                quests.forEach(q => {
+                    // Tag and Status Setup
+                    const tags = [];
+                    if (q.status) {
+                        tags.push(q.status.toUpperCase());
+                    } else {
+                        tags.push('ACTIVE');
+                    }
+                    
+                    if (q.activities && q.activities.length > 0 && q.activities[0].repLevel) {
+                        tags.push(q.activities[0].repLevel.toUpperCase());
+                    }
+                    
+                    // Progress bar support (Check explicit progress or participants count as highly interactive fallback)
+                    let current = q.current;
+                    let target = q.target;
+                    let hasProgress = q.current !== undefined && q.target !== undefined;
+                    
+                    if (!hasProgress && q.participants !== undefined) {
+                        current = q.participants;
+                        target = 25; // standard target campaign participants
+                        hasProgress = true;
+                    }
+                    
+                    let progressPercent = 0;
+                    if (hasProgress) {
+                        progressPercent = Math.min(100, Math.round((current / target) * 100));
+                    }
+                    
+                    // Time Left String
+                    let daysLeftStr = 'Ongoing';
+                    if (q.endDate) {
+                        const end = new Date(q.endDate);
+                        const now = new Date();
+                        const diff = end - now;
+                        const diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
+                        daysLeftStr = diffDays > 0 ? `${diffDays} days left` : 'Reviewing';
+                    }
+                    
+                    const cardHtml = `
+                        <div id="quest-card-${q.id}" class="bento-card p-4 sm:p-5 flex flex-col gap-4 group cursor-pointer hover:bg-white/[0.02] relative overflow-hidden transition-all duration-300" onclick="openQuestModal('${q.id}')">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-brand-blue/5 blur-3xl -mr-12 -mt-12 rounded-full"></div>
+                            
+                            <div class="flex items-start justify-between gap-4 relative z-10 w-full sm:flex-row">
+                                <div class="flex items-center gap-3">
+                                    <img src="${q.campaign?.avatarUrl || q.creator?.avatarUrl || 'https://zeroauthoritydao.com/favicon.ico'}" class="w-10 h-10 rounded-full border border-white/10 shrink-0" referrerpolicy="no-referrer">
+                                    <div>
+                                        <h3 class="text-base font-semibold text-white group-hover:text-brand-blue transition-colors line-clamp-1">${q.title}</h3>
+                                        <div class="text-xs text-brand-muted font-medium mt-0.5">${q.campaign?.name || q.creator?.username || 'Zero Authority'}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-right shrink-0">
+                                    <div class="font-display font-bold text-base text-brand-purple flex items-center justify-end gap-1">
+                                        <i data-lucide="award" class="w-4 h-4 text-brand-purple shrink-0"></i>
+                                        ${q.totalRep || 100} <span class="text-[10px] text-brand-muted font-sans font-medium">REP</span>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto mt-2 sm:mt-0 pt-3 sm:pt-0 border-t border-white/5 sm:border-t-0">
-                                <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 bg-white/5 text-gray-400 rounded"><%= b.tag %></span>
-                                <div class="font-display font-bold text-lg text-white w-24 text-right">
-                                    $<%= b.reward %>
+                            <p class="text-sm text-brand-muted line-clamp-2 leading-relaxed relative z-10">${q.description || 'No description provided.'}</p>
+                            
+                            ${hasProgress ? `
+                            <div class="w-full relative z-10">
+                                <div class="flex justify-between items-center text-xs mb-1.5 font-mono text-brand-muted">
+                                    <span>Campaign Progress</span>
+                                    <span class="text-white font-medium">${current} / ${target} (${progressPercent}%)</span>
+                                </div>
+                                <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                                    <div class="h-full bg-gradient-to-r from-brand-blue to-brand-purple rounded-full shadow-[0_0_8px_rgba(0,112,243,0.5)] transition-all duration-500" style="width: ${progressPercent}%"></div>
+                                </div>
+                            </div>
+                            ` : ''}
+                            
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-2 pt-3 border-t border-white/5 relative z-10 gap-3">
+                                <div class="flex items-center gap-1.5 text-xs text-brand-muted font-medium">
+                                    <i data-lucide="clock" class="w-3.5 h-3.5 text-brand-muted shrink-0"></i>
+                                    <span>${daysLeftStr}</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
+                                    <div class="flex gap-1.5">
+                                        ${tags.map(t => `<span class="text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 bg-white/5 text-gray-400 rounded">${t}</span>`).join('')}
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <button onclick="toggleSaveBounty(event, '${q.id}')" class="p-1 px-1.5 rounded-md bg-white/5 border border-white/5 hover:border-brand-purple/20 text-brand-muted hover:text-brand-purple hover:bg-brand-purple/10 transition-all pointer-events-auto" title="Save Quest">
+                                            <i data-lucide="bookmark" class="w-3.5 h-3.5 ${(typeof getSavedBounties !== 'undefined' && getSavedBounties().includes(q.id)) ? 'text-brand-purple fill-[currentcolor]' : 'text-brand-muted'}" id="save-icon-${q.id}"></i>
+                                        </button>
+                                        <button onclick="triggerCompleteQuest(event, '${q.id}')" class="px-3 py-1 text-[11px] font-bold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/15 rounded-md flex items-center gap-1 transition-all pointer-events-auto shrink-0 shadow-sm">
+                                            <i data-lucide="check" class="w-3 h-3 text-emerald-400"></i> Complete
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    <% }); %>
-                </div>
+                    `;
+                    listContainer.insertAdjacentHTML('beforeend', cardHtml);
+                });
+                
+                lucide.createIcons();
+            }
 
-                <div class="mt-8 flex justify-center">
-                    <button class="text-sm font-medium text-brand-muted hover:text-white px-4 py-2 border border-white/10 rounded-lg hover:bg-white/5 transition-all">Load More</button>
-                </div>
-            </div>
+            function renderPaginationInfo(pag) {
+                const info = document.getElementById('pagination-info');
+                const btnContainer = document.getElementById('pagination-buttons');
+                
+                if (!info || !btnContainer) return;
+                
+                const start = (pag.page - 1) * pag.limit + 1;
+                const end = Math.min(pag.page * pag.limit, pag.totalItems);
+                
+                info.innerText = `Showing ${start}-${end} of ${pag.totalItems} items (Page ${pag.page} of ${pag.totalPages})`;
+                
+                btnContainer.innerHTML = `
+                    <button onclick="changePage(${pag.page - 1})" ${pag.page === 1 ? 'disabled' : ''} class="p-2 border border-white/5 rounded-lg text-brand-muted hover:text-white hover:bg-white/5 transition-all disabled:opacity-30 disabled:pointer-events-none">
+                        <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                    </button>
+                `;
+                
+                for(let i = 1; i <= pag.totalPages; i++) {
+                    btnContainer.innerHTML += `
+                        <button onclick="changePage(${i})" class="px-3.5 py-1.5 text-xs font-bold rounded-lg ${pag.page === i ? 'bg-brand-blue text-white' : 'border border-white/5 text-brand-muted hover:text-white hover:bg-white/5'} transition-all">${i}</button>
+                    `;
+                }
+                
+                btnContainer.innerHTML += `
+                    <button onclick="changePage(${pag.page + 1})" ${pag.page === pag.totalPages ? 'disabled' : ''} class="p-2 border border-white/5 rounded-lg text-brand-muted hover:text-white hover:bg-white/5 transition-all disabled:opacity-30 disabled:pointer-events-none">
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                `;
+                
+                lucide.createIcons();
+            }
+
+            function changePage(targetPage) {
+                if (targetPage < 1 || targetPage > totalQuestPages) return;
+                loadQuests(targetPage);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function triggerCompleteQuest(event, qId) {
+                event.stopPropagation();
+                
+                const card = document.getElementById(`quest-card-${qId}`);
+                if (!card) return;
+                
+                card.classList.add('card-success-glow');
+                
+                // Spawn particles from client click or card center
+                const rect = card.getBoundingClientRect();
+                const clickX = event.clientX ? event.clientX - rect.left : rect.width / 2;
+                const clickY = event.clientY ? event.clientY - rect.top : rect.height / 2;
+                
+                for (let i = 0; i < 15; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'success-particle';
+                    
+                    const size = Math.random() * 6 + 4;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    
+                    particle.style.left = `${clickX + (Math.random() * 40 - 20)}px`;
+                    particle.style.top = `${clickY + (Math.random() * 40 - 20)}px`;
+                    
+                    particle.style.animationDelay = `${Math.random() * 0.15}s`;
+                    particle.style.animationDuration = `${Math.random() * 0.4 + 0.4}s`;
+                    
+                    card.appendChild(particle);
+                    setTimeout(() => particle.remove(), 800);
+                }
+                
+                const q = activeQuests.find(item => item.id === qId);
+                const titleStr = q ? q.title : 'Challenge';
+                const repVal = q ? q.totalRep : 100;
+                
+                showToastNotification("Quest Completed!", `"${titleStr}" was successfully marked done. Earned +${repVal} REP!`);
+                
+                const button = event.currentTarget;
+                if (button) {
+                    button.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Done`;
+                    button.className = "px-3 py-1 text-[11px] font-bold bg-emerald-500/30 text-emerald-300 border border-emerald-500/35 rounded-md flex items-center gap-1 pointer-events-none shrink-0 shadow-sm";
+                    lucide.createIcons();
+                }
+                
+                setTimeout(() => {
+                    card.classList.remove('card-success-glow');
+                }, 1000);
+            }
+
+            function showToastNotification(title, message) {
+                const container = document.getElementById('toast-container');
+                if (!container) return;
+                
+                const toast = document.createElement('div');
+                toast.className = `pointer-events-auto flex items-center gap-3 bg-brand-dark border-l-4 border-emerald-500 shadow-[0_4px_25px_rgba(16,185,129,0.2)] text-white p-4 rounded-r-xl border border-white/5 min-w-[300px] max-w-sm transition-all duration-300 transform translate-x-10 opacity-0 relative overflow-hidden`;
+                
+                toast.innerHTML = `
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-emerald-500/5 blur-xl -mr-6 -mt-6 rounded-full"></div>
+                    <div class="p-1 rounded bg-emerald-500/10 text-emerald-400 shrink-0 relative z-10">
+                        <i data-lucide="check-circle" class="w-5 h-5"></i>
+                    </div>
+                    <div class="flex-grow relative z-10">
+                        <h4 class="text-sm font-bold text-white">${title}</h4>
+                        <p class="text-xs text-brand-muted mt-0.5 leading-snug">${message}</p>
+                    </div>
+                    <button onclick="this.parentElement.remove()" class="text-brand-muted hover:text-white transition-colors pl-2 shrink-0 relative z-10">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                `;
+                
+                container.appendChild(toast);
+                lucide.createIcons();
+                
+                setTimeout(() => {
+                    toast.classList.remove('translate-x-10', 'opacity-0');
+                    toast.classList.add('translate-x-0', 'opacity-100');
+                }, 10);
+                
+                setTimeout(() => {
+                    toast.classList.remove('translate-x-0', 'opacity-100');
+                    toast.classList.add('translate-x-10', 'opacity-0');
+                    setTimeout(() => toast.remove(), 300);
+                }, 4000);
+            }
+
+            function openQuestModal(qId) {
+                const q = activeQuests.find(item => item.id === qId);
+                if (!q) return;
+                
+                const modalArea = document.getElementById('modal-content-area');
+                const modal = document.getElementById('quest-modal');
+                const container = document.getElementById('quest-modal-container');
+                
+                // Setup Guidelines steps based on Activities response fields
+                let activitiesHtml = '';
+                if (q.activities && q.activities.length > 0) {
+                    activitiesHtml = q.activities.map((act, idx) => `
+                        <div class="p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.05] transition-colors">
+                            <div class="flex items-start gap-4">
+                                <div class="w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">${idx + 1}</div>
+                                <div class="flex-grow">
+                                    <div class="flex items-center justify-between gap-4">
+                                        <h4 class="text-sm font-bold text-white">${act.title}</h4>
+                                        <span class="text-xs font-mono font-bold text-brand-purple shrink-0">+${act.repAmount || 50} ${act.repLevel || 'REP'}</span>
+                                    </div>
+                                    <p class="text-xs text-brand-muted mt-1 leading-relaxed">${act.description || 'Complete this guideline task to submit deliverables.'}</p>
+                                    ${act.config && act.config.socialMediaUrl ? `
+                                        <a href="${act.config.socialMediaUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 mt-2.5 text-xs text-brand-blue hover:underline">
+                                            <i data-lucide="external-link" class="w-3 h-3 text-brand-blue"></i> Open Resource
+                                        </a>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    activitiesHtml = `
+                        <div class="p-4 rounded-xl bg-white/[0.03] border border-white/5 text-center">
+                            <p class="text-xs text-brand-muted">Standard guidelines of engagement apply. Complete and submit for review.</p>
+                        </div>
+                    `;
+                }
+                
+                // Collate associated links
+                const links = [];
+                if (q.activities) {
+                    q.activities.forEach(a => {
+                        if (a.config && a.config.socialMediaUrl) {
+                            links.push({ title: a.title, url: a.config.socialMediaUrl });
+                        }
+                    });
+                }
+                if (links.length === 0) {
+                    links.push({ title: 'Campaign Hub', url: 'https://zeroauthoritydao.com' });
+                    links.push({ title: 'Zero Authority Forum', url: 'https://zeroauthoritydao.com/forum' });
+                }
+                
+                const linksHtml = links.map(link => `
+                    <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-xl bg-black/20 hover:bg-black/40 border border-white/5 hover:border-brand-blue/30 text-xs text-brand-muted hover:text-white transition-all">
+                        <span class="font-medium truncate mr-2">${link.title}</span>
+                        <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-brand-blue shrink-0"></i>
+                    </a>
+                `).join('');
+                
+                modalArea.innerHTML = `
+                    <div class="mb-6 flex items-start gap-4 mr-6">
+                        <img src="${q.campaign?.avatarUrl || q.creator?.avatarUrl || 'https://zeroauthoritydao.com/favicon.ico'}" class="w-14 h-14 rounded-full border border-white/10 shrink-0" referrerpolicy="no-referrer">
+                        <div>
+                            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 bg-brand-purple/15 text-brand-purple rounded">Ecosystem Quest</span>
+                            <h2 class="text-xl md:text-2xl font-display font-bold text-white mt-1.5 leading-tight">${q.title}</h2>
+                            <div class="text-xs text-brand-muted mt-1 font-mono">Hosted by <span class="text-white">${q.campaign?.name || q.creator?.username || 'Zero Authority'}</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-5 border-t border-white/5">
+                        <div class="md:col-span-2 space-y-6">
+                            <div>
+                                <h3 class="text-xs font-bold text-brand-muted uppercase tracking-wider mb-2">Description</h3>
+                                <p class="text-sm text-brand-text leading-relaxed whitespace-pre-wrap">${q.description || 'No detailed description provided.'}</p>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-xs font-bold text-brand-muted uppercase tracking-wider mb-3">Activities & Guidelines</h3>
+                                <div class="space-y-3">
+                                    ${activitiesHtml}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <!-- Rewards -->
+                            <div class="p-4 rounded-xl bg-white/5 border border-white/5">
+                                <h4 class="text-xs font-bold text-brand-muted uppercase tracking-wider mb-2.5">Completion Reward</h4>
+                                <div class="flex items-baseline gap-1 text-2xl font-display font-bold text-emerald-400">
+                                    +${q.totalRep || 100} 
+                                    <span class="text-xs text-brand-muted font-sans font-medium">REP</span>
+                                </div>
+                                <div class="text-[10px] text-brand-muted mt-1 leading-snug">Awarded automatically after your challenge submission is processed and verified</div>
+                            </div>
+                            
+                            <!-- Links -->
+                            <div>
+                                <h3 class="text-xs font-bold text-brand-muted uppercase tracking-wider mb-3">Associated Links</h3>
+                                <div class="flex flex-col gap-2">
+                                    ${linksHtml}
+                                </div>
+                            </div>
+                            
+                            <!-- Trigger Action -->
+                            <button onclick="triggerCompleteFromModal(event, '${q.id}')" class="w-full py-3 px-4 bg-emerald-500 hover:bg-emerald-600 text-black font-bold rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all flex items-center justify-center gap-2 text-sm active:scale-[0.98]">
+                                <i data-lucide="check-circle" class="w-4 h-4 text-black"></i> Claim Quest Reward
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                modal.classList.remove('hidden');
+                modal.classList.remove('pointer-events-none');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modal.classList.add('opacity-100');
+                    container.classList.remove('scale-95');
+                    container.classList.add('scale-100');
+                }, 10);
+                
+                lucide.createIcons();
+            }
+
+            function closeQuestModal() {
+                const modal = document.getElementById('quest-modal');
+                const container = document.getElementById('quest-modal-container');
+                if (!modal) return;
+                
+                modal.classList.remove('opacity-100');
+                modal.classList.add('opacity-0');
+                container.classList.remove('scale-100');
+                container.classList.add('scale-95');
+                modal.classList.add('pointer-events-none');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+
+            function triggerCompleteFromModal(event, qId) {
+                closeQuestModal();
+                const cardBtn = document.querySelector(`#quest-card-${qId} button`);
+                if (cardBtn) {
+                    cardBtn.click();
+                } else {
+                    showToastNotification("Quest Completed!", "Your challenge submission was successfully generated.");
+                }
+            }
+            </script>
 
         </main>
     </div>

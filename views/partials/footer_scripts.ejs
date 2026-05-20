@@ -20,6 +20,21 @@
         });
     }
 
+    // Dynamic Navigation Active State Tracking (Sidebar and Mobile Navigation Menu)
+    const currentPath = window.location.pathname;
+    const allLinks = document.querySelectorAll('aside a, #mobileMenu a');
+    allLinks.forEach(link => {
+        const linkPath = link.getAttribute('href');
+        if (linkPath === currentPath || (linkPath !== '/' && currentPath.startsWith(linkPath))) {
+            if (link.classList.contains('text-brand-purple')) {
+                link.classList.add('bg-brand-purple/10', 'text-white');
+            } else {
+                link.classList.add('bg-white/5', 'text-white');
+                link.classList.remove('text-brand-muted');
+            }
+        }
+    });
+
     // Theme Toggle
     const themeToggle = document.getElementById('themeToggle');
     const htmlElem = document.documentElement;
@@ -61,5 +76,524 @@
                 updateIcons(true);
             }
         });
+    }
+
+    // --- GLOBAL BOUNTIES DB ---
+    const GLOBAL_BOUNTIES_DB = [
+        // Dashboard / live opportunities
+        { id: "zap-1", title: "Smart contract audit", type: "Bounty", dao: "Compound DAO", reward: "$800", tags: ["Dev", "Auditing"], description: "Evaluate and audit smart contract codebase for vulnerabilities, reentrancy issues, storage leaks, and protocol logic correctness to ensure absolute settlement security.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://compound.finance" },
+        { id: "zap-2", title: "Frontend integration", type: "Bounty", dao: "Aave Grants", reward: "$400", tags: ["Dev", "Web3 UI"], description: "Connect the newly deployed collateral risk protocol UI dashboard with mainnet and testnet client ethers/viem providers. Optimize responsive render latency.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://aave.com" },
+        { id: "zap-3", title: "Governance explainer", type: "Bounty", dao: "ENS DAO", reward: "$200", tags: ["Content", "Marketing"], description: "Create a highly engaging educational video overview or comprehensive graphics carousel explaining ENS DAO delegation voting weight parameters.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://ens.domains" },
+        { id: "zap-4", title: "Thread on L2 scaling", type: "Bounty", dao: "Arbitrum DAO", reward: "$150", tags: ["Content", "Social"], description: "Draft a high-quality, comprehensive analysis thread explaining Arbitrum Nitro performance enhancements, sequencer limits, and batch compression systems.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://arbitrum.io" },
+        { id: "zap-5", title: "Brand identity refresh", type: "Bounty", dao: "Nouns DAO", reward: "$600", tags: ["Design", "Art"], description: "Develop unique vector visual identity assets including high-fidelity banner templates, color guidelines, and media kits suited for public marketing.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://nouns.wtf" },
+        { id: "zap-6", title: "Tokenomics analysis", type: "Bounty", dao: "Optimism", reward: "$500", tags: ["Research", "DeFi"], description: "Analyze weekly liquid velocity, token release emissions, liquidity incentives models, and deliver comprehensive analytical spreadsheets & PDF summaries.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://optimism.io" },
+        { id: "zap-7", title: "Core Protocol V2 Development", type: "Grant", dao: "Zero Authority", reward: "$15,000", tags: ["Dev", "Architecture"], description: "Full stack architectural upgrades to core protocol registries, handling decentralized multi-governance protocols and storage adapters securely.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://zeroauthoritydao.com" },
+        { id: "zap-8", title: "Community Management Tooling", type: "Grant", dao: "Optimism", reward: "$5,000", tags: ["Dev", "Social"], description: "Create automated tools, bot relays, and analytics dashboards that bridge community discord, forums and active snapshot protocols.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://optimism.io" },
+        { id: "zap-9", title: "DeFi Research Dashboard", type: "Grant", dao: "Aave Grants", reward: "$8,000", tags: ["Dev", "Design", "Data"], description: "Interactive dashboards presenting real-time asset utilization, borrow ratios, health metrics, and liquidations models with fully open-source React views.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://aave.com" },
+        { id: "zap-10", title: "Write deep dive on account abstraction", type: "Quest", dao: "Zero Authority", reward: "$100", tags: ["Writing"], description: "Compose an engaging technical article highlighting ERC-4337, paymasters, and user operations workflow targeted for native multi-sig developers.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://zeroauthoritydao.com" },
+        { id: "zap-11", title: "Review 5 PRs in core repo", type: "Quest", dao: "Compound DAO", reward: "$300", tags: ["Dev", "Review"], description: "Help maintain Compound DAO security standards by evaluating, testing, and leaving clear code reviews on 5 active pull requests.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://compound.finance" },
+        { id: "zap-12", title: "Participate in weekly dev call", type: "Quest", dao: "ENS DAO", reward: "$50", tags: ["Community"], description: "Attend the weekly call, engage in ongoing developer initiatives, and help outline milestones for upcoming naming protocol releases.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://ens.domains" },
+        
+        // Quests / Trending
+        { id: "trending-1", title: "Develop MCP Submorphic Plugin", type: "Bounty", dao: "Zero Authority DAO", reward: "$1,200", tags: ["Typescript", "Node.js"], description: "Design a sub-module protocol supporting dynamic schema registrations and model coordination endpoints following general MCP specifications.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://zeroauthoritydao.com" },
+        { id: "trending-2", title: "Smart Contract Vault Audit", type: "Bounty", dao: "Compound DAO", reward: "$500", tags: ["Solidity", "Security"], description: "Perform gas optimizations and access state checks on nested multi-sig deposit storage vaults to eliminate withdrawal vectors.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://compound.finance" },
+        { id: "trending-3", title: "Design UI Kit for Governance", type: "Bounty", dao: "ENS DAO", reward: "$300", tags: ["Design", "Figma"], description: "Create a visual system framework covering proposals lists, delegate weights, voting panels, and user profile fields with pixel-perfect responsive metrics.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://ens.domains" },
+        
+        // Gigs
+        { id: "gig-1", title: "Frontend Developer (React/Web3)", type: "Gig", dao: "Uniswap Labs", reward: "$3,000 - $5,000/mo", tags: ["Frontend", "React", "Ethers.js"], description: "Full-time support for the Web3 web interface, connecting liquidity pools, and drafting core components.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://uniswap.org" },
+        { id: "gig-2", title: "Technical Content Writer", type: "Gig", dao: "Arbitrum", reward: "$500 per article", tags: ["Writing", "Layer 2", "DeFi"], description: "Deliver deep technical articles explaining Rollup engineering, safety assumptions, and developer portals.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://arbitrum.io" },
+        { id: "gig-3", title: "Smart Contract Auditor", type: "Gig", dao: "Aave", reward: "Up to $15k per audit", tags: ["Solidity", "Security"], description: "Comprehensive audit reviews of smart contract upgrades, liquidity vaults, and yield aggregation modules.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://aave.com" },
+        { id: "gig-4", title: "Community Manager", type: "Gig", dao: "Lens Protocol", reward: "$2,000/mo", tags: ["Social", "Discord", "Growth"], description: "Manage growing community groups, organize content calendars, and assist in moderation and support tickets.", logo: "https://zeroauthoritydao.com/favicon.ico", link: "https://lens.xyz" }
+    ];
+
+    // Initialize Toast Container dynamically if not already present
+    if (!document.getElementById('toast-container')) {
+        const tCon = document.createElement('div');
+        tCon.id = 'toast-container';
+        tCon.className = 'fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none';
+        document.body.appendChild(tCon);
+    }
+
+    // Initialize Global Modal dynamically if not already present
+    if (!document.getElementById('global-detail-modal')) {
+        const modalHtml = `
+        <div id="global-detail-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md hidden transition-all duration-300 opacity-0 pointer-events-none">
+            <div id="global-detail-modal-container" class="relative w-full max-w-2xl bg-brand-dark border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(139,92,246,0.15)] overflow-hidden transform scale-95 transition-all duration-300 pointer-events-auto">
+                <button onclick="closeGlobalModal()" class="absolute top-4 right-4 p-2 rounded-full bg-white/5 border border-white/5 text-brand-muted hover:text-white hover:bg-white/10 transition-colors z-20">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+                <div class="p-6 md:p-8 max-h-[85vh] overflow-y-auto" id="global-modal-content"></div>
+            </div>
+        </div>`;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+    }
+
+    // --- NOTIFICATION & SAVE ENGINE ---
+    
+    // Toggle Save item (called when clicking bookmark icon button)
+    function toggleSaveBounty(event, itemId) {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        
+        let saved = getSavedBounties();
+        const index = saved.indexOf(itemId);
+        
+        let targetBounty = GLOBAL_BOUNTIES_DB.find(b => b.id === itemId);
+        
+        // If not in standard DB, check dynamic lists or deduce from DOM if available
+        if (!targetBounty) {
+            // Check if activeQuests array is loaded in quests template
+            if (typeof activeQuests !== 'undefined' && Array.isArray(activeQuests)) {
+                const quest = activeQuests.find(q => q.id === itemId);
+                if (quest) {
+                    targetBounty = {
+                        id: quest.id,
+                        title: quest.title,
+                        dao: quest.campaign?.name || quest.creator?.username || 'Zero Authority',
+                        reward: quest.totalRep ? `${quest.totalRep} REP` : '100 REP',
+                        type: 'Quest',
+                        tags: quest.status ? [quest.status] : ['Active'],
+                        description: quest.description || 'Custom active contributor challenge.',
+                        logo: quest.campaign?.avatarUrl || quest.creator?.avatarUrl || 'https://zeroauthoritydao.com/favicon.ico',
+                        link: 'https://zeroauthoritydao.com'
+                    };
+                }
+            }
+        }
+        
+        // Final fallback to build dummy data
+        if (!targetBounty) {
+            targetBounty = {
+                id: itemId,
+                title: "Decentralized Contribution Challenge",
+                dao: "Ecosystem Builder",
+                reward: "+100 REP",
+                type: "Bounty",
+                tags: ["Web3"],
+                description: "Collaborative contributor bounty for scaling infrastructure and community initiatives.",
+                logo: "https://zeroauthoritydao.com/favicon.ico",
+                link: "https://zeroauthoritydao.com"
+            };
+        }
+
+        const isSaving = index === -1;
+        if (isSaving) {
+            saved.push(itemId);
+            saveToLocalStorage(saved);
+            
+            // Highlight icon
+            updateBookmarkIcons(itemId, true);
+            
+            // Active notification bell
+            activateNotificationIndicator(true);
+            
+            // Pop Toast
+            showGlobalToastNotification(
+                "Bounty Saved!", 
+                `"${targetBounty.title}" added to your saved opportunities.`,
+                "bookmark-check"
+            );
+            
+            // Live insert into dropdown
+            addBountyToDropdown(targetBounty);
+        } else {
+            saved.splice(index, 1);
+            saveToLocalStorage(saved);
+            
+            // Un-highlight icon
+            updateBookmarkIcons(itemId, false);
+            
+            // Pop Toast
+            showGlobalToastNotification(
+                "Bounty Unsaved", 
+                `"${targetBounty.title}" removed from saved list.`,
+                "trash"
+            );
+            
+            // Remove from dropdown
+            removeBountyFromDropdown(itemId);
+            
+            // Check if notifications are now empty
+            if (saved.length === 0) {
+                activateNotificationIndicator(false);
+            }
+        }
+    }
+
+    // Helper functions for bookmark storage
+    function getSavedBounties() {
+        try {
+            const val = localStorage.getItem('saved_bounties');
+            return val ? JSON.parse(val) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveToLocalStorage(arr) {
+        localStorage.setItem('saved_bounties', JSON.stringify(arr));
+    }
+
+    // Update bookmark icon styling
+    function updateBookmarkIcons(itemId, isActive) {
+        const icons = document.querySelectorAll(`[id^="save-icon-${itemId}"]`);
+        icons.forEach(icon => {
+            if (isActive) {
+                icon.classList.add('text-brand-purple', 'fill-[currentcolor]');
+                icon.classList.remove('text-brand-muted');
+                // Ensure parent button states align
+                const btn = icon.closest('button');
+                if (btn && btn.id === 'modal-save-btn') {
+                    btn.innerHTML = `<i data-lucide="bookmark-check" class="w-4 h-4 text-brand-purple fill-[currentcolor]"></i> Bookmarked`;
+                    lucide.createIcons();
+                }
+            } else {
+                icon.classList.remove('text-brand-purple', 'fill-[currentcolor]');
+                icon.classList.add('text-brand-muted');
+                const btn = icon.closest('button');
+                if (btn && btn.id === 'modal-save-btn') {
+                    btn.innerHTML = `<i data-lucide="bookmark" class="w-4 h-4"></i> Save Bounty`;
+                    lucide.createIcons();
+                }
+            }
+        });
+    }
+
+    // Activate/Deactivate topbar badge dot
+    function activateNotificationIndicator(isActive) {
+        const dot = document.getElementById('notifBellDot');
+        if (dot) {
+            if (isActive) {
+                dot.classList.remove('hidden');
+            } else {
+                dot.classList.add('hidden');
+            }
+        }
+    }
+
+    // Dynamic dropdown elements building
+    function addBountyToDropdown(bounty) {
+        const container = document.getElementById('notifItemsContainer');
+        const emptyMsg = document.getElementById('emptyNotifFeedback');
+        if (!container) return;
+        
+        if (emptyMsg) {
+            emptyMsg.classList.add('hidden');
+        }
+        
+        // Avoid adding duplicate element list views
+        if (document.getElementById(`notif-item-${bounty.id}`)) return;
+        
+        const itemHtml = `
+            <div class="p-4 hover:bg-white/[0.03] flex items-center justify-between gap-3 text-xs transition-colors" id="notif-item-${bounty.id}">
+                <div class="flex items-center gap-3 min-w-0 cursor-pointer flex-grow" onclick="openGlobalBountyDetail('${bounty.id}')">
+                    <div class="w-8 h-8 rounded-full bg-brand-purple/10 text-brand-purple flex items-center justify-center shrink-0">
+                        <i data-lucide="bookmark" class="w-4 h-4 text-brand-purple fill-current"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h4 class="font-bold text-white truncate text-[12px]">${bounty.title}</h4>
+                        <p class="text-[10px] text-brand-muted truncate mt-0.5">${bounty.dao} • ${bounty.reward}</p>
+                    </div>
+                </div>
+                <button onclick="removeSavedBountyDropdown(event, '${bounty.id}')" class="text-brand-muted hover:text-red-400 p-1.5 rounded hover:bg-white/5 transition-all shrink-0" title="Remove">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+            </div>
+        `;
+        
+        container.insertAdjacentHTML('afterbegin', itemHtml);
+        lucide.createIcons();
+    }
+
+    function removeBountyFromDropdown(itemId) {
+        const item = document.getElementById(`notif-item-${itemId}`);
+        if (item) {
+            item.remove();
+        }
+        
+        const container = document.getElementById('notifItemsContainer');
+        const emptyMsg = document.getElementById('emptyNotifFeedback');
+        if (container && container.children.length <= 1 && emptyMsg) {
+            // Only emptyNotifFeedback is left
+            emptyMsg.classList.remove('hidden');
+        }
+    }
+
+    function removeSavedBountyDropdown(event, itemId) {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        toggleSaveBounty(null, itemId);
+    }
+
+    function clearAllNotifications(event) {
+        if (event) {
+            event.stopPropagation();
+        }
+        
+        const saved = getSavedBounties();
+        // Clone array to prevent indexing loops
+        const toRemove = [...saved];
+        toRemove.forEach(id => {
+            toggleSaveBounty(null, id);
+        });
+        
+        showGlobalToastNotification("Notifications Cleared", "Removed all saved items and notifications details.", "bell-off");
+    }
+
+    // Master list initialization on load to match icons from cached bookmarks
+    document.addEventListener('DOMContentLoaded', () => {
+        const saved = getSavedBounties();
+        
+        // Show status dot if saved arrays exists
+        if (saved.length > 0) {
+            activateNotificationIndicator(true);
+        }
+        
+        // Update all bookmarked UI icons and populate notifications list
+        saved.forEach(id => {
+            updateBookmarkIcons(id, true);
+            
+            // Lookup in DB and insert into dropdown list
+            const bounty = GLOBAL_BOUNTIES_DB.find(b => b.id === id);
+            if (bounty) {
+                addBountyToDropdown(bounty);
+            } else {
+                // If it was a custom dynamic quest, load a placeholder list item
+                addBountyToDropdown({
+                    id: id,
+                    title: "Saved Contributor Task",
+                    dao: "Zero Authority Quest",
+                    reward: "XP / REP",
+                    type: "Quest",
+                    logo: "https://zeroauthoritydao.com/favicon.ico"
+                });
+            }
+        });
+        
+        // Bell toggle setup click actions
+        const bellBtn = document.getElementById('notifBellBtn');
+        const bellDropdown = document.getElementById('notifBellDropdown');
+        if (bellBtn && bellDropdown) {
+            bellBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                bellDropdown.classList.toggle('hidden');
+            });
+            
+            // Close dropdown if user clicks elsewhere
+            document.addEventListener('click', (e) => {
+                if (!bellDropdown.contains(e.target) && !bellBtn.contains(e.target)) {
+                    bellDropdown.classList.add('hidden');
+                }
+            });
+        }
+    });
+
+    // --- GLOBAL TOAST NOTIFICATIONS CENTER ---
+    function showGlobalToastNotification(title, message, iconType = "check-circle") {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+        
+        const toast = document.createElement('div');
+        toast.className = `pointer-events-auto flex items-center gap-3 bg-brand-dark/95 backdrop-blur-md border-l-4 border-brand-purple shadow-[0_4px_30px_rgba(139,92,246,0.25)] text-white p-4 rounded-xl border border-white/10 min-w-[300px] max-w-sm transition-all duration-300 transform translate-y-10 opacity-0 relative overflow-hidden`;
+        
+        let colorTheme = "text-brand-purple bg-brand-purple/10 border-brand-purple/20";
+        if (iconType === 'trash') {
+            colorTheme = "text-red-400 bg-red-400/10 border-red-400/20";
+            iconType = "trash-2";
+        } else if (iconType === 'bookmark-check') {
+            colorTheme = "text-brand-purple bg-brand-purple/10 border-brand-purple/20";
+        } else if (iconType === 'bell-off') {
+            colorTheme = "text-yellow-400 bg-yellow-400/10 border-yellow-400/20";
+        }
+        
+        toast.innerHTML = `
+            <div class="absolute top-0 right-0 w-24 h-24 bg-brand-purple/5 blur-xl -mr-8 -mt-8 rounded-full"></div>
+            <div class="p-1 px-1.5 rounded-lg ${colorTheme} shrink-0 relative z-10">
+                <i data-lucide="${iconType}" class="w-5 h-5"></i>
+            </div>
+            <div class="flex-grow relative z-10">
+                <h4 class="text-sm font-bold text-white">${title}</h4>
+                <p class="text-xs text-brand-muted mt-0.5 leading-snug">${message}</p>
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-brand-muted hover:text-white transition-colors pl-2 shrink-0 relative z-10">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        `;
+        
+        container.appendChild(toast);
+        lucide.createIcons();
+        
+        setTimeout(() => {
+            toast.classList.remove('translate-y-10', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+        }, 10);
+        
+        setTimeout(() => {
+            toast.classList.remove('translate-y-0', 'opacity-100');
+            toast.classList.add('translate-y-10', 'opacity-0');
+            setTimeout(() => toast.remove(), 300);
+        }, 4500);
+    }
+
+    // --- REUSABLE GLOBAL BOUNTY DETAILS POPUP MODAL ---
+    function openGlobalBountyDetail(itemId) {
+        let b = GLOBAL_BOUNTIES_DB.find(item => item.id === itemId);
+        
+        // Handle lookup falling back to dynamic quest list
+        if (!b) {
+            if (typeof activeQuests !== 'undefined' && Array.isArray(activeQuests)) {
+                const quest = activeQuests.find(q => q.id === itemId);
+                if (quest) {
+                    b = {
+                        id: quest.id,
+                        title: quest.title,
+                        dao: quest.campaign?.name || quest.creator?.username || 'Zero Authority',
+                        reward: quest.totalRep ? `${quest.totalRep} REP` : '100 REP',
+                        type: 'Quest',
+                        tags: quest.status ? [quest.status] : ['Active'],
+                        description: quest.description || 'Custom active contributor challenge.',
+                        logo: quest.campaign?.avatarUrl || quest.creator?.avatarUrl || 'https://zeroauthoritydao.com/favicon.ico',
+                        link: 'https://zeroauthoritydao.com'
+                    };
+                }
+            }
+        }
+        
+        // Dynamic fallback details
+        if (!b) {
+            b = {
+                id: itemId,
+                title: "Decentralized Contribution Challenge",
+                dao: "Ecosystem Partner",
+                reward: "REP / Reward Size Variable",
+                type: "Bounty",
+                tags: ["Web3"],
+                description: "Collaborative building and development challenge focused on resolving open source issues, smart contracts audit reviews, and expanding community reach across top Layer-2 structures.",
+                logo: "https://zeroauthoritydao.com/favicon.ico",
+                link: "https://zeroauthoritydao.com"
+            };
+        }
+
+        const modal = document.getElementById('global-detail-modal');
+        const container = document.getElementById('global-detail-modal-container');
+        const contentArea = document.getElementById('global-modal-content');
+        
+        if (!modal || !contentArea) return;
+        
+        // Check local bookmarks state for bookmark button
+        const saved = getSavedBounties();
+        const isCurrentlySaved = saved.includes(b.id);
+        const saveBtnHtml = isCurrentlySaved 
+            ? `<button id="modal-save-btn" onclick="toggleSaveBounty(event, '${b.id}')" class="flex-1 py-3 px-4 bg-white/5 border border-white/10 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
+                 <i data-lucide="bookmark-check" class="w-4 h-4 text-brand-purple fill-[currentcolor]" id="save-icon-${b.id}"></i> Bookmarked
+               </button>`
+            : `<button id="modal-save-btn" onclick="toggleSaveBounty(event, '${b.id}')" class="flex-1 py-3 px-4 bg-white/5 border border-white/10 text-brand-muted hover:text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
+                 <i data-lucide="bookmark" class="w-4 h-4" id="save-icon-${b.id}"></i> Save Bounty
+               </button>`;
+        
+        const tagsHtml = (b.tags || []).map(t => 
+            `<span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 bg-white/5 text-gray-400 rounded">${t}</span>`
+        ).join('');
+        
+        contentArea.innerHTML = `
+            <div class="mb-6 flex items-start gap-4 mr-6">
+                <div class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                    <i data-lucide="award" class="w-6 h-6 text-brand-purple"></i>
+                </div>
+                <div>
+                    <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 bg-brand-blue/10 text-brand-blue rounded">${b.type}</span>
+                    <h2 class="text-xl md:text-2xl font-display font-bold text-white mt-2 leading-tight">${b.title}</h2>
+                    <div class="text-xs text-brand-muted mt-1 font-mono">Issued by <span class="text-white">${b.dao}</span></div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-5 border-t border-white/5">
+                <div class="md:col-span-2 space-y-6">
+                    <div>
+                        <h3 class="text-xs font-bold text-brand-muted uppercase tracking-wider mb-2">Opportunity Description</h3>
+                        <p class="text-sm text-brand-text leading-relaxed whitespace-pre-wrap">${b.description}</p>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-2">
+                        ${tagsHtml}
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <!-- Reward details card -->
+                    <div class="p-4 rounded-xl bg-white/5 border border-white/5">
+                        <h4 class="text-xs font-bold text-brand-muted uppercase tracking-wider mb-2.5">Available Reward</h4>
+                        <div class="flex items-baseline gap-1 text-2xl font-display font-bold text-emerald-400">
+                            ${b.reward}
+                        </div>
+                        <div class="text-[10px] text-brand-muted mt-1 leading-snug">Distributed immediately following verified contribution checkpoints</div>
+                    </div>
+                    
+                    <!-- Meta info link -->
+                    <div class="space-y-3">
+                        <a href="${b.link}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-xl bg-black/20 hover:bg-black/40 border border-white/5 hover:border-brand-blue/30 text-xs text-brand-muted hover:text-white transition-all">
+                            <span class="font-medium truncate mr-2">Official Portal</span>
+                            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-brand-blue shrink-0"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- Actions footer -->
+                    <div class="flex gap-2">
+                        ${saveBtnHtml}
+                        <button onclick="triggerApplyFromModal('${b.title}')" class="flex-grow py-3 px-4 bg-brand-blue hover:bg-blue-600 text-white font-bold rounded-xl shadow-[0_0_20px_rgba(0,112,243,0.3)] transition-all flex items-center justify-center gap-2 text-sm active:scale-[0.98]">
+                            Apply <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        modal.classList.remove('hidden');
+        modal.classList.remove('pointer-events-none');
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            modal.classList.add('opacity-100');
+            container.classList.remove('scale-95');
+            container.classList.add('scale-100');
+        }, 10);
+        
+        lucide.createIcons();
+    }
+
+    function closeGlobalModal() {
+        const modal = document.getElementById('global-detail-modal');
+        const container = document.getElementById('global-detail-modal-container');
+        if (!modal) return;
+        
+        modal.classList.remove('opacity-100');
+        modal.classList.add('opacity-0');
+        container.classList.remove('scale-100');
+        container.classList.add('scale-95');
+        modal.classList.add('pointer-events-none');
+        
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
+    // Dismiss active modal when clicking out of context
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('global-detail-modal');
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeGlobalModal();
+                }
+            });
+        }
+    });
+
+    function triggerApplyFromModal(title) {
+        closeGlobalModal();
+        showGlobalToastNotification("Application Initiated", `Your context proposal for "${title}" of Web3 contributors has been generated!`, "check-circle");
     }
 </script>
