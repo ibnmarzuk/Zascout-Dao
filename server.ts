@@ -103,6 +103,36 @@ app.use(express.static(path.join(process.cwd(), "public")));
     res.render('quests', { csrfToken: (req as any).csrfToken() });
   });
 
+  app.get('/bounties', csrfProtection, (req, res) => {
+    res.render('quests', { csrfToken: (req as any).csrfToken() }); // Reuse quests template for bounties explorer
+  });
+
+  app.get('/gigs', csrfProtection, (req, res) => {
+    res.render('gigs', { csrfToken: (req as any).csrfToken() });
+  });
+
+  app.get('/events', csrfProtection, (req, res) => {
+    res.render('events', { csrfToken: (req as any).csrfToken() });
+  });
+
+  app.get('/ai-scout', csrfProtection, (req, res) => {
+    res.render('ai-scout', { csrfToken: (req as any).csrfToken() });
+  });
+
+  app.get('/opportunities', csrfProtection, (req, res) => {
+    // For now, redirect or render bounties as opportunities
+    res.redirect('/bounties');
+  });
+
+  app.get('/reputation', csrfProtection, (req, res) => {
+    // Simple inline render for reputation placeholder
+    res.render('index', { 
+      opportunities: [], 
+      csrfToken: (req as any).csrfToken(),
+      activePage: 'reputation' 
+    });
+  });
+
   app.get('/mcp', csrfProtection, (req, res) => {
     res.render('mcp', { csrfToken: (req as any).csrfToken() });
   });

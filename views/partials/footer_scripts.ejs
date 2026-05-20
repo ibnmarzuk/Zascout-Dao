@@ -1,0 +1,65 @@
+<script>
+    // Initialize icons
+    lucide.createIcons();
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = mobileMenuBtn.querySelector('i');
+            if (icon) {
+                if (mobileMenu.classList.contains('hidden')) {
+                    icon.setAttribute('data-lucide', 'menu');
+                } else {
+                    icon.setAttribute('data-lucide', 'x');
+                }
+                lucide.createIcons();
+            }
+        });
+    }
+
+    // Theme Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const htmlElem = document.documentElement;
+    const darkIcons = document.querySelectorAll('.dark-icon');
+    const lightIcons = document.querySelectorAll('.light-icon');
+
+    const updateIcons = (isDark) => {
+        if (isDark) {
+            darkIcons.forEach(i => i.classList.remove('hidden'));
+            lightIcons.forEach(i => i.classList.add('hidden'));
+        } else {
+            darkIcons.forEach(i => i.classList.add('hidden'));
+            lightIcons.forEach(i => i.classList.remove('hidden'));
+        }
+    };
+
+    if (themeToggle) {
+        // Init theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            htmlElem.classList.remove('dark');
+            htmlElem.classList.add('light');
+            updateIcons(false);
+        } else {
+            updateIcons(true);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = htmlElem.classList.contains('dark');
+            if (isDark) {
+                htmlElem.classList.remove('dark');
+                htmlElem.classList.add('light');
+                localStorage.setItem('theme', 'light');
+                updateIcons(false);
+            } else {
+                htmlElem.classList.remove('light');
+                htmlElem.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                updateIcons(true);
+            }
+        });
+    }
+</script>

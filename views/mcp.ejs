@@ -1,296 +1,69 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZA Scout | MCP Setup Guide</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Space Grotesk', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            blue: '#0070F3',
-                            purple: '#8b5cf6',
-                            dark: 'var(--bg-dark, #020817)',
-                            light: 'var(--bg-light, #0f172a)',
-                            subtle: 'var(--bg-subtle, #1e293b)',
-                            text: 'var(--text-main, #EDEDED)',
-                            muted: 'var(--text-muted, #A1A1AA)'
-                        },
-                        white: 'var(--text-white, #ffffff)',
-                        black: 'var(--text-black, #000000)'
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-out forwards',
-                        'slide-up': 'slideUp 0.5s ease-out forwards',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        },
-                        slideUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <%- include('partials/head', { title: 'MCP Setup' }) %>
     <style>
-        html.light {
-            --bg-dark: #f8fafc;
-            --bg-light: #ffffff;
-            --bg-subtle: #e2e8f0;
-            --text-main: #0f172a;
-            --text-muted: #475569;
-            --text-white: #000000;
-            --text-black: #ffffff;
-        }
-
-        body {
-            background-color: theme('colors.brand.dark');
-            color: theme('colors.brand.text');
-            -webkit-font-smoothing: antialiased;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        
-        .glass-panel {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        
-        html.light .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
-            border-color: rgba(0, 0, 0, 0.1);
-        }
-
-        .bento-card {
-            background: linear-gradient(145deg, rgba(15,23,42,0.6) 0%, rgba(2,8,23,0.9) 100%);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 16px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        html.light .bento-card {
-            background: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,1) 100%);
-            border-color: rgba(0,0,0,0.1);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-
-        .bento-card:hover {
-            border-color: rgba(255,255,255,0.15);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-        }
-        
-        html.light .bento-card:hover {
-            border-color: rgba(0,0,0,0.15);
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
-        }
-
-        .bento-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        html.light .bento-card::before {
-            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
-        }
-
-        .bento-card:hover::before {
-            opacity: 1;
-        }
-
-        .gradient-text {
-            background: linear-gradient(to right, #fff, #a1a1aa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        html.light .gradient-text {
-            background: linear-gradient(to right, #0f172a, #475569);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .glow-bg {
-            position: fixed;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 800px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(0,0,0,0) 70%); /* Purple glow for MCP page */
-            pointer-events: none;
-            z-index: -1;
-        }
-        
-        html.light .glow-bg {
-            opacity: 0.3;
-        }
-
         .code-block { 
             background-color: rgba(0, 0, 0, 0.5); 
             border: 1px solid rgba(255,255,255,0.1); 
             border-radius: 12px;
             box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.2);
         }
-        
         pre, code {
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
         }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: theme('colors.brand.dark'); }
-        ::-webkit-scrollbar-thumb { background: theme('colors.brand.subtle'); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: theme('colors.brand.muted'); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans relative">
+<body class="min-h-screen flex font-sans text-brand-text bg-brand-dark relative overflow-x-hidden">
     
-    <div class="glow-bg animate-pulse-slow"></div>
+    <%- include('partials/sidebar', { activePage: 'mcp' }) %>
 
-    <!-- Navbar -->
-    <nav class="sticky top-0 z-50 glass-panel border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="/" class="flex items-center gap-3 cursor-pointer group">
-                    <div class="relative w-10 h-10 flex items-center justify-center">
-                        <div class="absolute inset-0 bg-brand-blue/20 rounded-xl blur-lg group-hover:bg-brand-purple/30 transition-colors"></div>
-                        <svg viewBox="0 0 100 100" class="w-8 h-8 relative z-10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="0.5" stroke-dasharray="2 2" class="text-brand-blue/50"/>
-                            <circle cx="50" cy="50" r="38" stroke="currentColor" stroke-width="1" class="text-brand-blue/30"/>
-                            <path d="M50 15V22M50 78V85M15 50H22M78 50H85" stroke="currentColor" stroke-width="1.5" class="text-brand-blue"/>
-                            <text x="47" y="12" fill="currentColor" class="text-[10px] font-bold text-brand-blue">N</text>
-                            <g transform="rotate(45, 50, 50)">
-                                <path d="M50 25L56 50L50 75L44 50L50 25Z" fill="url(#logo-gradient-mcp)"/>
-                                <circle cx="50" cy="50" r="3" fill="white"/>
-                            </g>
-                            <defs>
-                                <linearGradient id="logo-gradient-mcp" x1="50" y1="25" x2="50" y2="75" gradientUnits="userSpaceOnUse">
-                                    <stop stop-color="#0070F3"/>
-                                    <stop offset="1" stop-color="#8b5cf6"/>
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="font-display font-bold text-xl text-white tracking-tight leading-none">ZASCOUT</span>
-                        <span class="text-[7px] font-bold text-brand-muted uppercase tracking-[0.2em] mt-0.5">DAO Intelligence Hub</span>
-                    </div>
-                </a>
-                <div class="hidden md:flex items-center gap-8 bg-brand-light rounded-full px-6 py-2 border border-white/5">
-                    <a href="/" class="nav-link text-brand-muted font-medium text-sm hover:text-white transition-colors">Explorer</a>
-                    <a href="/quests" class="nav-link text-brand-muted font-medium text-sm hover:text-white transition-colors">Quests</a>
-                    <a href="/mcp" class="nav-link text-white font-medium text-sm transition-colors relative after:absolute after:-bottom-2 after:left-0 after:right-0 after:h-px after:bg-white after:rounded-full">MCP Setup</a>
-                </div>
-                <div class="flex items-center gap-2 sm:gap-4">
-                    <div class="hidden sm:flex flex-col items-end gap-1">
-                        <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20">
-                            <div class="w-1.5 h-1.5 rounded-full bg-brand-purple animate-pulse"></div>
-                            <span class="text-[10px] font-bold text-brand-purple uppercase tracking-tighter">LVL 1</span>
-                        </div>
-                        <div class="w-16 h-1 bg-brand-subtle rounded-full overflow-hidden">
-                            <div class="h-full bg-brand-purple w-1/3 shadow-[0_0_8px_rgba(139,92,246,0.5)]"></div>
-                        </div>
-                    </div>
-                    <button class="text-brand-muted hover:text-white transition-colors rounded-full p-2 hover:bg-white/5" id="themeToggle" title="Toggle Dark/Light Mode">
-                        <i data-lucide="sun" class="w-4 h-4 hidden dark-icon"></i>
-                        <i data-lucide="moon" class="w-4 h-4 light-icon"></i>
-                    </button>
-                    <button class="bg-white text-black hover:bg-gray-200 px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-medium transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95">
-                        Connect
-                    </button>
-                    <button id="mobileMenuBtn" class="md:hidden text-brand-muted hover:text-white p-2">
-                        <i data-lucide="menu" class="w-6 h-6"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden border-t border-white/5 bg-brand-dark/95 backdrop-blur-xl animate-fade-in">
-            <div class="px-4 pt-2 pb-6 space-y-1">
-                <a href="/" class="block px-3 py-4 text-base font-medium text-brand-muted hover:text-white border-b border-white/5 hover:bg-white/5 transition-colors">Explorer</a>
-                <a href="/quests" class="block px-3 py-4 text-base font-medium text-brand-muted hover:text-white border-b border-white/5 hover:bg-white/5 transition-colors">Quests</a>
-                <a href="/mcp" class="block px-3 py-4 text-base font-medium text-white hover:bg-white/5 transition-colors">MCP Setup</a>
-            </div>
-        </div>
-    </nav>
+    <div class="flex-grow flex flex-col min-w-0 lg:ml-64">
+        <%- include('partials/topbar') %>
 
-    <!-- Main Content -->
-    <main class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full animate-fade-in">
-        
-        <div class="mb-10 text-center max-w-2xl mx-auto">
-            <div class="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20 text-brand-purple text-xs font-semibold uppercase tracking-widest mb-6">
-                <i data-lucide="blocks" class="w-3.5 h-3.5"></i> Model Context Protocol
-            </div>
-            <h1 class="text-4xl md:text-5xl font-display font-bold gradient-text mb-4 tracking-tight">Connect Your AI</h1>
-            <p class="text-brand-muted text-lg font-light">
-                Securely link Claude Desktop, Cursor, or Claude Code directly to the Zero Authority network using MCP. 
-            </p>
-        </div>
-
-        <div class="bento-card p-8 md:p-10 mb-8 border-t hover:-translate-y-0 relative" style="border-top-color: theme('colors.brand.purple');">
+        <main class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full animate-fade-in">
             
-            <div class="absolute top-0 right-0 w-64 h-64 bg-brand-purple/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
-
-            <div class="relative z-10 space-y-10">
-                <!-- Step 1 -->
-                <div>
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-8 h-8 rounded-full bg-brand-purple/20 text-brand-purple flex items-center justify-center font-display font-bold text-sm">1</div>
-                        <h3 class="text-xl font-display font-bold text-white">Generate your API Key</h3>
-                    </div>
-                    <div class="ml-11">
-                        <p class="text-brand-muted mb-4">You need an active Zero Authority API Key to authenticate the MCP client and access DAO data.</p>
-                        <button class="bg-brand-purple text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-purple-600 transition-all shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] flex items-center gap-2">
-                            <i data-lucide="key" class="w-4 h-4"></i> Generate Access Key
-                        </button>
-                    </div>
+            <div class="mb-10 text-center max-w-2xl mx-auto">
+                <div class="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20 text-brand-purple text-xs font-semibold uppercase tracking-widest mb-6">
+                    <i data-lucide="blocks" class="w-3.5 h-3.5"></i> Model Context Protocol
                 </div>
+                <h1 class="text-4xl md:text-5xl font-display font-bold text-white mb-4 tracking-tight">Connect Your AI</h1>
+                <p class="text-brand-muted text-lg font-light">
+                    Securely link Claude Desktop, Cursor, or Claude Code directly to the Zero Authority network using MCP to search opportunities seamlessly. 
+                </p>
+            </div>
+
+            <div class="bento-card p-8 md:p-10 mb-8 border-t relative" style="border-top-color: theme('colors.brand.purple');">
                 
-                <div class="h-px bg-white/5 w-full ml-11 max-w-2xl"></div>
-                
-                <!-- Step 2 -->
-                <div>
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-8 h-8 rounded-full bg-brand-purple/20 text-brand-purple flex items-center justify-center font-display font-bold text-sm">2</div>
-                        <h3 class="text-xl font-display font-bold text-white">Add to Claude Desktop</h3>
-                    </div>
-                    <div class="ml-11">
-                        <p class="text-brand-muted mb-4">Add the following JSON configuration to your <code>claude_desktop_config.json</code> file to initialize the server:</p>
-                        <div class="code-block p-5 overflow-x-auto relative group">
-                            <button class="absolute top-3 right-3 text-brand-muted hover:text-white bg-white/5 hover:bg-white/10 p-1.5 rounded transition-colors opacity-0 group-hover:opacity-100">
-                                <i data-lucide="copy" class="w-4 h-4"></i>
+                <div class="absolute top-0 right-0 w-64 h-64 bg-brand-purple/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
+
+                <div class="relative z-10 space-y-10">
+                    <!-- Step 1 -->
+                    <div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full bg-brand-purple/20 text-brand-purple flex items-center justify-center font-display font-bold text-sm">1</div>
+                            <h3 class="text-xl font-display font-bold text-white">Generate your API Key</h3>
+                        </div>
+                        <div class="ml-11">
+                            <p class="text-brand-muted mb-4">You need an active API Key to authenticate the MCP client and access DAO data.</p>
+                            <button class="bg-brand-purple text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-purple-600 transition-all shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] flex items-center gap-2">
+                                <i data-lucide="key" class="w-4 h-4"></i> Generate Access Key
                             </button>
-                            <pre class="text-sm text-green-400"><code>{
+                        </div>
+                    </div>
+                    
+                    <div class="h-px bg-white/5 w-full ml-11 max-w-2xl"></div>
+                    
+                    <!-- Step 2 -->
+                    <div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full bg-brand-purple/20 text-brand-purple flex items-center justify-center font-display font-bold text-sm">2</div>
+                            <h3 class="text-xl font-display font-bold text-white">Add to Claude Desktop</h3>
+                        </div>
+                        <div class="ml-11">
+                            <p class="text-brand-muted mb-4">Add the following JSON configuration to your <code>claude_desktop_config.json</code> file to initialize the server:</p>
+                            <div class="code-block p-5 overflow-x-auto relative group">
+                                <pre class="text-sm text-green-400"><code>{
   "mcpServers": {
     "zero-authority": {
       "command": "npx",
@@ -301,180 +74,60 @@
     }
   }
 }</code></pre>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 animate-slide-up" style="animation-delay: 0.1s;">
-            <!-- Available Tools -->
-            <div class="bento-card p-6 md:p-8 flex flex-col h-full hover:-translate-y-0">
-                <div class="w-10 h-10 rounded-full bg-brand-blue/10 flex items-center justify-center mb-5">
-                    <i data-lucide="wrench" class="w-5 h-5 text-brand-blue"></i>
-                </div>
-                <h3 class="text-lg font-display font-bold text-white mb-4">Available Tools</h3>
-                <ul class="space-y-4 text-sm text-brand-muted flex-grow">
-                    <li class="flex items-start gap-3">
-                        <div class="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                            <i data-lucide="check" class="w-3 h-3 text-emerald-400"></i>
-                        </div>
-                        <span><strong class="text-white">get_bounties</strong>: Search for open gigs and bounties by keyword and tags.</span>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <div class="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                            <i data-lucide="check" class="w-3 h-3 text-emerald-400"></i>
-                        </div>
-                        <span><strong class="text-white">get_quests</strong>: Find community quests and ambassador tasks.</span>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <div class="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                            <i data-lucide="check" class="w-3 h-3 text-emerald-400"></i>
-                        </div>
-                        <span><strong class="text-white">apply_to_bounty</strong>: Draft an application directly from AI.</span>
-                    </li>
-                </ul>
-            </div>
-            
-            <!-- CLI Integration -->
-            <div class="bento-card p-6 md:p-8 flex flex-col h-full hover:-translate-y-0 relative overflow-hidden group">
-                <div class="absolute inset-0 bg-gradient-to-br from-brand-blue/5 to-transparent z-0"></div>
-                <div class="relative z-10 w-full h-full flex flex-col">
-                    <div class="w-10 h-10 rounded-full bg-brand-light border border-white/5 flex items-center justify-center mb-5 flex-shrink-0">
-                        <i data-lucide="terminal" class="w-5 h-5 text-white"></i>
-                    </div>
-                    <h3 class="text-lg font-display font-bold text-white mb-2">Try it with Claude Code</h3>
-                    <p class="text-sm text-brand-muted mb-5 leading-relaxed">Run this in your terminal to empower your CLI agent with DAO intelligence.</p>
-                    
-                    <div class="code-block p-4 overflow-x-auto text-sm text-gray-300 mt-auto shadow-inner relative group/code">
-                        <button class="absolute top-2 right-2 text-brand-muted hover:text-white bg-white/5 hover:bg-white/10 p-1.5 rounded transition-colors opacity-0 group-hover/code:opacity-100">
-                            <i data-lucide="copy" class="w-3 h-3"></i>
-                        </button>
-                        <div class="flex items-center gap-2 mb-1 opacity-70">
-                            <span class="text-emerald-400">$</span> <code>export ZA_API_KEY=YOUR_KEY</code>
-                        </div>
-                        <div class="flex items-start gap-2">
-                            <span class="text-emerald-400">$</span> <code>claude mcp add zero-authority npx -y @zeroauthority/mcp-server</code>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-    </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-white/5 py-8 mt-auto bg-brand-light/50 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex flex-col gap-3">
-                <div class="flex items-center gap-3 text-white font-display font-medium">
-                    <div class="w-10 h-10 rounded-xl bg-brand-light border border-white/5 flex items-center justify-center relative overflow-hidden group">
-                        <div class="absolute inset-0 bg-brand-blue/10 blur-md group-hover:bg-brand-purple/20 transition-colors"></div>
-                        <svg viewBox="0 0 100 100" class="w-6 h-6 relative z-10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="0.5" stroke-dasharray="2 2" class="text-brand-blue/30"/>
-                            <path d="M50 15V22M50 78V85M15 50H22M78 50H85" stroke="currentColor" stroke-width="1.5" class="text-brand-blue/50"/>
-                            <g transform="rotate(45, 50, 50)">
-                                <path d="M50 25L56 50L50 75L44 50L50 25Z" fill="url(#footer-logo-gradient-mcp)"/>
-                            </g>
-                            <defs>
-                                <linearGradient id="footer-logo-gradient-mcp" x1="50" y1="25" x2="50" y2="75" gradientUnits="userSpaceOnUse">
-                                    <stop stop-color="#0070F3"/>
-                                    <stop offset="1" stop-color="#8b5cf6"/>
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-lg font-bold tracking-tight">ZASCOUT</span>
-                        <span class="text-[8px] text-brand-muted uppercase tracking-[0.3em] -mt-1">Intelligence Platform</span>
-                    </div>
-                </div>
-                <div class="flex flex-col gap-1">
-                    <div class="text-brand-muted text-sm font-medium">Earn while you build</div>
-                    <div class="text-brand-muted/60 text-xs font-medium">
-                        © <%= new Date().getFullYear() %> Zero Authority DAO.
                     </div>
                 </div>
             </div>
             
-            <div class="flex flex-col lg:items-end gap-5 w-full lg:w-auto">
-                <div class="flex flex-wrap items-center gap-4 sm:gap-6 text-sm font-medium text-brand-muted">
-                    <a href="/mcp" class="hover:text-black transition-colors">Model Context Protocol</a>
-                    <a href="#" class="hover:text-black transition-colors">Terms</a>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 animate-slide-up" style="animation-delay: 0.1s;">
+                <!-- Available Tools -->
+                <div class="bento-card p-6 md:p-8 flex flex-col h-full hover:border-white/20 transition-all">
+                    <div class="w-10 h-10 rounded-full bg-brand-blue/10 flex items-center justify-center mb-5">
+                        <i data-lucide="wrench" class="w-5 h-5 text-brand-blue"></i>
+                    </div>
+                    <h3 class="text-lg font-display font-bold text-white mb-4">Available Capabilities</h3>
+                    <ul class="space-y-4 text-sm text-brand-muted flex-grow">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-400 mt-1 shrink-0"></i>
+                            <span><strong class="text-white">get_bounties</strong>: Search for open gigs and bounties by keyword and tags.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-400 mt-1 shrink-0"></i>
+                            <span><strong class="text-white">get_quests</strong>: Find community quests and ambassador tasks.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-400 mt-1 shrink-0"></i>
+                            <span><strong class="text-white">apply_to_bounty</strong>: Draft an application directly from AI.</span>
+                        </li>
+                    </ul>
                 </div>
-                <div class="flex items-center gap-4 text-brand-muted">
-                    <a href="https://x.com/zeroauthscout" target="_blank" aria-label="X (formerly Twitter)" class="w-10 h-10 rounded-full bg-black/80 border border-black/10 flex items-center justify-center hover:bg-black hover:text-white transition-all group">
-                        <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current group-hover:scale-110 transition-transform text-white" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.004 3.829H5.059z"></path></svg>
-                    </a>
-                    <a href="https://github.com/ibnmarzuk/Zascout-Dao" target="_blank" aria-label="GitHub" class="w-10 h-10 rounded-full bg-black/80 border border-black/10 flex items-center justify-center hover:bg-black hover:text-white transition-all group">
-                        <i data-lucide="github" class="w-4 h-4 group-hover:scale-110 transition-transform text-white"></i>
-                    </a>
+                
+                <!-- CLI Integration -->
+                <div class="bento-card p-6 md:p-8 flex flex-col h-full hover:border-white/20 transition-all relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-brand-blue/5 to-transparent z-0"></div>
+                    <div class="relative z-10 w-full h-full flex flex-col">
+                        <div class="w-10 h-10 rounded-full bg-brand-light border border-white/5 flex items-center justify-center mb-5 flex-shrink-0">
+                            <i data-lucide="terminal" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-display font-bold text-white mb-2">Try it with Claude Code</h3>
+                        <p class="text-sm text-brand-muted mb-5 leading-relaxed">Run this in your terminal to empower your CLI agent with DAO intelligence.</p>
+                        
+                        <div class="code-block p-4 overflow-x-auto text-sm text-gray-300 mt-auto relative">
+                            <div class="flex items-center gap-2 mb-1 opacity-70">
+                                <span class="text-emerald-400">$</span> <code>export ZA_API_KEY=YOUR_KEY</code>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <span class="text-emerald-400">$</span> <code class="whitespace-nowrap">claude mcp add zero-authority npx -y @zero-authority/mcp</code>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </footer>
+            
+        </main>
+    </div>
 
-    <script>
-        lucide.createIcons();
-        
-        // Add copy-to-clipboard functionality to all buttons
-        document.querySelectorAll('button:has(i[data-lucide="copy"])').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const codeBlock = e.currentTarget.nextElementSibling || e.currentTarget.parentElement.querySelector('code');
-                let textToCopy = '';
-                
-                if (codeBlock) {
-                    textToCopy = codeBlock.innerText || codeBlock.textContent;
-                } else if (e.currentTarget.parentElement.tagName === 'DIV' && e.currentTarget.parentElement.classList.contains('code-block')) {
-                    // Collect all code tags in the block
-                    const codes = e.currentTarget.parentElement.querySelectorAll('code');
-                    textToCopy = Array.from(codes).map(c => c.innerText).join('\n');
-                }
-                
-                if (textToCopy) {
-                    navigator.clipboard.writeText(textToCopy);
-                    const icon = e.currentTarget.querySelector('i');
-                    icon.setAttribute('data-lucide', 'check');
-                    icon.classList.add('text-emerald-400');
-                    lucide.createIcons();
-                    
-                    setTimeout(() => {
-                        icon.setAttribute('data-lucide', 'copy');
-                        icon.classList.remove('text-emerald-400');
-                        lucide.createIcons();
-                    }, 2000);
-                }
-            });
-        });
-
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        if(mobileMenuBtn && mobileMenu) {
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-                const icon = mobileMenuBtn.querySelector('i');
-                if(mobileMenu.classList.contains('hidden')) {
-                    icon.setAttribute('data-lucide', 'menu');
-                } else {
-                    icon.setAttribute('data-lucide', 'x');
-                }
-                lucide.createIcons();
-            });
-        }
-
-        // Theme toggling
-        const themeToggleBtn = document.getElementById('themeToggle');
-        if(themeToggleBtn) {
-            themeToggleBtn.addEventListener('click', () => {
-                const html = document.documentElement;
-                html.classList.toggle('light');
-                
-                const isLight = html.classList.contains('light');
-                themeToggleBtn.querySelector('.dark-icon').classList.toggle('hidden', !isLight);
-                themeToggleBtn.querySelector('.light-icon').classList.toggle('hidden', isLight);
-            });
-        }
-    </script>
+    <%- include('partials/footer_scripts') %>
 </body>
 </html>

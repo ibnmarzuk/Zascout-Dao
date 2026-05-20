@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <%- include('partials/head', { title: 'Gigs' }) %>
+</head>
+<body class="min-h-screen flex font-sans text-brand-text bg-brand-dark relative overflow-x-hidden">
+    
+    <%- include('partials/sidebar', { activePage: 'gigs' }) %>
+
+    <div class="flex-grow flex flex-col min-w-0">
+        <%- include('partials/topbar') %>
+
+        <main class="flex-grow p-4 sm:p-6 lg:p-10 w-full animate-fade-in lg:ml-64 max-w-7xl mx-auto">
+            
+            <div class="mb-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                <div>
+                    <h1 class="text-3xl lg:text-4xl font-display font-bold text-white mb-2 tracking-tight">Freelance Gigs</h1>
+                    <p class="text-brand-muted text-base max-w-xl">Find short and long term freelance opportunities across Web3 projects. Work remotely, get paid in crypto.</p>
+                </div>
+            </div>
+
+            <!-- Gigs Filter Bar -->
+            <div class="bento-card p-4 mb-8 flex flex-col lg:flex-row gap-4 lg:items-center">
+                <div class="relative w-full lg:w-64">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted"></i>
+                    <input type="text" placeholder="Search gigs..." class="w-full bg-black/20 border border-white/5 rounded-lg pl-9 pr-3 py-2 text-sm text-white focus:outline-none focus:border-brand-blue/50">
+                </div>
+                
+                <div class="flex flex-wrap gap-2 lg:ml-auto">
+                    <select class="bg-black/20 border border-white/5 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-blue/50 appearance-none min-w-[120px]">
+                        <option value="">Any Skill</option>
+                        <option value="frontend">Frontend</option>
+                        <option value="backend">Backend</option>
+                        <option value="smart-contracts">Smart Contracts</option>
+                        <option value="design">Design</option>
+                    </select>
+                    
+                    <select class="bg-black/20 border border-white/5 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-blue/50 appearance-none min-w-[120px]">
+                        <option value="">Any Category</option>
+                        <option value="engineering">Engineering</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="community">Community</option>
+                    </select>
+
+                    <label class="flex items-center gap-2 text-sm text-brand-muted whitespace-nowrap bg-black/20 border border-white/5 rounded-lg px-3 py-2 cursor-pointer hover:text-white transition-colors">
+                        <input type="checkbox" class="rounded accent-brand-purple"> Remote Only
+                    </label>
+
+                    <label class="flex items-center gap-2 text-sm text-brand-muted whitespace-nowrap bg-black/20 border border-white/5 rounded-lg px-3 py-2 cursor-pointer hover:text-white transition-colors">
+                        <input type="checkbox" class="rounded accent-brand-purple"> Beginner Friendly
+                    </label>
+                </div>
+            </div>
+
+            <!-- Gigs Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                
+                <% const mockGigs = [
+                    { title: 'Frontend Developer (React/Web3)', dao: 'Uniswap Labs', reward: '$3,000 - $5,000/mo', type: 'Full-time', tags: ['Frontend', 'React', 'Ethers.js'], remote: true, time: 'Apply by Oct 20' },
+                    { title: 'Technical Content Writer', dao: 'Arbitrum', reward: '$500 per article', type: 'Freelance', tags: ['Writing', 'Layer 2', 'DeFi'], remote: true, time: 'Rolling' },
+                    { title: 'Smart Contract Auditor', dao: 'Aave', reward: 'Up to $15k per audit', type: 'Contract', tags: ['Solidity', 'Security'], remote: true, time: 'Apply by Nov 1' },
+                    { title: 'Community Manager', dao: 'Lens Protocol', reward: '$2,000/mo', type: 'Part-time', tags: ['Social', 'Discord', 'Growth'], remote: true, time: 'Apply by Oct 15' }
+                ]; %>
+
+                <% mockGigs.forEach(function(gig) { %>
+                    <div class="bento-card p-6 flex flex-col group hover:border-brand-blue/30 transition-all">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                                    <i data-lucide="briefcase" class="w-5 h-5 text-brand-muted"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-base font-bold text-white group-hover:text-brand-blue transition-colors leading-snug"><%= gig.title %></h3>
+                                    <div class="text-sm text-brand-muted"><%= gig.dao %></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-4 mb-5 text-xs text-brand-muted">
+                            <div class="flex items-center gap-1">
+                                <i data-lucide="coins" class="w-3.5 h-3.5"></i>
+                                <span class="font-bold text-white"><%= gig.reward %></span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                                <span><%= gig.type %></span>
+                            </div>
+                            <% if (gig.remote) { %>
+                            <div class="flex items-center gap-1 text-emerald-400">
+                                <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+                                <span>Remote</span>
+                            </div>
+                            <% } %>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <% gig.tags.forEach(function(tag) { %>
+                                <span class="px-2 py-1 rounded bg-white/5 border border-white/5 text-[11px] font-bold uppercase tracking-wider text-gray-400"><%= tag %></span>
+                            <% }); %>
+                        </div>
+
+                        <div class="flex items-center justify-between mt-auto pt-4 border-t border-white/5">
+                            <span class="text-xs font-medium text-brand-muted"><%= gig.time %></span>
+                            <button class="bg-brand-blue hover:bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-all">
+                                Apply Now
+                            </button>
+                        </div>
+                    </div>
+                <% }); %>
+                
+            </div>
+
+        </main>
+    </div>
+
+    <%- include('partials/footer_scripts') %>
+</body>
+</html>

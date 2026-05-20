@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <%- include('partials/head', { title: 'Events Hub' }) %>
+</head>
+<body class="min-h-screen flex font-sans text-brand-text bg-brand-dark relative overflow-x-hidden">
+    
+    <%- include('partials/sidebar', { activePage: 'events' }) %>
+
+    <div class="flex-grow flex flex-col min-w-0">
+        <%- include('partials/topbar') %>
+
+        <main class="flex-grow p-4 sm:p-6 lg:p-10 w-full animate-fade-in lg:ml-64 max-w-7xl mx-auto">
+            
+            <div class="mb-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                <div>
+                    <h1 class="text-3xl lg:text-4xl font-display font-bold text-white mb-2 tracking-tight">Events Hub</h1>
+                    <p class="text-brand-muted text-base max-w-xl">Discover hackathons, Twitter Spaces, community calls, and workshops across the ecosystem.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button class="bg-white/5 border border-white/5 hover:bg-white/10 text-white rounded-lg px-4 py-2 text-sm font-medium transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="layout-grid" class="w-4 h-4"></i> Grid
+                    </button>
+                    <button class="bg-brand-blue border border-brand-blue hover:bg-blue-600 text-white rounded-lg px-4 py-2 text-sm font-medium transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="calendar" class="w-4 h-4"></i> Calendar
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Trending Event -->
+            <div class="bento-card p-6 md:p-8 mb-12 relative overflow-hidden group cursor-pointer border-brand-blue/30">
+                <div class="absolute inset-0 bg-gradient-to-r from-brand-blue/10 to-transparent z-0"></div>
+                <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div class="flex-grow">
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-brand-blue/20 text-brand-blue text-xs font-bold uppercase tracking-wider mb-4 border border-brand-blue/30">
+                            <i data-lucide="flame" class="w-3 h-3"></i> Featured Hackathon
+                        </div>
+                        <h2 class="text-3xl font-display font-bold text-white mb-2">Zero Authority Global Hackathon</h2>
+                        <p class="text-brand-muted max-w-xl mb-6">Build the next generation of decentralized intelligence tools using MCP. Compete for over $50k in stablecoin prizes and receive direct mentorship from core contributors.</p>
+                        
+                        <div class="flex flex-wrap items-center gap-6 text-sm text-brand-muted">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="calendar" class="w-4 h-4 text-white"></i> Nov 1 - Nov 15
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="globe" class="w-4 h-4 text-white"></i> Virtual (Global)
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="users" class="w-4 h-4 text-white"></i> 450+ Registered
+                            </div>
+                        </div>
+                    </div>
+                    <div class="shrink-0 flex flex-col gap-3 min-w-[200px]">
+                        <button class="w-full bg-white text-black hover:bg-gray-200 py-3 rounded-xl font-bold transition-all text-center">
+                            Register Now
+                        </button>
+                        <button class="w-full bg-white/5 border border-white/5 hover:bg-white/10 text-white py-3 rounded-xl font-bold transition-all text-center">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="font-display font-bold text-xl text-white mb-6">Upcoming Schedule</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <% const mockEvents = [
+                    { title: 'DeFi Governance Space', host: 'Zero Authority', date: 'Oct 12', time: '18:00 UTC', type: 'Twitter Space', icon: 'mic', color: 'blue' },
+                    { title: 'Smart Contract Workshop', host: 'Optimism', date: 'Oct 15', time: '14:00 UTC', type: 'Workshop', icon: 'code', color: 'purple' },
+                    { title: 'Core Devs Call #45', host: 'Ethereum', date: 'Oct 18', time: '16:00 UTC', type: 'Community Call', icon: 'users', color: 'gray' },
+                    { title: 'Local Node Meetup', host: 'ZA Scout Berlin', date: 'Oct 20', time: '19:00 CET', type: 'IRL Meetup', icon: 'map-pin', color: 'orange' },
+                    { title: 'AI Agent Hackathon Kickoff', host: 'Zero Authority', date: 'Nov 1', time: '12:00 UTC', type: 'Hackathon', icon: 'rocket', color: 'emerald' }
+                ]; %>
+
+                <% mockEvents.forEach(function(event) { %>
+                    <div class="bento-card p-5 group flex flex-col hover:border-white/20 transition-all">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex flex-col items-center justify-center shrink-0">
+                                <span class="text-[10px] font-bold uppercase text-brand-muted"><%= event.date.split(' ')[0] %></span>
+                                <span class="text-xl font-display font-bold text-white leading-none"><%= event.date.split(' ')[1] %></span>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider text-brand-muted mb-1">
+                                    <i data-lucide="<%= event.icon %>" class="w-3 h-3"></i> <%= event.type %>
+                                </div>
+                                <h4 class="text-base font-bold text-white leading-tight group-hover:text-brand-blue transition-colors"><%= event.title %></h4>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-2 mb-6">
+                            <div class="flex items-center gap-2 text-sm text-brand-muted">
+                                <i data-lucide="building-2" class="w-3.5 h-3.5"></i> Hosted by <%= event.host %>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-brand-muted">
+                                <i data-lucide="clock" class="w-3.5 h-3.5"></i> <%= event.time %>
+                            </div>
+                        </div>
+
+                        <div class="mt-auto">
+                            <button class="w-full bg-white/5 hover:bg-white/10 border border-white/5 text-white py-2 rounded-lg text-sm font-semibold transition-all">
+                                RSVP
+                            </button>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+
+        </main>
+    </div>
+
+    <%- include('partials/footer_scripts') %>
+</body>
+</html>

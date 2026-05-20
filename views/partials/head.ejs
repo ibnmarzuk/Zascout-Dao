@@ -1,0 +1,138 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= typeof title !== 'undefined' ? title + ' | ZA Scout' : 'ZA Scout | Zero Authority DAO' %></title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                    display: ['Space Grotesk', 'sans-serif'],
+                },
+                colors: {
+                    brand: {
+                        blue: '#0070F3',
+                        purple: '#8b5cf6',
+                        dark: 'var(--bg-dark, #020817)',
+                        light: 'var(--bg-light, #0f172a)',
+                        subtle: 'var(--bg-subtle, #1e293b)',
+                        text: 'var(--text-main, #EDEDED)',
+                        muted: 'var(--text-muted, #A1A1AA)'
+                    },
+                    white: 'var(--text-white, #ffffff)',
+                    black: 'var(--text-black, #000000)'
+                },
+                animation: {
+                    'fade-in': 'fadeIn 0.5s ease-out forwards',
+                    'slide-up': 'slideUp 0.5s ease-out forwards',
+                    'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                },
+                keyframes: {
+                    fadeIn: {
+                        '0%': { opacity: '0' },
+                        '100%': { opacity: '1' },
+                    },
+                    slideUp: {
+                        '0%': { opacity: '0', transform: 'translateY(20px)' },
+                        '100%': { opacity: '1', transform: 'translateY(0)' },
+                    }
+                }
+            }
+        }
+    }
+</script>
+<style>
+    html.light {
+        --bg-dark: #f8fafc;
+        --bg-light: #ffffff;
+        --bg-subtle: #e2e8f0;
+        --text-main: #0f172a;
+        --text-muted: #475569;
+        --text-white: #000000;
+        --text-black: #ffffff;
+    }
+
+    body {
+        background-color: theme('colors.brand.dark');
+        color: theme('colors.brand.text');
+        -webkit-font-smoothing: antialiased;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    
+    .glass-panel {
+        background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    html.light .glass-panel {
+        background: rgba(255, 255, 255, 0.85);
+        border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .bento-card {
+        background: rgba(15, 23, 42, 0.4);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 12px;
+        transition: all 0.2s ease-in-out;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    html.light .bento-card {
+        background: rgba(255,255,255,0.9);
+        border-color: rgba(0,0,0,0.1);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .bento-card:hover {
+        border-color: rgba(255,255,255,0.12);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px -10px rgba(0,0,0,0.3);
+    }
+    
+    html.light .bento-card:hover {
+        border-color: rgba(0,0,0,0.15);
+        box-shadow: 0 8px 24px -10px rgba(0,0,0,0.08);
+    }
+
+    .gradient-text {
+        background: linear-gradient(to right, #fff, #a1a1aa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    html.light .gradient-text {
+        background: linear-gradient(to right, #0f172a, #475569);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+    html.light ::-webkit-scrollbar-thumb {
+        background: rgba(0,0,0,0.15);
+    }
+</style>

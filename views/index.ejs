@@ -1,1077 +1,140 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZA Scout | Zero Authority DAO</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Space Grotesk', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            blue: '#0070F3',
-                            purple: '#8b5cf6',
-                            dark: 'var(--bg-dark, #020817)',
-                            light: 'var(--bg-light, #0f172a)',
-                            subtle: 'var(--bg-subtle, #1e293b)',
-                            text: 'var(--text-main, #EDEDED)',
-                            muted: 'var(--text-muted, #A1A1AA)'
-                        },
-                        white: 'var(--text-white, #ffffff)',
-                        black: 'var(--text-black, #000000)'
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-out forwards',
-                        'slide-up': 'slideUp 0.5s ease-out forwards',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        },
-                        slideUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        html.light {
-            --bg-dark: #f8fafc;
-            --bg-light: #ffffff;
-            --bg-subtle: #e2e8f0;
-            --text-main: #0f172a;
-            --text-muted: #475569;
-            --text-white: #000000;
-            --text-black: #ffffff;
-        }
-
-        body {
-            background-color: theme('colors.brand.dark');
-            color: theme('colors.brand.text');
-            -webkit-font-smoothing: antialiased;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        
-        .glass-panel {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        
-        html.light .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
-            border-color: rgba(0, 0, 0, 0.1);
-        }
-
-        .bento-card {
-            background: linear-gradient(145deg, rgba(15,23,42,0.6) 0%, rgba(2,8,23,0.9) 100%);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 16px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        html.light .bento-card {
-            background: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,1) 100%);
-            border-color: rgba(0,0,0,0.1);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-
-        .bento-card:hover {
-            border-color: rgba(255,255,255,0.15);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-        }
-        
-        html.light .bento-card:hover {
-            border-color: rgba(0,0,0,0.15);
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
-        }
-
-        .bento-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        html.light .bento-card::before {
-            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
-        }
-
-        .bento-card:hover::before {
-            opacity: 1;
-        }
-
-        .gradient-text {
-            background: linear-gradient(to right, #fff, #a1a1aa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        html.light .gradient-text {
-            background: linear-gradient(to right, #0f172a, #475569);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .glow-bg {
-            position: fixed;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 800px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(0, 112, 243, 0.15) 0%, rgba(0,0,0,0) 70%);
-            pointer-events: none;
-            z-index: -1;
-        }
-        
-        html.light .glow-bg {
-            opacity: 0.3;
-        }
-
-        .tab-btn {
-            position: relative;
-        }
-        .tab-btn.active {
-            color: white;
-        }
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background-color: theme('colors.brand.blue');
-            border-radius: 2px 2px 0 0;
-            box-shadow: 0 0 8px theme('colors.brand.blue');
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: theme('colors.brand.dark');
-        }
-        ::-webkit-scrollbar-thumb {
-            background: theme('colors.brand.subtle');
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: theme('colors.brand.muted');
-        }
-        
-        .opportunity-card.hidden {
-            display: none !important;
-        }
-    </style>
+    <%- include('partials/head', { title: 'Dashboard' }) %>
 </head>
-<body class="min-h-screen flex flex-col font-sans relative">
+<body class="min-h-screen flex font-sans text-brand-text bg-brand-dark relative overflow-x-hidden">
     
-    <!-- Toast Notification Container -->
-    <div id="toastContainer" class="fixed bottom-6 right-6 z-[200] flex flex-col gap-3 pointer-events-none"></div>
+    <%- include('partials/sidebar', { activePage: 'dashboard' }) %>
 
-    <div class="glow-bg animate-pulse-slow"></div>
+    <div class="flex-grow flex flex-col min-w-0">
+        <%- include('partials/topbar') %>
 
-    <!-- Navbar -->
-    <nav class="sticky top-0 z-50 glass-panel border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center gap-3 cursor-pointer group">
-                    <div class="relative w-10 h-10 flex items-center justify-center">
-                        <div class="absolute inset-0 bg-brand-blue/20 rounded-xl blur-lg group-hover:bg-brand-purple/30 transition-colors"></div>
-                        <svg viewBox="0 0 100 100" class="w-8 h-8 relative z-10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="0.5" stroke-dasharray="2 2" class="text-brand-blue/50"/>
-                            <circle cx="50" cy="50" r="38" stroke="currentColor" stroke-width="1" class="text-brand-blue/30"/>
-                            <!-- Compass Markings -->
-                            <path d="M50 15V22M50 78V85M15 50H22M78 50H85" stroke="currentColor" stroke-width="1.5" class="text-brand-blue"/>
-                            <text x="47" y="12" fill="currentColor" class="text-[10px] font-bold text-brand-blue">N</text>
-                            
-                            <!-- Glowing Needle -->
-                            <g transform="rotate(45, 50, 50)">
-                                <path d="M50 25L56 50L50 75L44 50L50 25Z" fill="url(#logo-gradient)" class="drop-shadow-[0_0_8px_rgba(0,112,243,0.8)]"/>
-                                <circle cx="50" cy="50" r="3" fill="white" class="shadow-sm"/>
-                            </g>
-                            <defs>
-                                <linearGradient id="logo-gradient" x1="50" y1="25" x2="50" y2="75" gradientUnits="userSpaceOnUse">
-                                    <stop stop-color="#0070F3"/>
-                                    <stop offset="1" stop-color="#8b5cf6"/>
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="font-display font-bold text-xl text-white tracking-tight leading-none">ZASCOUT</span>
-                        <span class="text-[7px] font-bold text-brand-muted uppercase tracking-[0.2em] mt-0.5">DAO Intelligence Hub</span>
-                    </div>
-                </div>
-                <div class="hidden md:flex items-center gap-8 bg-brand-light rounded-full px-6 py-2 border border-white/5">
-                    <a href="/" class="nav-link text-white font-medium text-sm transition-colors relative after:absolute after:-bottom-2 after:left-0 after:right-0 after:h-px after:bg-white after:rounded-full">Explorer</a>
-                    <a href="/quests" class="nav-link text-brand-muted font-medium text-sm hover:text-white transition-colors">Quests</a>
-                    <a href="/mcp" class="nav-link text-brand-muted font-medium text-sm hover:text-white transition-colors">MCP Setup</a>
-                </div>
-                <div class="flex items-center gap-2 sm:gap-4">
-                    <div class="hidden sm:flex flex-col items-end gap-1">
-                        <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20">
-                            <div class="w-1.5 h-1.5 rounded-full bg-brand-purple animate-pulse"></div>
-                            <span class="text-[10px] font-bold text-brand-purple uppercase tracking-tighter">LVL 1</span>
-                        </div>
-                        <div class="w-16 h-1 bg-brand-subtle rounded-full overflow-hidden">
-                            <div class="h-full bg-brand-purple w-1/3 shadow-[0_0_8px_rgba(139,92,246,0.5)]"></div>
-                        </div>
-                    </div>
-                    <button class="text-brand-muted hover:text-white transition-colors rounded-full p-2 hover:bg-white/5" id="themeToggle" title="Toggle Dark/Light Mode">
-                        <i data-lucide="sun" class="w-4 h-4 hidden dark-icon"></i>
-                        <i data-lucide="moon" class="w-4 h-4 light-icon"></i>
-                    </button>
-                    <button class="bg-white text-black hover:bg-gray-200 px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-medium transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95">
-                        Connect
-                    </button>
-                    <button id="mobileMenuBtn" class="md:hidden text-brand-muted hover:text-white p-2">
-                        <i data-lucide="menu" class="w-6 h-6"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden border-t border-white/5 bg-brand-dark/95 backdrop-blur-xl animate-fade-in">
-            <div class="px-4 pt-2 pb-6 space-y-1">
-                <a href="/" class="block px-3 py-4 text-base font-medium text-white border-b border-white/5 hover:bg-white/5 transition-colors">Explorer</a>
-                <a href="/quests" class="block px-3 py-4 text-base font-medium text-brand-muted hover:text-white border-b border-white/5 hover:bg-white/5 transition-colors">Quests</a>
-                <a href="/mcp" class="block px-3 py-4 text-base font-medium text-brand-muted hover:text-white hover:bg-white/5 transition-colors">MCP Setup</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full animate-fade-in">
-        
-        <!-- Header -->
-        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
-            <div class="max-w-2xl w-full">
-                <div class="flex items-center justify-between lg:justify-start lg:gap-6 mb-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20 text-brand-purple text-xs font-semibold uppercase tracking-widest">
-                        <i data-lucide="zap" class="w-3 h-3"></i> BOUNTY HUB
-                    </div>
-                </div>
-                
-                <h1 class="text-4xl md:text-5xl font-display font-bold text-white mb-2 tracking-tight">Complete tasks.</h1>
-                <h1 class="text-4xl md:text-5xl font-display font-bold text-brand-purple mb-6 tracking-tight">Get paid onchain.</h1>
-                
-                <p class="text-brand-muted text-lg font-light mb-8 max-w-3xl leading-relaxed">
-                    <strong class="text-white font-medium">ZA Scout</strong> is an AI powered DAO intelligence platform built for the Zero Authority ecosystem. It helps contributors discover grants, bounties, governance opportunities, and community reputation insights through a clean and accessible interface. The platform combines DAO analytics, AI powered discovery, and contributor reputation tracking into a single hub.
-                </p>
-                
-                <!-- Stats Row -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                    <div class="bento-card p-4 flex flex-col items-center justify-center text-center">
-                        <span class="text-3xl font-display font-bold text-white mb-1">128</span>
-                        <span class="text-xs font-medium text-brand-muted uppercase tracking-widest">Open bounties</span>
-                    </div>
-                    <div class="bento-card p-4 flex flex-col items-center justify-center text-center">
-                        <span class="text-3xl font-display font-bold text-white mb-1">$48K</span>
-                        <span class="text-xs font-medium text-brand-muted uppercase tracking-widest">In rewards</span>
-                    </div>
-                    <div class="bento-card p-4 flex flex-col items-center justify-center text-center">
-                        <span class="text-3xl font-display font-bold text-white mb-1">22</span>
-                        <span class="text-xs font-medium text-brand-muted uppercase tracking-widest">Added today</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Global Search and Filters -->
-            <div class="w-full lg:w-96 flex flex-col gap-3">
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <div class="relative flex-grow sm:w-80 group">
-                        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted group-focus-within:text-brand-blue transition-colors"></i>
-                        <input type="text" id="searchInput" placeholder="Search by title, tag, DAO..." class="w-full bg-brand-light border border-brand-subtle rounded-xl pl-11 pr-4 py-3 text-sm text-brand-text placeholder:text-brand-muted focus:outline-none focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/10 transition-all shadow-inner">
-                    </div>
-                    <button id="aiSearchBtn" class="bg-brand-purple hover:bg-purple-600 text-white rounded-xl px-4 py-3 text-sm font-medium transition-all shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] flex items-center justify-center gap-2 whitespace-nowrap">
-                        <i data-lucide="sparkles" class="w-4 h-4"></i> AI Search
-                    </button>
-                    <button id="toggleFiltersBtn" class="bg-brand-light border border-brand-subtle hover:bg-brand-subtle/50 text-brand-text rounded-xl px-4 py-3 text-sm font-medium transition-all flex items-center justify-center gap-2 lg:hidden">
-                        <i data-lucide="filter" class="w-4 h-4"></i> Filters
-                    </button>
-                </div>
-                
-                <!-- Filter Controls (Responsive) -->
-                <div id="filterPanel" class="hidden lg:flex flex-col gap-5 p-5 lg:p-0 rounded-2xl bg-brand-light/95 backdrop-blur-xl border border-brand-subtle lg:bg-transparent lg:backdrop-blur-none lg:border-none w-full animate-slide-up shadow-2xl lg:shadow-none z-20 relative lg:mt-3">
-                    <div class="flex flex-col sm:flex-row gap-6 items-end lg:items-center w-full">
-                        <div class="flex flex-col gap-3 w-full sm:w-1/2 lg:w-1/3">
-                            <label for="rewardRange" class="text-[11px] font-bold text-brand-muted uppercase tracking-wider flex justify-between items-center">
-                                <span>Min Reward</span>
-                                <span id="rewardRangeVal" class="text-brand-purple font-display font-bold text-sm">$0+</span>
-                            </label>
-                            <input type="range" id="rewardRange" min="0" max="15000" step="500" value="0" class="w-full accent-brand-purple h-1.5 bg-brand-subtle rounded-full appearance-none cursor-pointer">
-                        </div>
-                        
-                        <div class="flex flex-col gap-3 w-full sm:w-1/2 lg:w-1/4 lg:ml-auto">
-                            <label for="typeFilter" class="text-[11px] font-bold text-brand-muted uppercase tracking-wider">Opportunity Type</label>
-                            <div class="relative group">
-                                <select id="typeFilter" class="bg-transparent border border-brand-subtle rounded-xl px-4 py-2.5 text-sm text-brand-text focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 w-full cursor-pointer appearance-none transition-all hover:bg-brand-subtle/30 shadow-inner">
-                                    <option value="" class="bg-brand-light text-brand-text">All Types</option>
-                                    <option value="bounty" class="bg-brand-light text-brand-text">Bounties</option>
-                                    <option value="grant" class="bg-brand-light text-brand-text">Grants</option>
-                                    <option value="quest" class="bg-brand-light text-brand-text">Quests</option>
-                                </select>
-                                <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted pointer-events-none group-hover:text-brand-text transition-colors"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-		
-		<!-- AI Insight Panel -->
-		<div id="aiInsightPanel" class="hidden mb-12 bento-card p-6 border-brand-purple/30 relative overflow-hidden animate-slide-up">
-			<div class="absolute inset-0 bg-gradient-to-br from-brand-purple/10 to-transparent z-0"></div>
-			<div class="relative z-10 flex flex-col md:flex-row gap-6">
-                <div class="flex-shrink-0">
-                    <div class="w-12 h-12 rounded-xl bg-brand-purple/20 text-brand-purple flex items-center justify-center">
-                        <i data-lucide="bot" class="w-6 h-6"></i>
-                    </div>
-                </div>
-                <div class="flex-grow">
-                    <h3 class="text-xl font-display font-bold text-white mb-2">AI Insights</h3>
-                    <p id="aiSummary" class="text-brand-muted mb-4 leading-relaxed"></p>
+        <main class="flex-grow p-4 sm:p-6 lg:p-10 w-full animate-fade-in lg:ml-64 max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
+                <div class="max-w-2xl w-full">
+                    <h1 class="text-4xl md:text-5xl font-display font-bold text-white mb-2 tracking-tight">Discover your</h1>
+                    <h1 class="text-4xl md:text-5xl font-display font-bold text-brand-blue mb-4 tracking-tight">next contribution.</h1>
                     
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="bg-black/20 rounded-lg p-4 border border-white/5">
-                            <h4 class="text-xs text-brand-muted uppercase font-bold tracking-wider mb-2">Recommended Tags</h4>
-                            <div id="aiTags" class="flex flex-wrap gap-2"></div>
-                        </div>
-                        <div class="bg-black/20 rounded-lg p-4 border border-white/5">
-                            <h4 class="text-xs text-brand-muted uppercase font-bold tracking-wider mb-2">Suggested DAOs</h4>
-                            <div id="aiDaos" class="flex flex-wrap gap-2"></div>
-                        </div>
-                        <div class="bg-black/20 rounded-lg p-4 border border-white/5">
-                            <h4 class="text-xs text-brand-muted uppercase font-bold tracking-wider mb-2">Required Skills</h4>
-                            <div id="aiSkills" class="flex flex-wrap gap-2"></div>
-                        </div>
-                    </div>
-                </div>
-                <button id="closeAiPanel" class="absolute top-4 right-4 text-brand-muted hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-			</div>
-		</div>
-
-        <!-- Dashboard Bento Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-5 mb-14 animate-slide-up" style="animation-delay: 0.1s;">
-            <!-- Main Stat -->
-            <div class="md:col-span-4 bento-card p-6 flex flex-col justify-between">
-                <div class="flex items-center justify-between mb-8">
-                    <div class="w-10 h-10 rounded-full bg-brand-light border border-white/5 flex items-center justify-center">
-                        <i data-lucide="bar-chart-3" class="w-5 h-5 text-brand-blue"></i>
-                    </div>
-                    <span class="px-2.5 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-medium border border-green-500/20">+15.2%</span>
-                </div>
-                <div>
-                    <h3 class="text-brand-muted text-sm font-medium mb-1">Total Value Locked</h3>
-                    <div class="text-4xl font-display font-bold text-white">$45,200<span class="text-brand-muted text-lg">.00</span></div>
+                    <p class="text-brand-muted text-lg font-light mb-8 max-w-xl leading-relaxed">
+                        Find bounties, freelance gigs, events, and open opportunities across top Web3 ecosystems perfectly matched to your skills.
+                    </p>
                 </div>
             </div>
 
-            <!-- Active Bounties -->
-            <div class="md:col-span-3 bento-card p-6 flex flex-col justify-between">
-                <div class="flex items-center justify-between mb-8">
-                    <div class="w-10 h-10 rounded-full bg-brand-light border border-white/5 flex items-center justify-center">
-                        <i data-lucide="target" class="w-5 h-5 text-orange-400"></i>
+            <!-- AI Insight Preview -->
+            <div class="mb-12 bento-card p-6 border-brand-purple/20 cursor-pointer group hover:border-brand-purple/40" onclick="window.location.href='/ai-scout'">
+                <div class="flex flex-col md:flex-row gap-6 items-center">
+                    <div class="w-12 h-12 rounded-xl bg-brand-purple/10 text-brand-purple flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
                     </div>
-                </div>
-                <div>
-                    <h3 class="text-brand-muted text-sm font-medium mb-1">Open Opportunities</h3>
-                    <div class="text-4xl font-display font-bold text-white"><%= opportunities.length %></div>
-                </div>
-            </div>
-
-            <!-- AI Promo -->
-            <div class="md:col-span-5 bento-card p-6 relative overflow-hidden group cursor-pointer border-brand-purple/20 hover:border-brand-purple/50">
-                <div class="absolute inset-0 bg-gradient-to-r from-brand-purple/5 to-transparent opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                
-                <div class="absolute top-0 right-0 w-32 h-32 bg-brand-purple/20 rounded-full blur-[50px] -translate-y-1/2 translate-x-1/4 group-hover:bg-brand-purple/30 transition-all"></div>
-
-                <div class="relative z-10 flex flex-col h-full justify-between">
-                    <div class="flex justify-between items-start">
-                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-brand-purple/10 text-brand-purple text-xs font-medium">
-                            <i data-lucide="sparkles" class="w-3 h-3"></i> AI Powered
-                        </div>
-                        <div class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all">
-                            <i data-lucide="arrow-right" class="w-4 h-4 text-white"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-6">
-                        <h3 class="text-xl font-display font-bold text-white mb-2">MCP Integration Available</h3>
-                        <p class="text-sm text-brand-muted max-w-sm">Connect Cursor or Claude directly to the Zero Authority network to automate task discovery and apply instantly.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Controls & Tabs -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-            <div id="tabsContainer" class="flex items-center gap-6 border-b border-white/10 w-full sm:w-auto">
-                <button class="tab-btn active pb-3 text-sm font-medium transition-colors" data-filter="all">All</button>
-                <button class="tab-btn pb-3 text-sm font-medium text-brand-muted hover:text-white transition-colors" data-filter="bounty">Bounties</button>
-                <button class="tab-btn pb-3 text-sm font-medium text-brand-muted hover:text-white transition-colors" data-filter="grant">Grants</button>
-                <button class="tab-btn pb-3 text-sm font-medium text-brand-muted hover:text-white transition-colors" data-filter="quest">Quests</button>
-            </div>
-            
-            <div class="flex items-center gap-2">
-                <button class="flex items-center gap-2 bg-brand-light border border-white/10 px-3 py-1.5 rounded-lg text-xs font-medium text-brand-muted hover:text-white hover:border-white/20 transition-all">
-                    <i data-lucide="sort-desc" class="w-3 h-3"></i> Sort by Value
-                </button>
-            </div>
-        </div>
-
-        <!-- Opportunities Grid -->
-        <div id="opportunitiesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 animate-slide-up" style="animation-delay: 0.2s;">
-            <% if (opportunities && opportunities.length > 0) { %>
-                <% opportunities.forEach(function(op, index) { %>
-                    <div class="opportunity-card bento-card p-5 group flex flex-col" 
-                         data-type="<%= op.type.toLowerCase() %>" 
-                         data-title="<%= op.title %>" 
-                         data-dao="<%= op.dao %>" 
-                         data-reward="<%= op.reward || 0 %>"
-                         data-id="<%= op.id %>"
-                         data-tags="<%= (op.tags || []).join(',') %>">
-                        
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex items-center gap-2">
-                                <% if(op.type.toLowerCase() === 'grant') { %>
-                                    <div class="w-8 h-8 rounded bg-[#F5A623]/10 flex items-center justify-center">
-                                        <i data-lucide="landmark" class="w-4 h-4 text-[#F5A623]"></i>
-                                    </div>
-                                <% } else if (op.type.toLowerCase() === 'quest') { %>
-                                    <div class="w-8 h-8 rounded bg-emerald-500/10 flex items-center justify-center">
-                                        <i data-lucide="map" class="w-4 h-4 text-emerald-400"></i>
-                                    </div>
-                                <% } else { %>
-                                    <div class="w-8 h-8 rounded bg-brand-blue/10 flex items-center justify-center">
-                                        <i data-lucide="briefcase" class="w-4 h-4 text-brand-blue"></i>
-                                    </div>
-                                <% } %>
-                                <div>
-                                    <span class="text-xs font-bold uppercase tracking-wider text-brand-muted"><%= op.type %></span>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-center gap-3">
-                                <button class="save-bookmark-btn text-brand-muted hover:text-brand-purple transition-all relative z-10" data-id="<%= op.id %>" title="Save Task" onclick="event.stopPropagation();">
-                                    <i data-lucide="bookmark" class="w-5 h-5 bookmark-icon"></i>
-                                </button>
-                                <div class="text-right">
-                                    <% if (op.reward > 0) { %>
-                                        <div class="font-display font-bold text-lg text-white">$<%= op.reward.toLocaleString() %></div>
-                                    <% } else { %>
-                                        <div class="font-display font-medium text-sm text-brand-muted mt-1 px-2 py-0.5 bg-white/5 rounded">Open Allocation</div>
-                                    <% } %>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex-grow">
-                            <h3 class="text-lg font-semibold text-white mb-2 leading-snug group-hover:text-brand-blue transition-colors line-clamp-2"><%= op.title %></h3>
-                            <div class="flex items-center gap-3 mb-4">
-                                <span class="text-xs text-brand-muted flex items-center gap-1.5">
-                                    <div class="w-4 h-4 rounded-full bg-white/10 flex items-center justify-center">
-                                        <i data-lucide="building-2" class="w-2.5 h-2.5"></i>
-                                    </div>
-                                    <%= op.dao %>
-                                </span>
-                                <span class="w-1 h-1 rounded-full bg-brand-subtle"></span>
-                                <span class="text-xs text-brand-muted flex items-center gap-1">
-                                    <i data-lucide="clock" class="w-3 h-3 text-emerald-400"></i> <%= op.status.charAt(0).toUpperCase() + op.status.slice(1) %>
-                                </span>
-                            </div>
-                            
-                            <!-- Tags -->
-                            <div class="flex flex-wrap gap-1.5 mb-5 tags-container">
-                                <% if (op.tags && op.tags.length > 0) { %>
-                                    <% op.tags.slice(0, 3).forEach(function(tag) { %>
-                                        <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-1 bg-white/5 border border-white/5 text-gray-400 rounded hover:bg-white/10 transition-colors"><%= tag %></span>
-                                    <% }); %>
-                                    <% if (op.tags.length > 3) { %>
-                                        <span class="text-[10px] font-bold px-2 py-1 text-gray-500">+<%= op.tags.length - 3 %></span>
-                                    <% } %>
-                                <% } %>
-                            </div>
-                        </div>
-                        
-                        <div class="pt-4 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0 mt-auto">
-                            <button class="view-details-btn w-full flex items-center justify-center gap-2 bg-brand-light text-white font-semibold text-sm px-4 py-2.5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
-                                View Details <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                            </button>
-                        </div>
-                    </div>
-                <% }); %>
-            <% } else { %>
-                <div id="emptyState" class="col-span-full py-20 flex flex-col items-center justify-center text-brand-muted border-2 border-dashed border-white/5 rounded-2xl">
-                    <div class="w-16 h-16 rounded-full bg-brand-light flex items-center justify-center mb-4">
-                        <i data-lucide="search-x" class="w-8 h-8"></i>
-                    </div>
-                    <h3 class="text-white font-medium text-lg mb-1">No opportunities found</h3>
-                    <p class="text-sm">Try adjusting your filters or search term.</p>
-                </div>
-            <% } %>
-            <div id="hiddenEmptyState" class="hidden col-span-full py-20 flex flex-col items-center justify-center text-brand-muted border-2 border-dashed border-white/5 rounded-2xl">
-                <div class="w-16 h-16 rounded-full bg-brand-light flex items-center justify-center mb-4">
-                    <i data-lucide="search-x" class="w-8 h-8"></i>
-                </div>
-                <h3 class="text-white font-medium text-lg mb-1">No matches</h3>
-                <p class="text-sm">Try adjusting your filters or search term.</p>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Opportunity Detail Modal -->
-    <div id="detailModal" class="fixed inset-0 modal-backdrop hidden flex items-center justify-center p-4 animate-fade-in z-[100]">
-        <div class="modal-backdrop absolute inset-0 bg-black/80 backdrop-blur-md"></div>
-        <div class="bento-card max-w-2xl w-full max-h-[90vh] overflow-y-auto bg-brand-light p-0 border-white/10 shadow-2xl animate-slide-up relative z-10">
-            <div class="p-8 md:p-10">
-                <button id="closeDetailModal" class="absolute top-6 right-6 text-brand-muted hover:text-white transition-colors bg-white/5 p-2 rounded-full">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="px-2 py-0.5 rounded bg-brand-blue/10 border border-brand-blue/20 text-[10px] font-bold text-brand-blue uppercase tracking-widest" id="modalOpType">
-                        Bounty
-                    </div>
-                    <div class="flex items-center gap-1.5 hide-indicator" id="modalOpStatus">
-                        <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                        <span class="text-[10px] uppercase font-bold tracking-widest text-brand-muted">open</span>
-                    </div>
-                </div>
-
-                <div class="mb-8">
-                    <div class="flex items-center gap-3 mb-4">
-                         <div class="w-10 h-10 rounded-lg bg-brand-dark border border-white/5 flex items-center justify-center">
-                            <i data-lucide="building-2" class="w-5 h-5 text-brand-muted"></i>
-                         </div>
-                         <div class="flex flex-col">
-                            <span class="text-xs text-brand-muted font-bold uppercase tracking-widest">DAO</span>
-                            <span class="text-white font-display font-bold" id="modalOpDao">Zero Authority</span>
-                         </div>
-                    </div>
-                    <h2 id="modalOpTitle" class="text-3xl font-display font-bold text-white mb-4 leading-tight">Opportunity Title</h2>
-                    <p id="modalOpDescription" class="text-brand-muted leading-relaxed text-lg font-light">Loading mission parameters...</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-                    <div>
-                        <h4 class="text-xs font-bold uppercase tracking-widest text-brand-muted mb-4">Technical Specs</h4>
-                        <div id="modalOpTags" class="flex flex-wrap gap-2">
-                            <!-- Tags injected here -->
-                        </div>
+                    <div class="flex-grow">
+                        <h3 class="text-xl font-display font-bold text-white mb-1">Looking for a specific role?</h3>
+                        <p class="text-sm text-brand-muted">Try our AI Scout Assistant to find the perfect gigs matching your exact skills and experience.</p>
                     </div>
                     <div>
-                        <h4 class="text-xs font-bold uppercase tracking-widest text-brand-muted mb-4">Contribution Terms</h4>
-                        <ul class="space-y-2 text-sm text-brand-muted list-disc ml-4">
-                            <li>Must adhere to DAO constitution</li>
-                            <li>Payment released upon milestone approval</li>
-                            <li>Requires technical review from stewards</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div class="flex flex-col">
-                        <span class="text-xs font-bold uppercase tracking-widest text-brand-muted mb-1">Max Reward</span>
-                        <div id="modalOpReward" class="text-emerald-400 font-display font-bold text-2xl">$0.00</div>
-                    </div>
-                    <div class="flex gap-3 w-full sm:w-auto">
-                        <button id="saveTaskBtn" class="flex-grow sm:flex-grow-0 border border-white/10 text-white px-6 py-3 rounded-xl font-bold hover:bg-white/5 transition-all text-sm">
-                            Save Task
-                        </button>
-                        <button class="flex-grow sm:flex-grow-0 bg-white text-black px-8 py-3 rounded-xl font-bold hover:bg-gray-200 transition-all shadow-lg active:scale-95 text-sm">
-                            Apply Now
+                        <button class="bg-brand-purple hover:bg-purple-600 text-white rounded-lg px-6 py-2.5 text-sm font-medium transition-all shadow-[0_0_15px_rgba(139,92,246,0.3)] whitespace-nowrap">
+                            Launch AI Scout
                         </button>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <!-- Dashboard Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+                
+                <!-- Latest Opportunities Preview -->
+                <div class="lg:col-span-2 flex flex-col gap-4">
+                    <div class="flex items-center justify-between px-2">
+                        <h2 class="font-display font-bold text-lg text-white">Live Opportunities</h2>
+                        <a href="/opportunities" class="text-sm font-medium text-brand-blue hover:text-brand-blue/80 transition-colors flex items-center gap-1">
+                            View all <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <% if (opportunities && opportunities.length > 0) { %>
+                            <% opportunities.slice(0, 4).forEach(function(op) { %>
+                                <div class="bento-card p-5 group flex flex-col h-full cursor-pointer">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center">
+                                                <i data-lucide="building-2" class="w-4 h-4 text-brand-muted"></i>
+                                            </div>
+                                            <span class="text-xs font-bold uppercase tracking-wider text-brand-muted"><%= op.type %></span>
+                                        </div>
+                                        <% if (op.reward > 0) { %>
+                                            <div class="font-display font-bold text-white">$<%= op.reward.toLocaleString() %></div>
+                                        <% } %>
+                                    </div>
+                                    <div class="flex-grow">
+                                        <h3 class="text-base font-semibold text-white mb-2 leading-snug"><%= op.title %></h3>
+                                        <div class="text-sm text-brand-muted mb-4"><%= op.dao %></div>
+                                    </div>
+                                    <div class="flex flex-wrap gap-1.5 mt-auto">
+                                        <% (op.tags || []).slice(0, 2).forEach(function(tag) { %>
+                                            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-1 bg-white/5 text-gray-400 rounded"><%= tag %></span>
+                                        <% }); %>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <div class="col-span-2 bento-card p-10 flex flex-col items-center justify-center text-center">
+                                <i data-lucide="compass" class="w-8 h-8 text-brand-muted mb-3"></i>
+                                <span class="text-brand-muted font-medium">No opportunities right now</span>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+
+                <!-- Event Preview Sidebar -->
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center justify-between px-2">
+                        <h2 class="font-display font-bold text-lg text-white">Upcoming Events</h2>
+                        <a href="/events" class="text-sm font-medium text-brand-muted hover:text-white transition-colors">See all</a>
+                    </div>
+                    
+                    <div class="bento-card p-4 flex flex-col gap-4">
+                        <div class="flex items-start gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group border border-transparent hover:border-white/5">
+                            <div class="w-12 h-12 rounded-lg bg-emerald-500/10 text-emerald-400 flex flex-col items-center justify-center shrink-0 border border-emerald-500/20">
+                                <span class="text-[10px] font-bold uppercase">Oct</span>
+                                <span class="text-lg font-display font-bold leading-none">12</span>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">DeFi Hackathon</h4>
+                                <p class="text-xs text-brand-muted mt-1">Virtual • Hosted by ZA</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group border border-transparent hover:border-white/5">
+                            <div class="w-12 h-12 rounded-lg bg-brand-blue/10 text-brand-blue flex flex-col items-center justify-center shrink-0 border border-brand-blue/20">
+                                <span class="text-[10px] font-bold uppercase">Oct</span>
+                                <span class="text-lg font-display font-bold leading-none">15</span>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-white group-hover:text-brand-blue transition-colors">Community Call</h4>
+                                <p class="text-xs text-brand-muted mt-1">Discord • Core Team</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group border border-transparent hover:border-white/5">
+                            <div class="w-12 h-12 rounded-lg bg-orange-500/10 text-orange-400 flex flex-col items-center justify-center shrink-0 border border-orange-500/20">
+                                <span class="text-[10px] font-bold uppercase">Oct</span>
+                                <span class="text-lg font-display font-bold leading-none">18</span>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-white group-hover:text-orange-400 transition-colors">Governance Spc</h4>
+                                <p class="text-xs text-brand-muted mt-1">Twitter Space</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
     </div>
 
-    <!-- Footer -->
-    <footer class="border-t border-white/5 py-8 mt-auto bg-brand-light/50 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex flex-col gap-3">
-                <div class="flex items-center gap-3 text-white font-display font-medium">
-                    <div class="w-10 h-10 rounded-xl bg-brand-light border border-white/5 flex items-center justify-center relative overflow-hidden group">
-                        <div class="absolute inset-0 bg-brand-blue/10 blur-md group-hover:bg-brand-purple/20 transition-colors"></div>
-                        <svg viewBox="0 0 100 100" class="w-6 h-6 relative z-10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="0.5" stroke-dasharray="2 2" class="text-brand-blue/30"/>
-                            <path d="M50 15V22M50 78V85M15 50H22M78 50H85" stroke="currentColor" stroke-width="1.5" class="text-brand-blue/50"/>
-                            <g transform="rotate(45, 50, 50)">
-                                <path d="M50 25L56 50L50 75L44 50L50 25Z" fill="url(#footer-logo-gradient)"/>
-                            </g>
-                            <defs>
-                                <linearGradient id="footer-logo-gradient" x1="50" y1="25" x2="50" y2="75" gradientUnits="userSpaceOnUse">
-                                    <stop stop-color="#0070F3"/>
-                                    <stop offset="1" stop-color="#8b5cf6"/>
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-lg font-bold tracking-tight">ZASCOUT</span>
-                        <span class="text-[8px] text-brand-muted uppercase tracking-[0.3em] -mt-1">Intelligence Platform</span>
-                    </div>
-                </div>
-                <div class="flex flex-col gap-1">
-                    <div class="text-brand-muted text-sm font-medium">Earn while you build</div>
-                    <div class="text-brand-muted/60 text-xs font-medium">
-                        © <%= new Date().getFullYear() %> Zero Authority DAO.
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flex flex-col lg:items-end gap-5 w-full lg:w-auto">
-                <div class="flex flex-wrap items-center gap-4 sm:gap-6 text-sm font-medium text-brand-muted">
-                    <a href="/mcp" class="hover:text-black transition-colors">Model Context Protocol</a>
-                    <a href="#" class="hover:text-black transition-colors">Terms</a>
-                </div>
-                <div class="flex items-center gap-4 text-brand-muted">
-                    <a href="https://x.com/zeroauthscout" target="_blank" aria-label="X (formerly Twitter)" class="w-10 h-10 rounded-full bg-black/80 border border-black/10 flex items-center justify-center hover:bg-black hover:text-white transition-all group">
-                        <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current group-hover:scale-110 transition-transform text-white" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.004 3.829H5.059z"></path></svg>
-                    </a>
-                    <a href="https://github.com/ibnmarzuk/Zascout-Dao" target="_blank" aria-label="GitHub" class="w-10 h-10 rounded-full bg-black/80 border border-black/10 flex items-center justify-center hover:bg-black hover:text-white transition-all group">
-                        <i data-lucide="github" class="w-4 h-4 group-hover:scale-110 transition-transform text-white"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Mobile Menu Toggle
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const mobileMenu = document.getElementById('mobileMenu');
-            if(mobileMenuBtn && mobileMenu) {
-                mobileMenuBtn.addEventListener('click', () => {
-                    mobileMenu.classList.toggle('hidden');
-                    const icon = mobileMenuBtn.querySelector('i');
-                    if(mobileMenu.classList.contains('hidden')) {
-                        icon.setAttribute('data-lucide', 'menu');
-                    } else {
-                        icon.setAttribute('data-lucide', 'x');
-                    }
-                    lucide.createIcons();
-                });
-            }
-
-            // Theme toggling
-            const themeToggleBtn = document.getElementById('themeToggle');
-            if(themeToggleBtn) {
-                themeToggleBtn.addEventListener('click', () => {
-                    const html = document.documentElement;
-                    html.classList.toggle('light');
-                    
-                    const isLight = html.classList.contains('light');
-                    themeToggleBtn.querySelector('.dark-icon').classList.toggle('hidden', !isLight);
-                    themeToggleBtn.querySelector('.light-icon').classList.toggle('hidden', isLight);
-                });
-            }
-
-            // Toast Notification System
-            window.showToast = function(message, type = 'success') {
-                const container = document.getElementById('toastContainer');
-                if(!container) return;
-
-                const toast = document.createElement('div');
-                toast.className = `transform translate-y-8 opacity-0 transition-all duration-300 pointer-events-auto flex items-center gap-3 glass-panel px-4 py-3 rounded-xl shadow-2xl border-white/10 backdrop-blur-xl ${type === 'success' ? 'bg-emerald-500/10' : 'bg-brand-blue/10'}`;
-                
-                const iconHtml = type === 'success' 
-                    ? `<div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center"><i data-lucide="check" class="w-4 h-4"></i></div>`
-                    : `<div class="w-8 h-8 rounded-full bg-brand-blue/20 text-brand-blue flex items-center justify-center"><i data-lucide="info" class="w-4 h-4"></i></div>`;
-                
-                toast.innerHTML = `
-                    ${iconHtml}
-                    <span class="text-sm font-medium text-white">${message}</span>
-                `;
-                
-                container.appendChild(toast);
-                lucide.createIcons();
-
-                // Animate in
-                requestAnimationFrame(() => {
-                    toast.classList.remove('translate-y-8', 'opacity-0');
-                    toast.classList.add('translate-y-0', 'opacity-100');
-                });
-
-                // Auto remove after 3s
-                setTimeout(() => {
-                    toast.classList.remove('translate-y-0', 'opacity-100');
-                    toast.classList.add('translate-y-8', 'opacity-0');
-                    setTimeout(() => toast.remove(), 300);
-                }, 3000);
-            };
-
-            // Save Task functionality via Local Storage
-            const getSavedItems = () => {
-                try {
-                    const saved = localStorage.getItem('savedItems');
-                    return saved ? JSON.parse(saved) : [];
-                } catch(e) {
-                    console.error('Failed to parse saved items', e);
-                    return [];
-                }
-            };
-
-            const setSavedItems = (items) => {
-                try {
-                    localStorage.setItem('savedItems', JSON.stringify(items));
-                    return true;
-                } catch(e) {
-                    console.error('Failed to save to localStorage', e);
-                    return false;
-                }
-            };
-
-            let savedItems = getSavedItems();
-
-            const updateBookmarkUI = (id, isSaved) => {
-                // Update cards icons
-                const cardBtns = document.querySelectorAll(`.save-bookmark-btn[data-id="${id}"]`);
-                cardBtns.forEach(btn => {
-                    const icon = btn.querySelector('.bookmark-icon');
-                    if(icon) {
-                        if(isSaved) {
-                            btn.classList.add('text-brand-purple');
-                            btn.classList.remove('text-brand-muted');
-                            icon.setAttribute('fill', 'currentColor');
-                        } else {
-                            btn.classList.remove('text-brand-purple');
-                            btn.classList.add('text-brand-muted');
-                            icon.setAttribute('fill', 'none');
-                        }
-                    }
-                });
-
-                // Update modal button if currently viewing
-                const modalBtn = document.getElementById('saveTaskBtn');
-                if(modalBtn && modalBtn.dataset.id === id) {
-                    if(isSaved) {
-                        modalBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 inline mr-1"></i> Saved';
-                        modalBtn.classList.add('saved', 'border-emerald-500/50', 'text-emerald-400', 'bg-emerald-500/10');
-                    } else {
-                        modalBtn.innerHTML = 'Save Task';
-                        modalBtn.classList.remove('saved', 'border-emerald-500/50', 'text-emerald-400', 'bg-emerald-500/10');
-                    }
-                    lucide.createIcons();
-                }
-            };
-
-            const toggleSaveTask = (id) => {
-                if(!id) return;
-                savedItems = getSavedItems();
-                const isCurrentlySaved = savedItems.includes(id);
-                
-                let newSaved = isCurrentlySaved 
-                    ? savedItems.filter(itemId => itemId !== id)
-                    : [...savedItems, id];
-                
-                if(setSavedItems(newSaved)) {
-                    savedItems = newSaved;
-                    updateBookmarkUI(id, !isCurrentlySaved);
-                    if(!isCurrentlySaved) {
-                        window.showToast('Task added to your saved catalogue');
-                    } else {
-                        window.showToast('Task removed from saved catalogue', 'info');
-                    }
-                } else {
-                    window.showToast('Failed to save task. Storage error.', 'error');
-                }
-            };
-
-            // Initialize existing saved UI
-            savedItems.forEach(id => updateBookmarkUI(id, true));
-
-            // Attach to card bookmark icons
-            document.querySelectorAll('.save-bookmark-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    toggleSaveTask(btn.dataset.id);
-                });
-            });
-
-            // Attach to modal Save button
-            const saveTaskBtn = document.getElementById('saveTaskBtn');
-            if(saveTaskBtn) {
-                saveTaskBtn.addEventListener('click', function() {
-                    const id = this.dataset.id;
-                    toggleSaveTask(id);
-                });
-            }
-
-            // Mobile filter panel toggle
-            const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
-            const filterPanel = document.getElementById('filterPanel');
-            if(toggleFiltersBtn && filterPanel) {
-                toggleFiltersBtn.addEventListener('click', () => {
-                    filterPanel.classList.toggle('hidden');
-                    filterPanel.classList.toggle('flex');
-                });
-            }
-
-            // Client-side filtering and search
-            const searchInput = document.getElementById('searchInput');
-            const typeFilter = document.getElementById('typeFilter');
-            const rewardRange = document.getElementById('rewardRange');
-            const rewardRangeVal = document.getElementById('rewardRangeVal');
-            const cards = document.querySelectorAll('.opportunity-card');
-            const hiddenEmptyState = document.getElementById('hiddenEmptyState');
-
-            if (rewardRange) {
-                rewardRange.addEventListener('input', (e) => {
-                    const val = Number(e.target.value);
-                    if (val === 0) {
-                        rewardRangeVal.textContent = '$0+';
-                    } else {
-                        rewardRangeVal.textContent = '$' + val.toLocaleString() + '+';
-                    }
-                    filterCards();
-                });
-            }
-
-            function filterCards() {
-                const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
-                const typeVal = typeFilter ? typeFilter.value.toLowerCase() : '';
-                const formatVal = rewardRange ? Number(rewardRange.value) : 0;
-                
-                let visibleCount = 0;
-                
-                cards.forEach(card => {
-                    const type = card.dataset.type;
-                    const titleText = card.dataset.title;
-                    const daoText = card.dataset.dao;
-                    const tagsText = card.dataset.tags;
-                    const rewardAmt = parseInt(card.dataset.reward, 10) || 0;
-                    
-                    const textContent = `${titleText} ${daoText} ${tagsText}`;
-                    
-                    const matchesSearch = textContent.includes(searchTerm);
-                    const matchesType = typeVal === '' || type === typeVal;
-                    
-                    let matchesReward = true;
-                    if (formatVal > 0) {
-                        matchesReward = rewardAmt >= formatVal;
-                    }
-                    
-                    if (matchesSearch && matchesType && matchesReward) {
-                        card.classList.remove('hidden');
-                        card.style.animation = 'none';
-                        card.offsetHeight; /* trigger reflow */
-                        card.style.animation = `slideUp 0.3s ease-out forwards`;
-                        visibleCount++;
-                    } else {
-                        card.classList.add('hidden');
-                    }
-                });
-                
-                if(hiddenEmptyState) {
-                    if(visibleCount === 0 && cards.length > 0) {
-                        hiddenEmptyState.classList.remove('hidden');
-                        hiddenEmptyState.classList.add('flex');
-                    } else {
-                        hiddenEmptyState.classList.add('hidden');
-                        hiddenEmptyState.classList.remove('flex');
-                    }
-                }
-            }
-
-            if(searchInput) searchInput.addEventListener('input', filterCards);
-            if(typeFilter) typeFilter.addEventListener('change', filterCards);
-
-            // AI Search feature
-            const aiSearchBtn = document.getElementById('aiSearchBtn');
-            const aiInsightPanel = document.getElementById('aiInsightPanel');
-            const closeAiPanel = document.getElementById('closeAiPanel');
-            
-            if(aiSearchBtn) {
-                aiSearchBtn.addEventListener('click', async () => {
-                    const query = searchInput ? searchInput.value.trim() : '';
-                    if(!query) {
-                        alert('Please enter a search query first to get AI insights.');
-                        return;
-                    }
-                    
-                    const originalHtml = aiSearchBtn.innerHTML;
-                    aiSearchBtn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Analyzing...';
-                    aiSearchBtn.disabled = true;
-                    
-                    try {
-                        const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-                        // get cookies to find csrf if not in meta
-                        const csrfMatch = document.cookie.match(/(?:^|;)s*_csrf=([^;]*)/);
-                        
-                        const res = await fetch('/api/ai/discover', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'CSRF-Token': `<%= csrfToken %>`
-                            },
-                            body: JSON.stringify({ query })
-                        });
-                        
-                        const data = await res.json();
-                        if(data.error) throw new Error(data.error);
-                        
-                        // Populate panel
-                        document.getElementById('aiSummary').textContent = data.summary || 'Insight generated.';
-                        
-                        const tagsDiv = document.getElementById('aiTags');
-                        if(tagsDiv && data.keywords) {
-                            tagsDiv.innerHTML = data.keywords.map(t => `<span class="px-2 py-1 bg-white/5 rounded text-xs text-white">${t}</span>`).join('');
-                        }
-                        
-                        const daosDiv = document.getElementById('aiDaos');
-                        if(daosDiv && data.daos) {
-                            daosDiv.innerHTML = data.daos.map(d => `<span class="px-2 py-1 bg-brand-purple/20 text-brand-purple rounded text-xs font-semibold">${d}</span>`).join('');
-                        }
-                        
-                        const skillsDiv = document.getElementById('aiSkills');
-                        if(skillsDiv && data.skills) {
-                            skillsDiv.innerHTML = data.skills.map(s => `<span class="px-2 py-1 bg-brand-blue/20 text-brand-blue rounded text-xs font-semibold">${s}</span>`).join('');
-                        }
-                        
-                        // Show panel
-                        if(aiInsightPanel) {
-                            aiInsightPanel.classList.remove('hidden');
-                            aiInsightPanel.classList.add('block');
-                        }
-                        
-                        // Apply filter hints
-                        if(data.filterHints) {
-                            if(data.filterHints.type && typeFilter) {
-                                typeFilter.value = data.filterHints.type;
-                                filterCards();
-                            }
-                        }
-                        lucide.createIcons();
-                    } catch (e) {
-                         alert('AI Analysis failed. See console for details.');
-                         console.error(e);
-                    } finally {
-                         aiSearchBtn.innerHTML = originalHtml;
-                         aiSearchBtn.disabled = false;
-                         lucide.createIcons();
-                    }
-                });
-            }
-            
-            if(closeAiPanel && aiInsightPanel) {
-                closeAiPanel.addEventListener('click', () => {
-                    aiInsightPanel.classList.add('hidden');
-                    aiInsightPanel.classList.remove('block');
-                });
-            }
-
-            // Opportunity Detail Modal Logic
-            const detailModal = document.getElementById('detailModal');
-            const closeDetailModal = document.getElementById('closeDetailModal');
-            
-            const openOpDetail = (card) => {
-                const id = card.dataset.id;
-                const title = card.dataset.title;
-                const dao = card.dataset.dao;
-                const type = card.dataset.type;
-                const reward = parseInt(card.dataset.reward).toLocaleString();
-                const tags = card.dataset.tags ? card.dataset.tags.split(',') : [];
-
-                document.getElementById('modalOpTitle').textContent = title;
-                document.getElementById('modalOpDao').textContent = dao;
-                document.getElementById('modalOpType').textContent = type;
-                document.getElementById('modalOpReward').textContent = `$${reward}`;
-                
-                const saveTaskBtn = document.getElementById('saveTaskBtn');
-                if (saveTaskBtn) {
-                    saveTaskBtn.dataset.id = id;
-                    const isSaved = savedItems.includes(id);
-                    if(isSaved) {
-                        saveTaskBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 inline mr-1"></i> Saved';
-                        saveTaskBtn.classList.add('saved', 'border-emerald-500/50', 'text-emerald-400', 'bg-emerald-500/10');
-                    } else {
-                        saveTaskBtn.innerHTML = 'Save Task';
-                        saveTaskBtn.classList.remove('saved', 'border-emerald-500/50', 'text-emerald-400', 'bg-emerald-500/10');
-                    }
-                }
-                
-                // Detailed descriptions based on type
-                const descriptions = {
-                    bounty: "The Zero Authority DAO is looking for a technical contributor to execute the parameters of this bounty. This task requires active participation in our Discord/Slack channels for coordination and adherence to the specified technical milestones.",
-                    grant: "This grant opportunity represents an open invitation to build core infrastructure or research for the DAO. Priority will be given to proposals that align with Zero Authority's roadmap and demonstrate long-term commitment to the ecosystem.",
-                    quest: "A recurring community quest designed to increase engagement and technical awareness. These tasks are typically low-barrier to entry but provide significant XP rewards toward steward governance roles."
-                };
-                
-                document.getElementById('modalOpDescription').textContent = descriptions[type.toLowerCase()] || descriptions.bounty;
-
-                const tagsContainer = document.getElementById('modalOpTags');
-                tagsContainer.innerHTML = tags.map(t => `
-                    <span class="px-2 py-1 bg-white/5 border border-white/5 rounded text-xs text-brand-muted">${t}</span>
-                `).join('');
-
-                detailModal.classList.remove('hidden');
-                detailModal.classList.add('flex');
-                document.body.style.overflow = 'hidden';
-                lucide.createIcons();
-            };
-
-            const hideOpDetail = () => {
-                detailModal.classList.add('hidden');
-                detailModal.classList.remove('flex');
-                document.body.style.overflow = '';
-            };
-
-            document.querySelectorAll('.view-details-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const card = e.currentTarget.closest('.opportunity-card');
-                    openOpDetail(card);
-                });
-            });
-
-            if(closeDetailModal) closeDetailModal.addEventListener('click', hideOpDetail);
-            if(detailModal) {
-                detailModal.addEventListener('click', (e) => {
-                    if (e.target === detailModal || e.target.classList.contains('modal-backdrop')) {
-                        hideOpDetail();
-                    }
-                });
-            }
-        });
-    </script>
+    <%- include('partials/footer_scripts') %>
 </body>
 </html>
