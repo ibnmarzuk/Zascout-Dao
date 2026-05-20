@@ -303,12 +303,18 @@
                                             </div>
                                         </div>
                                         
-                                        <h4 class="text-white font-bold text-xs sm:text-sm mb-0.5 sm:mb-1 group-hover:text-brand-purple transition-colors line-clamp-1">
+                                        <h4 class="text-white font-bold text-xs sm:text-sm mb-0.5 sm:mb-1 group-hover:text-brand-purple transition-colors line-clamp-1 group-hover:line-clamp-none">
                                             ${m.title}
                                         </h4>
                                         <p class="text-[10px] sm:text-xs text-brand-muted mb-2 sm:mb-3 font-mono">
                                             <span>${m.dao}</span> • <span class="text-emerald-400 font-bold">${m.reward}</span>
                                         </p>
+                                        
+                                        ${m.description ? `
+                                            <p class="text-[11px] text-brand-muted line-clamp-2 group-hover:line-clamp-none transition-all duration-300 mb-2.5 leading-relaxed">
+                                                ${m.description}
+                                            </p>
+                                        ` : ''}
                                         
                                         ${m.matchReason ? `
                                             <div class="text-[10px] sm:text-[11px] text-brand-muted bg-white/[0.02] border border-white/5 rounded-lg p-2 sm:p-2.5 mb-2.5 sm:mb-3 leading-normal">

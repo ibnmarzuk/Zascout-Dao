@@ -99,7 +99,7 @@
                             </div>
                             <div class="flex items-center gap-2">
                                 <div class="font-display font-bold text-lg text-brand-purple">$1,200 <span class="text-xs text-brand-muted font-sans font-medium">USDC</span></div>
-                                <button onclick="toggleSaveBounty(event, 'trending-1')" class="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:border-brand-purple/20 text-brand-muted hover:text-brand-purple hover:bg-brand-purple/10 transition-all pointer-events-auto" title="Save Bounty">
+                                <button onclick="toggleSaveBounty(event, 'trending-1')" class="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:border-brand-purple/20 text-brand-muted hover:text-brand-purple hover:bg-brand-purple/10 transition-all pointer-events-auto active:scale-[0.9] transform" title="Save Bounty">
                                     <i data-lucide="bookmark" class="w-3.5 h-3.5" id="save-icon-trending-1"></i>
                                 </button>
                             </div>
@@ -125,7 +125,7 @@
                             </div>
                             <div class="flex items-center gap-2">
                                 <div class="font-display font-bold text-lg text-white">$500 <span class="text-xs text-brand-muted font-sans font-medium">USDC</span></div>
-                                <button onclick="toggleSaveBounty(event, 'trending-2')" class="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:border-brand-purple/20 text-brand-muted hover:text-brand-purple hover:bg-brand-purple/10 transition-all pointer-events-auto" title="Save Bounty">
+                                <button onclick="toggleSaveBounty(event, 'trending-2')" class="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:border-brand-purple/20 text-brand-muted hover:text-brand-purple hover:bg-brand-purple/10 transition-all pointer-events-auto active:scale-[0.9] transform" title="Save Bounty">
                                     <i data-lucide="bookmark" class="w-3.5 h-3.5" id="save-icon-trending-2"></i>
                                 </button>
                             </div>
@@ -150,7 +150,7 @@
                             </div>
                             <div class="flex items-center gap-2">
                                 <div class="font-display font-bold text-lg text-white">$300 <span class="text-xs text-brand-muted font-sans font-medium">USDC</span></div>
-                                <button onclick="toggleSaveBounty(event, 'trending-3')" class="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:border-brand-purple/20 text-brand-muted hover:text-brand-purple hover:bg-brand-purple/10 transition-all pointer-events-auto" title="Save Bounty">
+                                <button onclick="toggleSaveBounty(event, 'trending-3')" class="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:border-brand-purple/20 text-brand-muted hover:text-brand-purple hover:bg-brand-purple/10 transition-all pointer-events-auto active:scale-[0.9] transform" title="Save Bounty">
                                     <i data-lucide="bookmark" class="w-3.5 h-3.5" id="save-icon-trending-3"></i>
                                 </button>
                             </div>
@@ -617,7 +617,7 @@
                                 <div class="flex items-center gap-3">
                                     <img src="${q.campaign?.avatarUrl || q.creator?.avatarUrl || 'https://ui-avatars.com/api/?name=ZA&background=random'}" class="w-10 h-10 rounded-full border border-white/10 shrink-0" referrerpolicy="no-referrer">
                                     <div>
-                                        <h3 class="text-base font-semibold text-white group-hover:text-brand-blue transition-colors line-clamp-1">${q.title}</h3>
+                                        <h3 class="text-base font-semibold text-white group-hover:text-brand-blue transition-colors line-clamp-1 group-hover:line-clamp-none">${q.title}</h3>
                                         <div class="text-xs text-brand-muted font-medium mt-0.5">${q.campaign?.name || q.creator?.username || 'ZA Scout'}</div>
                                     </div>
                                 </div>
@@ -627,13 +627,13 @@
                                         <i data-lucide="award" class="w-4 h-4 text-brand-purple shrink-0"></i>
                                         ${q.totalRep || 100} <span class="text-[10px] text-brand-muted font-sans font-medium">REP</span>
                                     </div>
-                                    <button onclick="toggleSaveBounty(event, '${q.id}')" class="p-1.5 rounded-lg hover:border-brand-purple/30 hover:text-brand-purple hover:bg-brand-purple/10 transition-all pointer-events-auto shrink-0 ${isSaved ? 'bg-brand-purple/10 border border-brand-purple/30 text-brand-purple' : 'bg-white/5 border border-white/5 text-brand-muted'}" title="Save Quest">
+                                    <button onclick="toggleSaveBounty(event, '${q.id}')" class="p-1.5 rounded-lg hover:border-brand-purple/30 hover:text-brand-purple hover:bg-brand-purple/10 transition-all pointer-events-auto shrink-0 ${isSaved ? 'bg-brand-purple/10 border border-brand-purple/30 text-brand-purple' : 'bg-white/5 border border-white/5 text-brand-muted'} active:scale-[0.9] transform" title="Save Quest">
                                         <i data-lucide="bookmark" class="w-4 h-4 ${isSaved ? 'text-brand-purple fill-[currentcolor]' : 'text-brand-muted'}" id="save-icon-${q.id}"></i>
                                     </button>
                                 </div>
                             </div>
                             
-                            <p class="text-sm text-brand-muted line-clamp-2 leading-relaxed relative z-10">${q.description || 'No description provided.'}</p>
+                            <p class="text-sm text-brand-muted line-clamp-2 group-hover:line-clamp-none transition-all duration-300 leading-relaxed relative z-10">${q.description || 'No description provided.'}</p>
                             
                             ${hasProgress ? `
                             <div class="w-full relative z-10 bg-white/[0.01] border border-white/[0.03] p-3 rounded-xl mt-1">

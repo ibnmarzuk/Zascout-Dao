@@ -5,12 +5,25 @@ ZA Scout is a premium, fully responsive dashboard designed for the Zero Authorit
 ## Key Features
 
 - **Deep Discovery Explorer:** Real-time filtering for DAO opportunities based on reward amount, asset type (Bounty, Grant, Quest), and keyword tags, featuring custom detailed overlays for high-fidelity opportunities.
-- **Ecosystem Events Calendar:** A fully responsive calendar hub featuring list grid and monthly schedules. Supports date-selection event triggers, highlighting active days, dynamic agendas, and client-side RSVP persistence using local storage.
+- **Enhanced Interactive Cards:** Quest and bounty cards now feature expansive hover behaviors to reveal description details, and all interactive buttons include active responsiveness (scaling effects) for a tactile user experience.
+- **Save & Bookmark Functionality:** Users can seamlessly toggle bookmarks on quests and bounties.
+- **Ecosystem Events Calendar:** A fully responsive calendar hub featuring monthly schedules. Supports date-selection event triggers, highlighting active days, dynamic agendas, and client-side RSVP persistence using local storage.
 - **Gemini AI Scout:** An integrated, intelligent Discovery Agent that analyzes conversational search queries to recommend live ecosystem matches, custom tailored skills, and matching reasons.
 - **Model Context Protocol (MCP):** Standardized, ready-to-use configuration guide for connecting ZA Scout directly to developers' local AI engines (Claude Desktop, Cursor, Claude Code) for automated searching and proposal drafting.
 - **Ambassador Quests Portal:** Structured progress trackers monitoring public community milestones, Discord contributions, and code submissions, detailed with contribution modals containing live linking states.
 - **Refined Mobile Layout:** Streamlined mobile navigation and dashboard interfaces designed to prevent blocking states, incorporating sleek overlay transitions, custom close indicators, and mobile-responsive action bars.
 - **Dynamic Theming:** Seamless support for Dark (Midnight OLED) and Light (High-contrast slate) views with instant system responsiveness.
+
+## Backend & API Endpoints
+
+The ZA Scout platform leverages an Express backend to serve data and proxy requests securely:
+
+- `POST /api/ai/discover`: AI-powered discovery agent for matching opportunities.
+- `GET /api/quests/fetched`: Fetches live quest data from ZA Scout.
+- `GET /api/events/fetched`: Fetches ecosystem event schedules.
+- `GET /api/gigs/fetched`: Fetches available gigs and job opportunities.
+- `GET /api/grants/fetched`: Fetches active grant programs.
+- `GET /api/v1/:resource`: Proxy endpoint for dynamic opportunity data resources.
 
 ## Tech Stack
 
@@ -71,6 +84,15 @@ ZA Scout exposes a standardized Model Context Protocol interface. Contributors c
 The project uses a specialized build pipeline:
 -   `npm run build`: Bundles `server.ts` into a standalone `dist/server.cjs` using esbuild.
 -   `npm run start`: Runs the production-optimized CommonJS server.
+
+## Roadmap
+
+We are constantly evolving ZA Scout to better serve the ecosystem. Here is a look at what's coming:
+
+### Future Milestones
+- **Q3 2026: Collaborative Workspace:** Real-time multi-user editing for proposal drafting and grant applications.
+- **Q4 2026: On-chain Verification Integration:** Direct integration with on-chain reputation stats (e.g., ENS, Gitcoin) to auto-fill contributor profiles.
+- **Q1 2027: Automated Bounty Deployment:** Tools for DAOs to deploy bounties directly from the platform via smart contract orchestration.
 
 ## License
 

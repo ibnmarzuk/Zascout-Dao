@@ -34,10 +34,10 @@
                     </p>
                     
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-6">
-                        <a href="/quests" id="hero-explore-btn" class="text-center bg-brand-blue hover:bg-opacity-95 text-black font-extrabold px-6 py-3 rounded-xl text-sm transition-all shadow-[0_0_20px_rgba(0,112,243,0.30)] flex items-center justify-center gap-2 hover:scale-[1.02] transform">
+                        <a href="/quests" id="hero-explore-btn" class="text-center bg-brand-blue hover:bg-opacity-95 text-black font-extrabold px-6 py-3 rounded-xl text-sm transition-all shadow-[0_0_20px_rgba(0,112,243,0.30)] flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transform">
                             Explore Live Quests <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </a>
-                        <a href="/ai-scout" id="hero-scout-btn" class="text-center bg-white/5 border border-white/10 hover:bg-white/10 hover:border-brand-purple/30 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all flex items-center justify-center gap-2 hover:scale-[1.02] transform">
+                        <a href="/ai-scout" id="hero-scout-btn" class="text-center bg-white/5 border border-white/10 hover:bg-white/10 hover:border-brand-purple/30 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transform">
                             <i data-lucide="cpu" class="w-4 h-4 text-brand-purple"></i> Smart Match via AI Scout
                         </a>
                     </div>
@@ -55,7 +55,7 @@
                         <p class="text-sm text-brand-muted">Try our AI Scout Assistant to find the perfect gigs matching your exact skills and experience.</p>
                     </div>
                     <div>
-                        <button class="bg-brand-purple hover:bg-purple-600 text-white rounded-lg px-6 py-2.5 text-sm font-medium transition-all shadow-[0_0_15px_rgba(139,92,246,0.3)] whitespace-nowrap">
+                        <button class="bg-brand-purple hover:bg-purple-600 text-white rounded-lg px-6 py-2.5 text-sm font-medium transition-all shadow-[0_0_15px_rgba(139,92,246,0.3)] whitespace-nowrap active:scale-[0.98]">
                             Launch AI Scout
                         </button>
                     </div>
@@ -89,14 +89,19 @@
                                             <% if (op.reward > 0) { %>
                                                 <div class="font-display font-bold text-white">$<%= op.reward.toLocaleString() %></div>
                                             <% } %>
-                                            <button onclick="toggleSaveBounty(event, '<%= op.id %>')" class="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:border-brand-purple/20 text-brand-muted hover:text-brand-purple hover:bg-brand-purple/10 transition-all cursor-pointer pointer-events-auto" title="Save Opportunity">
+                                            <button onclick="toggleSaveBounty(event, '<%= op.id %>')" class="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:border-brand-purple/20 text-brand-muted hover:text-brand-purple hover:bg-brand-purple/10 transition-all cursor-pointer pointer-events-auto active:scale-[0.9] transform" title="Save Opportunity">
                                                 <i data-lucide="bookmark" class="w-3.5 h-3.5" id="save-icon-<%= op.id %>"></i>
                                             </button>
                                         </div>
                                     </div>
                                     <div class="flex-grow">
-                                        <h3 class="text-base font-semibold text-white mb-2 leading-snug"><%= op.title %></h3>
-                                        <div class="text-sm text-brand-muted mb-4"><%= op.dao %></div>
+                                        <h3 class="text-base font-semibold text-white mb-1 leading-snug"><%= op.title %></h3>
+                                        <div class="text-xs text-brand-purple font-semibold mb-2"><%= op.dao %></div>
+                                        <% if (op.description) { %>
+                                            <p class="text-xs text-brand-muted line-clamp-2 group-hover:line-clamp-none transition-all duration-300 leading-relaxed mb-4"><%= op.description %></p>
+                                        <% } else { %>
+                                            <div class="mb-4"></div>
+                                        <% } %>
                                     </div>
                                     <div class="flex flex-wrap gap-1.5 mt-auto">
                                         <% (op.tags || []).slice(0, 2).forEach(function(tag) { %>
@@ -158,6 +163,64 @@
                 </div>
 
             </div>
+            <!-- Task Manager -->
+            <div class="bento-card p-6 border border-white/5 bg-black/40">
+                <h2 class="font-display font-bold text-lg text-white mb-4">My Tasks</h2>
+                <div class="flex gap-2 mb-4">
+                    <input type="text" id="task-input" placeholder="Add a new personal task..." class="flex-grow bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm text-white placeholder-brand-muted focus:outline-none focus:border-brand-purple/50">
+                    <button onclick="addTask()" class="bg-brand-blue hover:bg-opacity-95 text-black px-4 py-2 rounded-lg text-sm font-semibold transition-all">Add</button>
+                </div>
+                <ul id="task-list" class="space-y-2">
+                    <!-- Tasks will be injected here -->
+                </ul>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', loadTasks);
+
+                function loadTasks() {
+                    const tasks = JSON.parse(localStorage.getItem('userTasks') || '[]');
+                    const list = document.getElementById('task-list');
+                    list.innerHTML = '';
+                    tasks.forEach((task, index) => {
+                        const li = document.createElement('li');
+                        li.className = 'flex items-center gap-3 bg-white/[0.02] p-3 rounded-lg border border-white/5';
+                        li.innerHTML = `
+                            <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${index})" class="accent-brand-blue">
+                            <span class="${task.completed ? 'line-through text-brand-muted' : 'text-white'} text-sm flex-grow">${task.text}</span>
+                            <button onclick="deleteTask(${index})" class="text-brand-muted hover:text-red-400">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        `;
+                        list.appendChild(li);
+                    });
+                    // Re-render icons if needed (might not work well without re-initializing icons if they are not in footer scripts)
+                }
+
+                function addTask() {
+                    const input = document.getElementById('task-input');
+                    if (!input.value.trim()) return;
+                    const tasks = JSON.parse(localStorage.getItem('userTasks') || '[]');
+                    tasks.push({ text: input.value, completed: false });
+                    localStorage.setItem('userTasks', JSON.stringify(tasks));
+                    input.value = '';
+                    loadTasks();
+                }
+
+                function toggleTask(index) {
+                    const tasks = JSON.parse(localStorage.getItem('userTasks') || '[]');
+                    tasks[index].completed = !tasks[index].completed;
+                    localStorage.setItem('userTasks', JSON.stringify(tasks));
+                    loadTasks();
+                }
+
+                function deleteTask(index) {
+                    const tasks = JSON.parse(localStorage.getItem('userTasks') || '[]');
+                    tasks.splice(index, 1);
+                    localStorage.setItem('userTasks', JSON.stringify(tasks));
+                    loadTasks();
+                }
+            </script>
         </main>
     </div>
 

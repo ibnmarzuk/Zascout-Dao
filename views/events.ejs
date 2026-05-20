@@ -18,10 +18,10 @@
                     <p class="text-brand-muted text-base max-w-xl">Discover hackathons, Twitter Spaces, community calls, and workshops across the ecosystem.</p>
                 </div>
                 <div class="flex gap-3 bg-white/5 p-1 rounded-xl border border-white/5">
-                    <button id="viewGridBtn" onclick="switchView('grid')" class="bg-brand-blue/10 border border-brand-blue/20 text-brand-blue px-4 py-2 text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2 hover:bg-brand-blue/15 cursor-pointer">
+                    <button id="viewGridBtn" onclick="switchView('grid')" class="bg-brand-blue/10 border border-brand-blue/20 text-brand-blue px-4 py-2 text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2 hover:bg-brand-blue/15 cursor-pointer active:scale-[0.98]">
                         <i data-lucide="layout-grid" class="w-4 h-4"></i> Grid View
                     </button>
-                    <button id="viewCalendarBtn" onclick="switchView('calendar')" class="text-brand-muted hover:text-white px-4 py-2 text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2 hover:bg-white/5 cursor-pointer">
+                    <button id="viewCalendarBtn" onclick="switchView('calendar')" class="text-brand-muted hover:text-white px-4 py-2 text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2 hover:bg-white/5 cursor-pointer active:scale-[0.98]">
                         <i data-lucide="calendar" class="w-4 h-4"></i> Calendar View
                     </button>
                 </div>
@@ -51,10 +51,10 @@
                         </div>
                     </div>
                     <div class="shrink-0 flex flex-col gap-3 min-w-[200px]">
-                        <button onclick="event.stopPropagation(); switchView('calendar'); selectCalendarDate(2026, 4, 15);" class="w-full bg-white text-black hover:bg-gray-200 py-3 rounded-xl font-bold transition-all text-center text-sm shadow-md cursor-pointer">
+                        <button onclick="event.stopPropagation(); switchView('calendar'); selectCalendarDate(2026, 4, 15);" class="w-full bg-white text-black hover:bg-gray-200 py-3 rounded-xl font-bold transition-all text-center text-sm shadow-md cursor-pointer active:scale-[0.98]">
                             Register Now
                         </button>
-                        <button onclick="event.stopPropagation(); switchView('calendar'); selectCalendarDate(2026, 4, 15);" class="w-full bg-white/5 border border-white/5 hover:bg-white/10 text-white py-3 rounded-xl font-bold transition-all text-center text-sm cursor-pointer">
+                        <button onclick="event.stopPropagation(); switchView('calendar'); selectCalendarDate(2026, 4, 15);" class="w-full bg-white/5 border border-white/5 hover:bg-white/10 text-white py-3 rounded-xl font-bold transition-all text-center text-sm cursor-pointer active:scale-[0.98]">
                             View Details
                         </button>
             <!-- Layout View Containers -->
@@ -90,7 +90,7 @@
                         </div>
 
                         <!-- Days label row -->
-                        <div class="grid grid-cols-7 text-center text-[10px] font-mono font-bold uppercase tracking-wider text-brand-muted mb-4 border-b border-white/5 pb-2">
+                        <div class="grid grid-cols-7 text-center text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-brand-muted mb-4 border-b border-white/5 pb-2">
                             <div class="text-red-400">Sun</div>
                             <div>Mon</div>
                             <div>Tue</div>
@@ -107,7 +107,7 @@
                     </div>
 
                     <!-- Sidepanel Details Column -->
-                    <div class="bento-card p-6 border border-white/5 bg-black/45 flex flex-col justify-between">
+                    <div id="agendaSidebar" class="bento-card p-6 border border-white/5 bg-black/45 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between border-b border-white/5 pb-4 mb-5">
                                 <div class="flex flex-col min-w-0">
@@ -322,6 +322,9 @@
                     selectedMonth = calendarMonth;
                     selectedDay = day;
                     renderCalendar();
+                    if (window.innerWidth < 1024) {
+                        document.getElementById('agendaSidebar')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
                 };
 
                 let borderClass = "border-white/5 bg-white/[0.02]";
@@ -332,11 +335,11 @@
                     textClass = "text-brand-blue font-bold";
                 }
                 if (isSelected) {
-                    borderClass = "border-brand-purple bg-brand-purple/10 scale-102 shadow-[0_0_12px_rgba(139,92,246,0.25)]";
-                    textClass = "text-brand-purple font-bold";
+                    borderClass = "border-brand-purple bg-brand-purple/20 ring-2 ring-brand-purple ring-offset-2 ring-offset-brand-dark shadow-[0_0_15px_rgba(139,92,246,0.3)] z-10";
+                    textClass = "text-white font-bold";
                 }
 
-                cell.className = `p-2 min-h-[52px] sm:min-h-[58px] border ${borderClass} rounded-xl hover:border-brand-purple/35 transition-all text-center flex flex-col justify-between items-center group relative cursor-pointer`;
+                cell.className = `p-1 sm:p-2 min-h-[52px] sm:min-h-[64px] border ${borderClass} rounded-xl hover:border-brand-purple/35 transition-all text-center flex flex-col justify-start items-center gap-1 group relative cursor-pointer`;
 
                 // Day numbering
                 const numSpan = document.createElement('span');
@@ -428,7 +431,7 @@
                         <span class="text-[10px] text-brand-muted font-mono flex items-center gap-1">
                             <i data-lucide="building-2" class="w-2.5 h-2.5"></i> ${evt.host}
                         </span>
-                        <button onclick="toggleRSVP('${evt.id}')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${isRsvped ? 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20' : 'bg-white hover:bg-gray-200 text-black shadow-md'}">
+                        <button onclick="toggleRSVP('${evt.id}')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${isRsvped ? 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20' : 'bg-white hover:bg-gray-200 text-black shadow-md'} active:scale-[0.98]">
                             <i data-lucide="${isRsvped ? 'check-circle' : 'plus-circle'}" class="w-3.5 h-3.5"></i>
                             ${isRsvped ? 'RSVP\'d!' : 'RSVP Now'}
                         </button>
@@ -510,7 +513,7 @@
                         </div>
 
                         <div class="mt-auto pt-3 border-t border-white/5">
-                            <button onclick="event.stopPropagation(); switchView('calendar'); selectCalendarDate(${event.year}, ${event.month}, ${event.day});" class="w-full bg-white/5 hover:bg-brand-purple/10 border border-white/5 hover:border-brand-purple/20 text-white hover:text-brand-purple py-2.5 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2">
+                            <button onclick="event.stopPropagation(); switchView('calendar'); selectCalendarDate(${event.year}, ${event.month}, ${event.day});" class="w-full bg-white/5 hover:bg-brand-purple/10 border border-white/5 hover:border-brand-purple/20 text-white hover:text-brand-purple py-2.5 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2 active:scale-[0.98]">
                                 <i data-lucide="calendar-check" class="w-4 h-4"></i> Schedule details
                             </button>
                         </div>
