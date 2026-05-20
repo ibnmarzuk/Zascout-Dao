@@ -142,6 +142,43 @@ app.use(express.static(path.join(process.cwd(), "public")));
     }
   });
 
+  // Zero Authority Live Quests API
+  app.get("/api/quests/fetched", async (req, res) => {
+    try {
+      const response = await axios.get("https://zeroauthoritydao.com/api/quest/all", {
+        headers: {
+          "Authorization": `Bearer za_1a77fc60f98dafd7993383ddacce5bc3769e4db86c53fca1df1d108344cf1244`
+        },
+        timeout: 5000
+      });
+      
+      const allQuests = response.data?.data || [];
+      
+      // Pagination parameters
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 3;
+      
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+      
+      const paginatedQuests = allQuests.slice(startIndex, endIndex);
+      
+      res.json({
+        success: true,
+        data: paginatedQuests,
+        pagination: {
+          page,
+          limit,
+          totalItems: allQuests.length,
+          totalPages: Math.ceil(allQuests.length / limit)
+        }
+      });
+    } catch (error: any) {
+      console.error("Error fetching quests from Zero Authority:", error.message);
+      res.status(500).json({ success: false, error: error.message || "Unknown error" });
+    }
+  });
+
   // Zero Authority Bounties API
   app.get("/api/v1/:resource", async (req, res) => {
     const { resource } = req.params;
