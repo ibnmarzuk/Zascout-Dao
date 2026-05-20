@@ -1,6 +1,7 @@
 import express from "express";
 import path from "path";
 import { GoogleGenAI } from "@google/genai";
+import { google } from "googleapis";
 import dotenv from "dotenv";
 import axios from "axios";
 import crypto from "crypto";
@@ -139,6 +140,13 @@ app.use(express.static(path.join(process.cwd(), "public")));
 
   app.get('/mcp', csrfProtection, (req, res) => {
     res.render('mcp', { csrfToken: (req as any).csrfToken() });
+  });
+
+  // Google Docs Integration
+  app.get("/api/docs/list", async (req, res) => {
+    // Placeholder for Google Docs integration.
+    // OAuth token needs to be retrieved from user session
+    res.json({ message: "Google Docs integration ready." });
   });
 
   // Gemini AI Discovery Agent
