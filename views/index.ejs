@@ -164,11 +164,11 @@
 
             </div>
             <!-- Task Manager -->
-            <div class="bento-card p-6 border border-white/5 bg-black/40">
+            <div class="bento-card p-6 border border-white/5 bg-black/40 mb-10">
                 <h2 class="font-display font-bold text-lg text-white mb-4">My Tasks</h2>
                 <div class="flex gap-2 mb-4">
-                    <input type="text" id="task-input" placeholder="Add a new personal task..." class="flex-grow bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm text-white placeholder-brand-muted focus:outline-none focus:border-brand-purple/50">
-                    <button onclick="addTask()" class="bg-brand-blue hover:bg-opacity-95 text-black px-4 py-2 rounded-lg text-sm font-semibold transition-all">Add</button>
+                    <input type="text" id="task-input" placeholder="Add a new personal task..." class="flex-grow bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm text-white placeholder-brand-muted focus:outline-none focus:border-brand-purple/50 transition-colors">
+                    <button onclick="addTask()" class="bg-brand-blue hover:bg-opacity-95 text-black px-6 py-2 rounded-lg text-sm font-semibold transition-all">Add Task</button>
                 </div>
                 <ul id="task-list" class="space-y-2">
                     <!-- Tasks will be injected here -->
@@ -184,17 +184,19 @@
                     list.innerHTML = '';
                     tasks.forEach((task, index) => {
                         const li = document.createElement('li');
-                        li.className = 'flex items-center gap-3 bg-white/[0.02] p-3 rounded-lg border border-white/5';
+                        li.className = 'flex items-center gap-3 bg-white/[0.02] p-3 rounded-lg border border-white/5 hover:bg-white/[0.04] transition-colors';
                         li.innerHTML = `
-                            <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${index})" class="accent-brand-blue">
-                            <span class="${task.completed ? 'line-through text-brand-muted' : 'text-white'} text-sm flex-grow">${task.text}</span>
-                            <button onclick="deleteTask(${index})" class="text-brand-muted hover:text-red-400">
+                            <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${index})" class="w-4 h-4 rounded border-white/10 bg-white/5 accent-brand-purple cursor-pointer">
+                            <span class="${task.completed ? 'line-through text-brand-muted' : 'text-white'} text-sm flex-grow transition-all">${task.text}</span>
+                            <button onclick="deleteTask(${index})" class="text-brand-muted hover:text-red-400 transition-colors">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i>
                             </button>
                         `;
                         list.appendChild(li);
                     });
-                    // Re-render icons if needed (might not work well without re-initializing icons if they are not in footer scripts)
+                    if (window.lucide) {
+                        window.lucide.createIcons();
+                    }
                 }
 
                 function addTask() {
@@ -205,6 +207,7 @@
                     localStorage.setItem('userTasks', JSON.stringify(tasks));
                     input.value = '';
                     loadTasks();
+                    showGlobalToastNotification("Task Added", "Your task was added to the list.", "check-circle");
                 }
 
                 function toggleTask(index) {
@@ -212,6 +215,9 @@
                     tasks[index].completed = !tasks[index].completed;
                     localStorage.setItem('userTasks', JSON.stringify(tasks));
                     loadTasks();
+                    if (tasks[index].completed) {
+                        showGlobalToastNotification("Task Completed", "Great job staying organized!", "check-circle");
+                    }
                 }
 
                 function deleteTask(index) {
@@ -219,6 +225,7 @@
                     tasks.splice(index, 1);
                     localStorage.setItem('userTasks', JSON.stringify(tasks));
                     loadTasks();
+                    showGlobalToastNotification("Task Removed", "Task was deleted.", "trash-2");
                 }
             </script>
         </main>

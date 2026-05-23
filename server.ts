@@ -149,6 +149,18 @@ app.use(express.static(path.join(process.cwd(), "public")));
     res.json({ message: "Google Docs integration ready." });
   });
 
+  if (process.env.NODE_ENV !== "production") {
+    import("vite").then(async ({ createServer: createViteServer }) => {
+      const vite = await createViteServer({
+        server: { middlewareMode: true },
+        appType: "custom",
+      });
+      app.use(vite.middlewares);
+    });
+  } else {
+    app.use(express.static(path.join(process.cwd(), "dist/client")));
+  }
+
   // Gemini AI Discovery Agent
   app.post("/api/ai/discover", csrfProtection, async (req, res) => {
     try {

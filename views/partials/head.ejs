@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><%= typeof title !== 'undefined' ? title + ' | ZA Scout' : 'ZA Scout | Ecosystem Contributor Hub' %></title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <script>
@@ -12,7 +12,7 @@
             extend: {
                 fontFamily: {
                     sans: ['Inter', 'sans-serif'],
-                    display: ['Space Grotesk', 'sans-serif'],
+                    display: ['Sora', 'sans-serif'],
                 },
                 colors: {
                     brand: {
@@ -47,6 +47,10 @@
     }
 </script>
 <style>
+    html {
+        scroll-behavior: smooth;
+    }
+
     html.light {
         --bg-dark: #f8fafc;
         --bg-light: #ffffff;
@@ -65,42 +69,59 @@
     }
     
     .glass-panel {
-        background: rgba(15, 23, 42, 0.7);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 16px;
     }
     
     html.light .glass-panel {
-        background: rgba(255, 255, 255, 0.85);
-        border-color: rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.7);
+        border-color: rgba(0, 0, 0, 0.05);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
     }
 
     .bento-card {
         background: rgba(15, 23, 42, 0.4);
-        border: 1px solid rgba(255,255,255,0.06);
-        border-radius: 12px;
-        transition: all 0.2s ease-in-out;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     }
     
     html.light .bento-card {
-        background: rgba(255,255,255,0.9);
-        border-color: rgba(0,0,0,0.1);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        background: rgba(255, 255, 255, 0.9);
+        border-color: rgba(0, 0, 0, 0.05);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     }
 
     .bento-card:hover {
-        border-color: rgba(255,255,255,0.12);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px -10px rgba(0,0,0,0.3);
+        border-color: rgba(139, 92, 246, 0.3);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px -10px rgba(139, 92, 246, 0.2);
     }
     
     html.light .bento-card:hover {
-        border-color: rgba(0,0,0,0.15);
-        box-shadow: 0 8px 24px -10px rgba(0,0,0,0.08);
+        border-color: rgba(139, 92, 246, 0.2);
+        box-shadow: 0 12px 30px -10px rgba(139, 92, 246, 0.15);
+    }
+
+    button {
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    button:active {
+        transform: scale(0.97) !important;
+    }
+
+    button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
     }
 
     .gradient-text {

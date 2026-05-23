@@ -447,50 +447,19 @@
     });
 
     // --- GLOBAL TOAST NOTIFICATIONS CENTER ---
-    function showGlobalToastNotification(title, message, iconType = "check-circle") {
-        const container = document.getElementById('toast-container');
-        if (!container) return;
-        
-        const toast = document.createElement('div');
-        toast.className = `pointer-events-auto flex items-center gap-3 bg-brand-dark/95 backdrop-blur-md border-l-4 border-brand-purple shadow-[0_4px_30px_rgba(139,92,246,0.25)] text-white p-4 rounded-xl border border-white/10 min-w-[300px] max-w-sm transition-all duration-300 transform translate-y-10 opacity-0 relative overflow-hidden`;
-        
-        let colorTheme = "text-brand-purple bg-brand-purple/10 border-brand-purple/20";
-        if (iconType === 'trash') {
-            colorTheme = "text-red-400 bg-red-400/10 border-red-400/20";
-            iconType = "trash-2";
-        } else if (iconType === 'bookmark-check') {
-            colorTheme = "text-brand-purple bg-brand-purple/10 border-brand-purple/20";
-        } else if (iconType === 'bell-off') {
-            colorTheme = "text-yellow-400 bg-yellow-400/10 border-yellow-400/20";
+    function showGlobalToastNotification(title, message, iconType = "info") {
+        if (window.reactToast) {
+            const description = message;
+            if (iconType === 'trash' || iconType === 'trash-2') {
+                window.reactToast.error(title, { description });
+            } else if (iconType === 'bookmark-check' || iconType === 'check-circle') {
+                window.reactToast.success(title, { description });
+            } else if (iconType === 'bell-off') {
+                window.reactToast.warning(title, { description });
+            } else {
+                window.reactToast.info(title, { description });
+            }
         }
-        
-        toast.innerHTML = `
-            <div class="absolute top-0 right-0 w-24 h-24 bg-brand-purple/5 blur-xl -mr-8 -mt-8 rounded-full"></div>
-            <div class="p-1 px-1.5 rounded-lg ${colorTheme} shrink-0 relative z-10">
-                <i data-lucide="${iconType}" class="w-5 h-5"></i>
-            </div>
-            <div class="flex-grow relative z-10">
-                <h4 class="text-sm font-bold text-white">${title}</h4>
-                <p class="text-xs text-brand-muted mt-0.5 leading-snug">${message}</p>
-            </div>
-            <button onclick="this.parentElement.remove()" class="text-brand-muted hover:text-white transition-colors pl-2 shrink-0 relative z-10">
-                <i data-lucide="x" class="w-4 h-4"></i>
-            </button>
-        `;
-        
-        container.appendChild(toast);
-        lucide.createIcons();
-        
-        setTimeout(() => {
-            toast.classList.remove('translate-y-10', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
-        }, 10);
-        
-        setTimeout(() => {
-            toast.classList.remove('translate-y-0', 'opacity-100');
-            toast.classList.add('translate-y-10', 'opacity-0');
-            setTimeout(() => toast.remove(), 300);
-        }, 4500);
     }
 
     // --- REUSABLE GLOBAL BOUNTY DETAILS POPUP MODAL ---
@@ -651,3 +620,9 @@
         showGlobalToastNotification("Application Initiated", `Your context proposal for "${title}" of Web3 contributors has been generated!`, "check-circle");
     }
 </script>
+
+<!-- Global React Toaster -->
+<script type="module">
+    import "vite/modulepreload-polyfill";
+</script>
+<script type="module" src="/src/client-entry.tsx"></script>
