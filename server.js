@@ -88,15 +88,21 @@ app.use(errorHandler);
 async function start() {
   try {
     await connectDB();
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`✅ ZAScout DAO running on port ${PORT}`);
-      console.log(` Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(` ZA DAO API: ${process.env.ZADAO_API_BASE_URL}`);
-    });
+    if (!process.env.VERCEL) {
+      app.listen(PORT, "0.0.0.0", () => {
+        console.log(`✅ ZAScout DAO running on port ${PORT}`);
+        console.log(` Environment: ${process.env.NODE_ENV || 'development'}`);
+        console.log(` ZA DAO API: ${process.env.ZADAO_API_BASE_URL}`);
+      });
+    }
   } catch (err) {
     console.error('❌ Failed to start server:', err.message);
-    process.exit(1);
+    if (!process.env.VERCEL) {
+      process.exit(1);
+    }
   }
 }
 
 start();
+
+module.exports = app;
