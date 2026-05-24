@@ -1,5 +1,12 @@
 require('dotenv').config();
 
+// Fix malformed environment variables where key is duplicated, e.g., MONGODB_URI=MONGODB_URI=...
+for (const key in process.env) {
+  if (typeof process.env[key] === 'string' && process.env[key].startsWith(`${key}=`)) {
+    process.env[key] = process.env[key].substring(key.length + 1).trim();
+  }
+}
+
 // Validate required environment variables before anything else
 const requiredEnvVars = ['GEMINI_API_KEY'];
 const missing = requiredEnvVars.filter(v => !process.env[v]);

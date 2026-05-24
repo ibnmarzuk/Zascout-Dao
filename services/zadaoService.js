@@ -2,8 +2,29 @@ const axios = require('axios');
 const NodeCache = require('node-cache');
 const cache = new NodeCache({ stdTTL: parseInt(process.env.CACHE_TTL_SECONDS) || 300 });
 
+function validateConfig() {
+  const baseUrl = process.env.ZADAO_API_BASE_URL;
+  const apiKey = process.env.ZADAO_API_KEY;
+
+  if (!baseUrl || !/^https?:\/\//.test(baseUrl)) {
+    console.error('\n[ZADao] ERROR: ZADAO_API_BASE_URL is missing or malformed. Please set a valid URL (e.g. https://zeroauthoritydao.com/api) in your environment variables.\n');
+  }
+  
+  if (!apiKey || apiKey.trim() === '') {
+    console.error('\n[ZADao] ERROR: ZADAO_API_KEY is missing or malformed. Please set your API key in the environment variables.\n');
+  }
+}
+
+validateConfig();
+
+const rawBaseUrl = process.env.ZADAO_API_BASE_URL || 'https://zeroauthoritydao.com/api';
+let cleanBaseUrl = rawBaseUrl;
+if (typeof cleanBaseUrl === 'string') {
+  cleanBaseUrl = cleanBaseUrl.replace(/^ZADAO_API_BASE_URL=/, '').replace(/^['"]|['"]$/g, '').trim().replace(/\/+$/, '');
+}
+
 const zadaoClient = axios.create({
-  baseURL: process.env.ZADAO_API_BASE_URL || 'https://zeroauthoritydao.com/api',
+  baseURL: cleanBaseUrl,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

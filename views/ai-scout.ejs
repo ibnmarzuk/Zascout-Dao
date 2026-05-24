@@ -63,7 +63,7 @@
                         </div>
                     </div>
  
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 w-full max-w-2xl mb-4 sm:mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3 w-full max-w-2xl mb-4 sm:mb-6">
                         <button class="prompt-suggestion text-left p-3.5 sm:p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-brand-purple/30 transition-all group">
                             <span class="block text-xs sm:text-sm font-semibold text-white mb-1 group-hover:text-brand-purple transition-colors">"Find frontend DAO gigs"</span>
                             <span class="block text-[10px] sm:text-xs text-brand-muted">React, Web3, and UI bounties</span>
@@ -91,7 +91,7 @@
                             </h3>
                             <span class="text-[9px] sm:text-[10px] text-brand-muted font-mono" id="savedCountLabel">0 saved</span>
                         </div>
-                        <div id="savedItemsList" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 max-h-36 sm:max-h-48 overflow-y-auto custom-scrollbar pr-1">
+                        <div id="savedItemsList" class="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3 max-h-36 sm:max-h-48 overflow-y-auto custom-scrollbar pr-1">
                             <!-- populated dynamically -->
                         </div>
                     </div>
@@ -272,7 +272,7 @@
             
             if (matches.length > 0) {
                 cardsHtml = `
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-3 sm:mt-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mt-3 sm:mt-4">
                         ${matches.map((m) => {
                             const isSaved = getSavedBounties().includes(m.id);
                             const cardId = `bounty-card-${m.id}`;
@@ -424,6 +424,14 @@
         
         window.addEventListener('DOMContentLoaded', () => {
             loadScoutSavedDashboard();
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const q = urlParams.get('q');
+            if (q) {
+                aiInput.value = q;
+                setTimeout(() => chatForm.dispatchEvent(new Event('submit')), 100);
+                window.history.replaceState({}, '', '/ai-scout');
+            }
         });
     </script>
 </body>

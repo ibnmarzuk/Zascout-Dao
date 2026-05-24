@@ -44,6 +44,22 @@ router.get('/v1/:resource', async (req, res) => {
 // AI Scout
 router.post('/ai/discover', aiController.discover);
 
+const SearchHistory = require('../models/SearchHistory');
+
+router.get('/ai/trending', async (req, res) => {
+  try {
+    const trending = await SearchHistory.aggregate([
+      { $match: { success: true } },
+      { $group: { _id: { $toLower: "$prompt" }, count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+      { $limit: 8 }
+    ]);
+    res.json({ success: true, data: trending.map(t => t._id) });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // Health
 router.get('/health', async (req, res) => {
   const zadaoStatus = await zadaoService.pingAPI();

@@ -621,6 +621,127 @@
     }
 </script>
 
+<!-- Floating Action Button for AI Scout -->
+<div class="fixed bottom-6 right-6 z-50">
+    <button id="fab-scout-btn" class="w-14 h-14 bg-brand-purple hover:bg-purple-600 text-white rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(139,92,246,0.3)] transition-all transform hover:scale-110 active:scale-95 group">
+        <i data-lucide="sparkles" class="w-6 h-6 group-hover:animate-pulse"></i>
+    </button>
+</div>
+
+<!-- Scout Overlay Modal -->
+<div id="fab-scout-modal" class="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-0 md:p-4 bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+    <div id="fab-scout-content" class="w-full max-w-lg bg-brand-dark sm:rounded-3xl border-t sm:border border-white/10 shadow-[0_-10px_50px_rgba(139,92,246,0.15)] sm:shadow-[0_0_50px_rgba(139,92,246,0.15)] transform translate-y-full sm:translate-y-10 sm:scale-95 transition-all duration-300 flex flex-col max-h-[90vh]">
+        
+        <div class="p-6 pb-4 border-b border-white/5 relative">
+            <button id="close-fab-modal" class="absolute top-6 right-6 text-brand-muted hover:text-white transition-colors bg-white/5 p-1.5 rounded-full">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-full bg-brand-purple/10 border border-brand-purple/20 text-brand-purple flex items-center justify-center">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-display font-bold text-white">AI Scout</h3>
+                    <p class="text-xs text-brand-muted">Smart Match Assistant</p>
+                </div>
+            </div>
+            
+            <div class="relative">
+                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-brand-muted"></i>
+                <input type="text" id="fab-scout-input" autocomplete="off" placeholder="e.g. Solidity developer looking for audits..." class="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 py-4 text-sm text-white placeholder-brand-muted focus:outline-none focus:border-brand-purple/50 focus:bg-white/10 transition-all font-medium shadow-inner">
+            </div>
+        </div>
+        
+        <div class="p-6 overflow-y-auto w-full max-h-[40vh]" id="fab-scout-trending">
+            <h4 class="text-xs font-bold text-brand-muted uppercase tracking-wider mb-4 flex items-center gap-2">
+                <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Trending Searches
+            </h4>
+            <div class="flex flex-wrap gap-2" id="trending-tags-container">
+                <div class="animate-pulse flex gap-2">
+                    <div class="h-8 w-24 bg-white/5 rounded-lg"></div>
+                    <div class="h-8 w-32 bg-white/5 rounded-lg"></div>
+                    <div class="h-8 w-20 bg-white/5 rounded-lg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const fab = document.getElementById('fab-scout-btn');
+        const modal = document.getElementById('fab-scout-modal');
+        const content = document.getElementById('fab-scout-content');
+        const closeBtn = document.getElementById('close-fab-modal');
+        const input = document.getElementById('fab-scout-input');
+        const trendingContainer = document.getElementById('trending-tags-container');
+        
+        let loadedTrending = false;
+
+        function openFabScout() {
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            content.classList.remove('translate-y-full', 'sm:translate-y-10', 'sm:scale-95');
+            setTimeout(() => input.focus(), 300);
+            
+            if (!loadedTrending) {
+                fetchTrending();
+            }
+        }
+        
+        function closeFabScout() {
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            content.classList.add('translate-y-full', 'sm:translate-y-10', 'sm:scale-95');
+            input.value = '';
+        }
+
+        if (fab) fab.addEventListener('click', openFabScout);
+        if (closeBtn) closeBtn.addEventListener('click', closeFabScout);
+        if (modal) modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeFabScout();
+        });
+        
+        async function fetchTrending() {
+            try {
+                const res = await fetch('/api/ai/trending');
+                const data = await res.json();
+                if (data.success && data.data && data.data.length > 0) {
+                    trendingContainer.innerHTML = data.data.map(t => 
+                        '<button class="trending-tag px-3 py-1.5 bg-white/5 border border-white/5 hover:border-brand-purple/30 hover:bg-brand-purple/10 text-brand-muted hover:text-brand-purple rounded-xl text-xs transition-colors cursor-pointer text-left focus:outline-none">' + escapeHtml(t) + '</button>'
+                    ).join('');
+                    
+                    document.querySelectorAll('.trending-tag').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            window.location.href = '/ai-scout?q=' + encodeURIComponent(btn.textContent.trim());
+                        });
+                    });
+                } else {
+                    trendingContainer.innerHTML = '<span class="text-xs text-brand-muted">No trending searches found yet. Be the first!</span>';
+                }
+                loadedTrending = true;
+            } catch (err) {
+                trendingContainer.innerHTML = '<span class="text-xs text-red-400">Failed to load trending.</span>';
+            }
+        }
+
+        if (input) {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && input.value.trim()) {
+                    window.location.href = '/ai-scout?q=' + encodeURIComponent(input.value.trim());
+                }
+            });
+        }
+        
+        function escapeHtml(unsafe) {
+            return unsafe
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+         }
+    });
+</script>
+
 <!-- Global React Toaster -->
 <script src="/client-entry.bundle.js"></script>
 <script src="/js/wallet.js"></script>
