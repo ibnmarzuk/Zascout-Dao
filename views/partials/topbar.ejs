@@ -64,9 +64,18 @@
 
                 <div class="h-6 w-px bg-white/10 mx-1 hidden sm:block"></div>
                 
-                <button class="hidden sm:flex items-center gap-2 bg-white text-black hover:bg-gray-200 px-4 py-1.5 rounded-full text-sm font-medium transition-all shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:scale-105 active:scale-95">
-                    Connect Wallet
-                </button>
+                <!-- Wallet connection UI -->
+                <div class="wallet-wrapper flex items-center gap-2">
+                    <span id="wallet-error" class="hidden text-xs text-red-500 absolute -bottom-6 right-0 whitespace-nowrap" role="alert"></span>
+                    <span id="wallet-status" class="w-2 h-2 rounded-full bg-brand-muted hidden online:bg-green-500" title="Wallet not connected"></span>
+                    <button id="wallet-btn" class="hidden sm:flex items-center gap-2 bg-white text-black hover:bg-gray-200 px-4 py-1.5 rounded-full text-sm font-medium transition-all shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:scale-105 active:scale-95" aria-label="Connect MetaMask wallet">
+                        Connect Wallet
+                    </button>
+                    <button id="wallet-disconnect" class="hidden text-brand-muted hover:text-white px-2 text-xs" style="display:none">
+                        Disconnect
+                    </button>
+                    <span id="wallet-address" class="hidden text-xs text-brand-muted"></span>
+                </div>
             </div>
         </div>
     </div>

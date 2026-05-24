@@ -183,33 +183,41 @@
 
                 <!-- Live Dynamic Quest List Container -->
                 <div id="quest-list-container" class="grid grid-cols-1 gap-4">
-                    <!-- Loaded dynamically via client-side fetch -->
-                </div>
-
-                <!-- Custom Skeleton Loading state -->
-                <div id="quest-skeleton-container" class="grid grid-cols-1 gap-4 hidden">
-                    <% for(let i = 0; i < 3; i++) { %>
-                        <div class="bento-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-pulse">
-                            <div class="flex items-start gap-4 flex-grow">
-                                <div class="w-10 h-10 rounded-full bg-white/5 shrink-0 hidden sm:flex"></div>
-                                <div class="flex-grow space-y-2.5">
-                                    <div class="h-4 bg-white/10 rounded w-1/3"></div>
-                                    <div class="h-3 bg-white/5 rounded w-1/4"></div>
-                                    <div class="h-3 bg-white/5 rounded w-1/2"></div>
+                    <% if (quests && quests.length > 0) { %>
+                        <% quests.forEach(function(q) { %>
+                            <div class="bento-card p-4 sm:p-5 flex flex-col gap-4 group hover:bg-white/[0.02] relative overflow-hidden transition-all duration-300">
+                                <div class="absolute top-0 right-0 w-32 h-32 bg-brand-blue/5 blur-3xl -mr-12 -mt-12 rounded-full"></div>
+                                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10 w-full">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                                            <i data-lucide="compass" class="w-5 h-5 text-brand-muted"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-base font-semibold text-white group-hover:text-brand-blue transition-colors line-clamp-1"><%= q.title || q.name || 'Untitled Quest' %></h3>
+                                            <div class="text-xs text-brand-muted font-medium mt-0.5"><%= (q.campaign && q.campaign.name) || (q.creator && q.creator.username) || 'ZA Scout' %></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center gap-3 shrink-0">
+                                        <div class="font-display font-bold text-base text-brand-purple flex items-center gap-1">
+                                            <i data-lucide="award" class="w-4 h-4 text-brand-purple shrink-0"></i>
+                                            <%= q.reward || q.totalRep || 100 %> <span class="text-[10px] text-brand-muted font-sans font-medium">REP</span>
+                                        </div>
+                                    </div>
                                 </div>
+                                <p class="text-sm text-brand-muted line-clamp-2 leading-relaxed relative z-10"><%= q.description || q.details || 'No description provided.' %></p>
                             </div>
-                            <div class="w-full sm:w-auto h-8 bg-white/5 rounded sm:w-24"></div>
+                        <% }); %>
+                    <% } else { %>
+                        <!-- Empty State -->
+                        <div class="bento-card p-12 flex flex-col items-center justify-center text-center">
+                            <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4">
+                                <i data-lucide="compass" class="w-6 h-6 text-brand-muted"></i>
+                            </div>
+                            <span class="text-brand-text font-bold text-base">No quests or bounties found</span>
+                            <span class="text-brand-muted text-xs mt-1">Check back later or try clearing your search keyword</span>
                         </div>
                     <% } %>
-                </div>
-
-                <!-- Empty State -->
-                <div id="quest-empty-container" class="bento-card p-12 flex flex-col items-center justify-center text-center hidden">
-                    <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4">
-                        <i data-lucide="compass" class="w-6 h-6 text-brand-muted"></i>
-                    </div>
-                    <span class="text-brand-text font-bold text-base">No quests or bounties found</span>
-                    <span class="text-brand-muted text-xs mt-1">Check back later or try clearing your search keyword</span>
                 </div>
 
                 <!-- Pagination controls -->

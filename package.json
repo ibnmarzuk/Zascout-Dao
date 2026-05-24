@@ -1,14 +1,12 @@
 {
-  "name": "react-example",
+  "name": "zascout-dao",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "1.0.0",
   "scripts": {
-    "dev": "tsx server.ts",
-    "build": "esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
-    "start": "node dist/server.cjs",
-    "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit"
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'No build step required for EJS.'",
+    "test:api": "node scripts/testApiEndpoints.cjs"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
@@ -18,6 +16,7 @@
     "clsx": "^2.1.1",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
     "csurf": "^1.11.0",
     "dotenv": "^17.2.3",
     "ejs": "^5.0.2",
@@ -27,7 +26,10 @@
     "googleapis": "^171.4.0",
     "helmet": "^8.1.0",
     "lucide-react": "^0.546.0",
+    "mongoose": "^9.6.2",
+    "morgan": "^1.10.1",
     "motion": "^12.23.24",
+    "node-cache": "^5.1.2",
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
     "react-router-dom": "^7.15.1",

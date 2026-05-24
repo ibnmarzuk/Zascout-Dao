@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: zascout-dao
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: ZADAO_API_BASE_URL
+        sync: false
+      - key: ZADAO_API_KEY
+        sync: false
+      - key: CACHE_TTL_SECONDS
+        value: "300"
+    healthCheckPath: /api/health
+    autoDeploy: true
