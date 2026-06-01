@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { X, Wallet, Bell, ChevronRight, Plus, MapPin, Globe, Twitter, Github } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/src/lib/utils";
+import { useAppKit } from "@reown/appkit/react";
+import { useAccount, useDisconnect } from "wagmi";
 
 interface ProfileModalProps {
   isOpen: boolean;
@@ -10,14 +12,9 @@ interface ProfileModalProps {
 
 export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
   const [activeTab, setActiveTab] = useState<"general" | "wallets" | "notifications">("general");
-  const [wallets, setWallets] = useState(["0x71C...4f9a"]);
-
-  const addWallet = () => {
-    const array = new Uint32Array(2);
-    window.crypto.getRandomValues(array);
-    const newWallet = `0x${array[0].toString(16).padStart(8, '0')}...${array[1].toString(16).padStart(8, '0').slice(0, 4)}`;
-    setWallets([...wallets, newWallet]);
-  };
+  const { open } = useAppKit();
+  const { address, isConnected } = useAccount();
+  const { disconnect } = useDisconnect();
 
   return (
     <AnimatePresence>
@@ -119,24 +116,26 @@ export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                 {activeTab === "wallets" && (
                   <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                     <div className="space-y-3">
-                      {wallets.map((wallet, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-4 bg-card-hover border border-border-main rounded-2xl group transition-all hover:border-brand-blue/30">
+                      {isConnected && address && (
+                        <div className="flex items-center justify-between p-4 bg-card-hover border border-border-main rounded-2xl group transition-all hover:border-brand-blue/30">
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-lg bg-brand-blue/10 flex items-center justify-center">
                               <Wallet className="w-4 h-4 text-brand-blue" />
                             </div>
                             <div>
-                              <p className="text-xs font-bold text-text-main">{wallet}</p>
-                              <p className="text-[10px] text-neutral-500">{idx === 0 ? "Primary Wallet" : "Secondary Wallet"}</p>
+                              <p className="text-xs font-bold text-text-main">{`${address.slice(0, 6)}...${address.slice(-4)}`}</p>
+                              <p className="text-[10px] text-neutral-500">Connected Wallet</p>
                             </div>
                           </div>
-                          <button className="text-[10px] font-bold text-neutral-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all">Disconnect</button>
+                          <button 
+                            onClick={() => disconnect()}
+                            className="text-[10px] font-bold text-neutral-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all">Disconnect</button>
                         </div>
-                      ))}
+                      )}
                     </div>
                     
                     <button 
-                      onClick={addWallet}
+                      onClick={() => open()}
                       className="w-full flex items-center justify-center gap-2 py-4 border-2 border-dashed border-border-main rounded-2xl text-neutral-500 hover:text-brand-blue hover:border-brand-blue transition-all font-bold text-sm"
                     >
                       <Plus className="w-4 h-4" />
