@@ -4,14 +4,14 @@ const cache = new NodeCache({ stdTTL: parseInt(process.env.CACHE_TTL_SECONDS) ||
 
 function validateConfig() {
   const baseUrl = process.env.ZADAO_API_BASE_URL;
-  const apiKey = process.env.ZADAO_API_KEY;
+  const apiKey = process.env.ZA_API_KEY || process.env.ZADAO_API_KEY;
 
   if (!baseUrl || !/^https?:\/\//.test(baseUrl)) {
     console.error('\n[ZADao] ERROR: ZADAO_API_BASE_URL is missing or malformed. Please set a valid URL (e.g. https://zeroauthoritydao.com/api) in your environment variables.\n');
   }
   
   if (!apiKey || apiKey.trim() === '') {
-    console.error('\n[ZADao] ERROR: ZADAO_API_KEY is missing or malformed. Please set your API key in the environment variables.\n');
+    console.error('\n[ZADao] ERROR: ZA_API_KEY or ZADAO_API_KEY is missing or malformed. Please set your API key in the environment variables.\n');
   }
 }
 
@@ -23,13 +23,15 @@ if (typeof cleanBaseUrl === 'string') {
   cleanBaseUrl = cleanBaseUrl.replace(/^ZADAO_API_BASE_URL=/, '').replace(/^['"]|['"]$/g, '').trim().replace(/\/+$/, '');
 }
 
+const activeApiKey = process.env.ZA_API_KEY || process.env.ZADAO_API_KEY;
+
 const zadaoClient = axios.create({
   baseURL: cleanBaseUrl,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
-    ...(process.env.ZADAO_API_KEY ? { 'Authorization': `Bearer ${process.env.ZADAO_API_KEY}` } : { 'Authorization': 'Bearer za_1a77fc60f98dafd7993383ddacce5bc3769e4db86c53fca1df1d108344cf1244' })
+    ...(activeApiKey ? { 'Authorization': `Bearer ${activeApiKey}` } : { 'Authorization': 'Bearer za_1a77fc60f98dafd7993383ddacce5bc3769e4db86c53fca1df1d108344cf1244' })
   }
 });
 

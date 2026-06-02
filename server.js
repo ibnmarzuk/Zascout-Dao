@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ override: true });
 
 // Fix malformed environment variables where key is duplicated, e.g., MONGODB_URI=MONGODB_URI=...
 for (const key in process.env) {

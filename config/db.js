@@ -2,11 +2,12 @@ const mongoose = require('mongoose');
 
 async function connectDB() {
   try {
-    if (!process.env.MONGODB_URI) {
-      console.log('No MONGODB_URI provided, skipping MongoDB connection.');
+    const mongoUri = process.env.MONGODB_URI || process.env.MONGODB_URI_LOCAL;
+    if (!mongoUri) {
+      console.log('No MONGODB_URI or MONGODB_URI_LOCAL provided, skipping MongoDB connection.');
       return;
     }
-    await mongoose.connect(process.env.MONGODB_URI);
+    await mongoose.connect(mongoUri);
     console.log('MongoDB connected successfully.');
   } catch (err) {
     console.error('MongoDB connection error:', err.message);

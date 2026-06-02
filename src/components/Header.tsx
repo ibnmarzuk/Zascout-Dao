@@ -3,6 +3,7 @@ import { Search, Bell, Wallet, Sun, Moon, X, Menu, Sparkles, Compass, ChevronDow
 import { Link } from "react-router-dom";
 import { useTheme } from "../lib/ThemeContext";
 import ProfileModal from "./ProfileModal";
+import NotificationCenter from "./NotificationCenter";
 
 export const LogoIcon = ({ className }: { className?: string }) => (
   <div className={`relative flex items-center justify-center ${className}`}>
@@ -34,7 +35,6 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
   const { theme, toggleTheme } = useTheme();
   const [searchValue, setSearchValue] = useState("");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false);
   const [currentWorkspace, setCurrentWorkspace] = useState("Personal");
 
@@ -115,30 +115,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
           {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </button>
 
-        {/* Notifications */}
-        <div className="relative">
-          <button 
-            onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-            className="hidden sm:flex h-8 w-8 items-center justify-center rounded-full border border-border-main bg-card-bg text-neutral-400 hover:text-brand-blue transition-all relative"
-          >
-            <Bell className="w-4 h-4" />
-            <span className="absolute top-0 right-0 w-2 h-2 rounded-full bg-brand-blue border-2 border-brand-charcoal animate-pulse" />
-          </button>
-          
-          {isNotificationsOpen && (
-            <div className="absolute top-full right-0 mt-2 w-72 md:w-80 rounded-xl border border-border-main bg-card-bg shadow-xl overflow-hidden z-50">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-border-main bg-card-hover/50">
-                <span className="text-xs font-bold text-text-main">Notifications</span>
-                <span className="text-[10px] text-brand-blue cursor-pointer hover:underline">Mark all as read</span>
-              </div>
-              <div className="max-h-80 overflow-y-auto">
-                <NotificationItem title="Saved Search Alert" desc="5 new React bounties on DeveloperDAO." time="10m ago" unread />
-                <NotificationItem title="Proposal Update" desc="Governance Dashboard Bounty has closed." time="2h ago" />
-                <NotificationItem title="Zero Authority" desc="Your application for 'ZKP Research' is under review." time="1d ago" />
-              </div>
-            </div>
-          )}
-        </div>
+        <NotificationCenter />
         
         <button 
           onClick={() => setIsProfileOpen(true)}
@@ -163,19 +140,5 @@ function WorkspaceItem({ name, current, onClick }: { name: string, current: stri
       <span className={isActive ? "text-text-main font-semibold" : "text-neutral-400"}>{name}</span>
       {isActive && <Check className="w-3 h-3 text-brand-blue" />}
     </button>
-  );
-}
-
-function NotificationItem({ title, desc, time, unread = false }: { title: string, desc: string, time: string, unread?: boolean }) {
-  return (
-    <div className={`p-4 border-b border-border-main/50 hover:bg-card-hover transition-colors cursor-pointer ${unread ? 'bg-brand-blue/5' : ''}`}>
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-xs font-bold text-text-main">{title}</p>
-          <p className="text-[10px] text-neutral-500 mt-0.5 line-clamp-2 leading-relaxed">{desc}</p>
-        </div>
-        <span className="text-[9px] text-neutral-500 whitespace-nowrap pt-0.5">{time}</span>
-      </div>
-    </div>
   );
 }

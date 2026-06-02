@@ -9,8 +9,8 @@ async function testAll() {
     try {
       const res = await axios.get(`${BASE}${ep}`, {
         timeout: 8000,
-        headers: process.env.ZADAO_API_KEY
-          ? { Authorization: `Bearer ${process.env.ZADAO_API_KEY}` }
+        headers: (process.env.ZA_API_KEY || process.env.ZADAO_API_KEY)
+          ? { Authorization: `Bearer ${process.env.ZA_API_KEY || process.env.ZADAO_API_KEY}` }
           : { Authorization: `Bearer za_1a77fc60f98dafd7993383ddacce5bc3769e4db86c53fca1df1d108344cf1244` }
       });
       const count = Array.isArray(res.data) ? res.data.length

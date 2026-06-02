@@ -224,7 +224,7 @@ const OpCard: React.FC<{ op: Opportunity }> = ({ op }) => {
 
   return (
     <motion.div 
-      whileHover={{ y: -4, shadow: "0 20px 50px rgba(37,99,235,0.08)" }}
+      whileHover={{ y: -4, boxShadow: "0 20px 50px rgba(37,99,235,0.08)" }}
       className={cn(
         "group relative rounded-2xl border border-border-main bg-card-bg p-5 transition-all hover:bg-card-hover hover:shadow-xl",
         isGrant && "hover:border-brand-blue/50",

@@ -10,6 +10,8 @@ const Explorer = lazy(() => import("./pages/Explorer"));
 const Analytics = lazy(() => import("./pages/Analytics"));
 const Intelligence = lazy(() => import("./pages/Intelligence"));
 const SavedItems = lazy(() => import("./pages/SavedItems"));
+const Settings = lazy(() => import("./pages/Settings"));
+const Profile = lazy(() => import("./pages/Profile"));
 
 // Loading fallback
 const LoadingFallback = () => (
@@ -36,6 +38,8 @@ export default function App() {
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/intelligence" element={<Intelligence />} />
               <Route path="/saved" element={<SavedItems />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/profile" element={<Profile />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

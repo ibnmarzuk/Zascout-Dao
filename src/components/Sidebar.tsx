@@ -11,6 +11,7 @@ const menuItems = [
   { icon: BarChart3, label: "Analytics", path: "/analytics" },
   { icon: User, label: "Intelligence", path: "/intelligence" },
   { icon: Bookmark, label: "Saved Items", path: "/saved" },
+  { icon: Settings, label: "Settings", path: "/settings" },
 ];
 
 interface SidebarProps {
